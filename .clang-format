@@ -1,0 +1,92 @@
+---
+Language: Cpp
+# BasedOnStyle:  WebKit
+# Access specifiers are best unindented, to keep them easy to spot:
+AccessModifierOffset: -2
+# Keep them together. Would be preferable to put all arguments on a new line
+AlignAfterOpenBracket: true
+# Newline escapes should be aligned, they're prettier that way
+AlignEscapedNewlinesLeft: false
+# Same with OpenBracket alignment. No need for that.
+AlignOperands: false
+# Purdy
+AlignTrailingComments: true
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+# Macros, ew
+AlignConsecutiveMacros: AcrossEmptyLines
+AlignEscapedNewlines: Left
+# Yuck:
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLambdasOnASingleLine: All
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: true
+# Ew, yes.
+AlwaysBreakAfterReturnType: TopLevelDefinitions
+# Not mandatory...
+AlwaysBreakTemplateDeclarations: true
+# Readability:
+AlwaysBreakBeforeMultilineStrings: true
+## Templates.
+BreakBeforeConceptDeclarations: true
+# Nice...
+BreakBeforeBinaryOperators: All
+BreakBeforeTernaryOperators: true
+# Yessir
+BreakConstructorInitializersBeforeComma: false
+# Please, keep it readable:
+BinPackParameters: false
+BinPackArguments: false
+# Not a hard and fast rule, but yeah
+ColumnLimit: 80
+# Bleh
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+# This is a tough one... it can be confusing to seem them alligned with code
+ConstructorInitializerIndentWidth: 4
+# No, there's a One True Way to align these things
+DerivePointerAlignment: false
+# Yes need
+IndentCaseLabels: true
+# Gross
+IndentWrappedFunctionNames: false
+IndentFunctionDeclarationAfterType: false
+# Yas
+IncludeBlocks: Merge
+MaxEmptyLinesToKeep: 1
+KeepEmptyLinesAtTheStartOfBlocks: true
+# Never ever ever
+NamespaceIndentation: None
+# These feel about right...
+PenaltyBreakBeforeFirstCallParameter: 600
+PenaltyBreakComment: 300
+PenaltyBreakString: 1000
+PenaltyBreakFirstLessLess: 120
+PenaltyExcessCharacter: 1000000
+PenaltyReturnTypeOnItsOwnLine: 60
+PointerAlignment: Left
+# Keep it away:
+SpacesBeforeTrailingComments: 2
+Cpp11BracedListStyle: false
+Standard: Cpp11
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+BreakBeforeBraces: Attach
+SortUsingDeclarations: true
+# Used to do this, not anymore
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+SpacesInAngles: false
+SpaceInEmptyParentheses: false
+SpacesInCStyleCastParentheses: false
+SpaceAfterCStyleCast: true
+SpacesInContainerLiterals: true
+SpaceBeforeAssignmentOperators: true
+ContinuationIndentWidth: 4
+CommentPragmas: "^ IWYU pragma:"
+ForEachMacros: [foreach, Q_FOREACH, BOOST_FOREACH]
+SpaceBeforeParens: ControlStatements
+DisableFormat: false
