@@ -1,5 +1,6 @@
 set(FILES 
   detector_manager.cpp
+	detector.cpp
 )
 set(SUBDIRECTORIES )
 
