@@ -1,24 +1,17 @@
 #pragma once
 
+#include "detector_manager.hpp"
+#include <iostream>
 #include <string>
 
 // TODO: Add interface documentation
 namespace detector {
 
-struct DetectorReport {
-  std::string message;
-  std::string source;
-  int         level;
-};
+struct DetectorReport;
 
-using Report = DetectorReport;
+#define REGISTER_DETECTOR(tag, det) \
+  DetectorManager::Get().RegisterDetector(tag, det)
 
-class Detector {
-public:
-  Detector();
-  virtual ~Detector() = default;
-
-  virtual auto SniffCode(const std::string&) -> Report = 0;
-};
+#define DETECTOR [](const std::string& input) -> DetectorReport
 
 }  // namespace detector
