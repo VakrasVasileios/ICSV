@@ -1,6 +1,7 @@
 set(FILES 
   detector_manager.cpp
-	detector.cpp
+	architecture_holder.cpp
+	report_center.cpp
 )
 set(SUBDIRECTORIES )
 
