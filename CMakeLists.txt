@@ -16,7 +16,13 @@ add_library(${PROJECT_NAME} )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
-set(SUBDIRECTORIES external include libs src unit-tests)
+set(SUBDIRECTORIES 
+  # external
+  include
+  libs
+  src
+  unit-tests
+)
 
 foreach(VAR ${SUBDIRECTORIES})
 	add_subdirectory(${VAR})
