@@ -1,16 +1,21 @@
 #pragma once
 
-#include <list>
+#include <functional>
+#include <string>
+#include <unordered_map>
 
 namespace detector {
 
-class Detector;
+struct DetectorReport;
 
 class DetectorManager final {
 public:
+  using Detector = std::function<DetectorReport(const std::string&)>;
+
+public:
   static auto Get() -> DetectorManager&;
 
-  void RegisterDetector(Detector*);
+  void RegisterDetector(const std::string& tag, const Detector& det);
 
 private:
   DetectorManager()                       = default;
@@ -18,7 +23,7 @@ private:
   DetectorManager(DetectorManager&&)      = delete;
   ~DetectorManager();
 
-  std::list<Detector*> m_detectors;
+  std::unordered_map<std::string, Detector> m_detectors;
 };
 
 }  // namespace detector

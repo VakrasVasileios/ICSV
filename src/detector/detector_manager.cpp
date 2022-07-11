@@ -1,12 +1,9 @@
-#include "detector/detector_manager.hpp"
-#include "detector/detector.hpp"
+#include "icsv/detector/detector_manager.hpp"
+#include "icsv/detector/detector.hpp"
 
 namespace detector {
 
-DetectorManager::~DetectorManager() {
-  for (auto* det : m_detectors)
-    delete det;
-}
+DetectorManager::~DetectorManager() { m_detectors.clear(); }
 
 auto
 DetectorManager::Get() -> DetectorManager& {
@@ -15,8 +12,8 @@ DetectorManager::Get() -> DetectorManager& {
 }
 
 void
-DetectorManager::RegisterDetector(Detector* det) {
-  m_detectors.push_back(det);
+DetectorManager::RegisterDetector(const std::string& tag, const Detector& det) {
+  m_detectors[tag] = det;
 }
 
 }  // namespace detector
