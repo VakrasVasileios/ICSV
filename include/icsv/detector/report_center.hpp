@@ -1,16 +1,14 @@
 #pragma once
 
+#include "detector_report.hpp"
 #include <list>
 #include <map>
 #include <string>
 
-namespace detector {
+#define REGISTER_REPORT(smell_name, rep) \
+  icsv::detector::ReportCenter::Get().RegisterReport(smell_name, rep)
 
-typedef struct DetectorReport {
-  std::string message = "";
-  std::string source  = "";
-  int         level   = -1;
-} Report;
+namespace icsv::detector {
 
 class ReportCenter final {
 public:
@@ -29,4 +27,4 @@ private:
   std::map<std::string, std::list<Report>> m_report_log;
 };
 
-}  // namespace detector
+}  // namespace icsv::detector

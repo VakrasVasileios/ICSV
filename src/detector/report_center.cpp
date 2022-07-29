@@ -1,15 +1,7 @@
 #include "icsv/detector/report_center.hpp"
 #include <ostream>
 
-namespace detector {
-
-auto
-operator<<(std::ostream& os, const Report& rep) -> std::ostream& {
-  os << "Message: " << rep.message << '\n';
-  os << "Source: " << rep.source << '\n';
-  os << "Level: " << rep.level << '\n';
-  return os;
-}
+namespace icsv::detector {
 
 auto
 ReportCenter::Get() -> ReportCenter& {
@@ -28,4 +20,4 @@ ReportCenter::ClearReports(void) {
     log.second.clear();
 }
 
-}  // namespace detector
+}  // namespace icsv::detector
