@@ -1,17 +1,14 @@
 #pragma once
 
 #include "detector_manager.hpp"
+#include "detector_report.hpp"
+#include "report_center.hpp"
 #include <iostream>
+#include <json/json.h>
 #include <string>
 
 // TODO: Add interface documentation
-namespace detector {
 
-struct DetectorReport;
+using DetectorReport = icsv::detector::DetectorReport;
 
-#define REGISTER_DETECTOR(tag, det) \
-  DetectorManager::Get().RegisterDetector(tag, det)
-
-#define DETECTOR [](const std::string& input) -> DetectorReport
-
-}  // namespace detector
+#define DETECTOR [](const Json::Value& arch) -> void
