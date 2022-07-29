@@ -4,13 +4,14 @@
 #include <string>
 #include <unordered_map>
 
-namespace detector {
+#define REGISTER_DETECTOR(tag, det) \
+  icsv::detector::DetectorManager::Get().RegisterDetector(tag, det)
 
-struct DetectorReport;
+namespace icsv::detector {
 
 class DetectorManager final {
 public:
-  using Detector = std::function<DetectorReport(const std::string&)>;
+  using Detector = std::function<void(const std::string&)>;
 
 public:
   static auto Get() -> DetectorManager&;
@@ -26,4 +27,4 @@ private:
   std::unordered_map<std::string, Detector> m_detectors;
 };
 
-}  // namespace detector
+}  // namespace icsv::detector
