@@ -14,10 +14,15 @@ endif()
 
 add_library(${PROJECT_NAME} )
 
+set(JSONCPP_LIBS libjsoncpp.so)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE ${JSONCPP_LIBS})
+
+
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
 set(SUBDIRECTORIES 
-  # external
+  external
   include
   libs
   src
@@ -27,13 +32,3 @@ set(SUBDIRECTORIES
 foreach(VAR ${SUBDIRECTORIES})
 	add_subdirectory(${VAR})
 endforeach()
-
-# set(ALLEGRO_LIBRARIES 
-# 	liballegro.so liballegro_dialog.so liballegro_image.so liballegro_color.so
-# 	liballegro_audio.so liballegro_physfs.so liballegro_font.so 
-# 	liballegro_acodec.so liballegro_main.so liballegro_memfile.so
-# 	liballegro_primitives.so liballegro_ttf.so
-# )
-
-
-target_link_libraries(${PROJECT_NAME} PUBLIC ${ALLEGRO_LIBRARIES})
