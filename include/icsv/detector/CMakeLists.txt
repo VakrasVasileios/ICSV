@@ -3,6 +3,7 @@ set(FILES
   detector_manager.hpp
   architecture_holder.hpp
   report_center.hpp
+  detector_report.hpp
 )
 set(SUBDIRECTORIES )
 
