@@ -1,6 +1,7 @@
 #include "icsv/detector/architecture_holder.hpp"
+#include <fstream>
 
-namespace detector {
+namespace icsv::detector {
 
 auto
 ArchitectureHolder::Get() -> ArchitectureHolder& {
@@ -9,6 +10,9 @@ ArchitectureHolder::Get() -> ArchitectureHolder& {
 }
 
 void
-ArchitectureHolder::ReadArchitectureFile(const std::string& path) {}
+ArchitectureHolder::DeserializeArchitecture(const std::string& path) {
+  std::ifstream file(path);
+  file >> m_json_arch;
+}
 
-}  // namespace detector
+}  // namespace icsv::detector
