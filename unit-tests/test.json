@@ -1,0 +1,7 @@
+{
+    "dependencies": [
+        { "dep1": "one" },
+        { "dep2": "two" },
+        { "dep3": "three" }
+    ]
+}
