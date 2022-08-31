@@ -28,7 +28,6 @@ LongIdentifierDet::SmellDetect(const Json::Value& arch) {
                                     (*strct)["src_info"]["col"].asInt(),
                                     (*strct)["name"].asString());
     REGISTER_REPORT("long_identifier", strct_rep);
-    std::cout << strct_rep << std::endl;
 
     for (auto meth = (*strct)["methods"].begin();
          meth != (*strct)["methods"].end();
@@ -46,8 +45,6 @@ LongIdentifierDet::SmellDetect(const Json::Value& arch) {
                                      (*meth)["name"].asString());
       REGISTER_REPORT("long_identifier", meth_rep);
 
-      std::cout << meth_rep << std::endl;
-
       for (auto arg = (*strct)["methods"]["args"].begin();
            arg != (*strct)["methods"]["args"].end();
            arg++) {
@@ -64,8 +61,6 @@ LongIdentifierDet::SmellDetect(const Json::Value& arch) {
                                       (*strct)["name"].asString(),
                                       (*meth)["name"].asString());
         REGISTER_REPORT("long_identifier", arg_rep);
-
-        std::cout << arg_rep << std::endl;
       }
 
       for (auto def = (*strct)["methods"]["definitions"].begin();
@@ -84,7 +79,6 @@ LongIdentifierDet::SmellDetect(const Json::Value& arch) {
                                       (*strct)["name"].asString(),
                                       (*meth)["name"].asString());
         REGISTER_REPORT("long_identifier", def_rep);
-        std::cout << def_rep << std::endl;
       }
     }
     for (auto field = (*strct)["fields"].begin();
@@ -102,7 +96,6 @@ LongIdentifierDet::SmellDetect(const Json::Value& arch) {
                                     (*field)["src_info"]["col"].asInt(),
                                     (*strct)["name"].asString());
       REGISTER_REPORT("long_identifier", fld_rep);
-      std::cout << fld_rep << std::endl;
     }
   }
 }

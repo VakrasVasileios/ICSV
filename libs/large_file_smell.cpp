@@ -1,4 +1,5 @@
 #include "icsv/detector/detector.hpp"
+#include <assert.h>
 #include <fstream>
 #include <string>
 
@@ -19,7 +20,8 @@ unsigned
 LargeFileDet::FileLineCount(const std::string& path) {
   unsigned      fcount = 0;
   std::ifstream file(path);
-  std::string   dump;
+  assert(file.is_open());
+  std::string dump;
   while (std::getline(file, dump))
     ++fcount;
 
