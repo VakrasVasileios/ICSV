@@ -11,4 +11,14 @@
 
 using DetectorReport = icsv::detector::DetectorReport;
 
-#define DETECTOR [](const Json::Value& arch) -> void
+namespace icsv::detector {
+
+class Detector {
+public:
+  Detector(const std::string& tag) { REGISTER_DETECTOR(tag, this); }
+  virtual ~Detector() = default;
+
+  virtual void SmellDetect(const Json::Value& arch) = 0;
+};
+
+}  // namespace icsv::detector
