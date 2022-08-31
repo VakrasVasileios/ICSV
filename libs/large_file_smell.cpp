@@ -2,8 +2,21 @@
 #include <fstream>
 #include <string>
 
+class LargeFileDet : public icsv::detector::Detector {
+public:
+  LargeFileDet() : icsv::detector::Detector("large_file_det") {}
+  ~LargeFileDet() override = default;
+
+  void SmellDetect(const Json::Value& arch);
+
+private:
+  unsigned FileLineCount(const std::string& path);
+};
+
+LargeFileDet* lgd = new LargeFileDet();
+
 unsigned
-file_line_count(const std::string& path) {
+LargeFileDet::FileLineCount(const std::string& path) {
   unsigned      fcount = 0;
   std::ifstream file(path);
   std::string   dump;
@@ -13,27 +26,17 @@ file_line_count(const std::string& path) {
   return fcount;
 }
 
-class LargeFileDetector : public icsv::detector::Detector {
-public:
-  LargeFileDetector() : icsv::detector::Detector("large_file_det") {}
-  ~LargeFileDetector() override = default;
-
-  void SmellDetect(const Json::Value& arch);
-};
-
-LargeFileDetector* lgd = new LargeFileDetector();
-
 void
-LargeFileDetector::SmellDetect(const Json::Value& arch) {
+LargeFileDet::SmellDetect(const Json::Value& arch) {
   for (auto& src : arch["sources"]) {
     DetectorReport rep;
     unsigned       lines
-        = file_line_count(src.asString());  // FIXME: This will need the full,
-                                            // json has only file name
+        = FileLineCount(src.asString());  // FIXME: This will need the full,
+                                          // json has only file name
     rep.level   = lines;
     rep.message = "Source file: " + src.asString() + " has "
         + std::to_string(lines) + " of code.";
-    rep.source = src.asString();
+    rep.src_info.file = src.asString();
     REGISTER_REPORT("large_file", rep);
   }
 };
