@@ -1,5 +1,6 @@
-set(FILES # Code-Smell detector extensions
+set(FILES # Detector Interface Implementations
 	large_file_smell.cpp
+	long_identifier_smell.cpp
 )
 
 if(FILES)
