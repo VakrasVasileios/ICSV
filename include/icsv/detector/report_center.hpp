@@ -16,6 +16,12 @@ public:
 
   void RegisterReport(const std::string& smell_tag, const Report& rep);
 
+  auto GetReportsByTag(const std::string& tag) const
+      -> const std::list<Report>&;
+
+  auto GetAllReports(void) const
+      -> const std::map<std::string, std::list<Report>>&;
+
   void ClearReports(void);
 
 private:
