@@ -8,7 +8,7 @@ public:
   LargeFileDet() : icsv::detector::Detector("large_file_det") {}
   ~LargeFileDet() override = default;
 
-  void SmellDetect(const Json::Value& arch);
+  void DetectSmell(const Json::Value& arch);
 
 private:
   unsigned FileLineCount(const std::string& path);
@@ -29,7 +29,7 @@ LargeFileDet::FileLineCount(const std::string& path) {
 }
 
 void
-LargeFileDet::SmellDetect(const Json::Value& arch) {
+LargeFileDet::DetectSmell(const Json::Value& arch) {
   for (auto& src : arch["sources"]) {
     DetectorReport rep;
     unsigned       lines

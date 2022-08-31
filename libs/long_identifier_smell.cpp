@@ -7,13 +7,13 @@ public:
   LongIdentifierDet() : Detector("long_identifier_det") {}
   ~LongIdentifierDet() override = default;
 
-  void SmellDetect(const Json::Value& arch);
+  void DetectSmell(const Json::Value& arch);
 };
 
 LongIdentifierDet* l_id = new LongIdentifierDet();
 
 void
-LongIdentifierDet::SmellDetect(const Json::Value& arch) {
+LongIdentifierDet::DetectSmell(const Json::Value& arch) {
   for (auto strct = arch["structures"].begin();
        strct != arch["structures"].end();
        strct++) {

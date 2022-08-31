@@ -24,7 +24,7 @@ DetectorManager::RegisterDetector(const std::string& tag, Detector* det) {
 void
 DetectorManager::UseDetectors(void) {
   for (auto& d : m_detectors) {
-    d.second->SmellDetect(ArchitectureHolder::Get().GetArchitecture());
+    d.second->DetectSmell(ArchitectureHolder::Get().GetArchitecture());
   }
 }
 
