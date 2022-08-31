@@ -3,7 +3,11 @@
 
 namespace icsv::detector {
 
-DetectorManager::~DetectorManager() { m_detectors.clear(); }
+DetectorManager::~DetectorManager() {
+  for (auto d : m_detectors)
+    delete d.second;
+  m_detectors.clear();
+}
 
 auto
 DetectorManager::Get() -> DetectorManager& {
@@ -12,7 +16,7 @@ DetectorManager::Get() -> DetectorManager& {
 }
 
 void
-DetectorManager::RegisterDetector(const std::string& tag, const Detector& det) {
+DetectorManager::RegisterDetector(const std::string& tag, Detector* det) {
   m_detectors[tag] = det;
 }
 

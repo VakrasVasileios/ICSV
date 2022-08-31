@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <json/json.h>
 #include <string>
 #include <unordered_map>
 
@@ -9,14 +10,13 @@
 
 namespace icsv::detector {
 
-class DetectorManager final {
-public:
-  using Detector = std::function<void(const std::string&)>;
+class Detector;
 
+class DetectorManager final {
 public:
   static auto Get() -> DetectorManager&;
 
-  void RegisterDetector(const std::string& tag, const Detector& det);
+  void RegisterDetector(const std::string& tag, Detector* det);
 
 private:
   DetectorManager()                       = default;
@@ -24,7 +24,7 @@ private:
   DetectorManager(DetectorManager&&)      = delete;
   ~DetectorManager();
 
-  std::unordered_map<std::string, Detector> m_detectors;
+  std::unordered_map<std::string, Detector*> m_detectors;
 };
 
 }  // namespace icsv::detector
