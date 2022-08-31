@@ -4,6 +4,7 @@ set(FILES
   architecture_holder.hpp
   report_center.hpp
   detector_report.hpp
+  smell_evaluator.hpp
 )
 set(SUBDIRECTORIES )
 
