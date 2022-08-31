@@ -10,6 +10,7 @@
 // TODO: Add interface documentation
 
 using DetectorReport = icsv::detector::DetectorReport;
+using SourceInfo     = icsv::detector::SourceInfo;
 
 namespace icsv::detector {
 
