@@ -1,5 +1,6 @@
 set(FILES
 	arch_deserialization.cpp
+	large_file_detecting.cpp
 	tests.cpp
 )
 
