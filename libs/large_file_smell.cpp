@@ -21,7 +21,7 @@ public:
   void SmellDetect(const Json::Value& arch);
 };
 
-LargeFileDetector lgd;
+LargeFileDetector* lgd = new LargeFileDetector();
 
 void
 LargeFileDetector::SmellDetect(const Json::Value& arch) {
