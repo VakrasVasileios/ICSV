@@ -3,9 +3,11 @@
 #include <fstream>
 #include <string>
 
-class LargeFileDet : public icsv::detector::Detector {
+#define TAG "Large File"
+
+class LargeFileDet final : public icsv::detector::Detector {
 public:
-  LargeFileDet() : icsv::detector::Detector("large_file_det") {}
+  LargeFileDet() : icsv::detector::Detector(TAG) {}
   ~LargeFileDet() override = default;
 
   void DetectSmell(const Json::Value& arch);
@@ -39,6 +41,6 @@ LargeFileDet::DetectSmell(const Json::Value& arch) {
     rep.message = "Source file: " + src.asString() + " has "
         + std::to_string(lines) + " of code.";
     rep.src_info.file = src.asString();
-    REGISTER_REPORT("large_file", rep);
+    REGISTER_REPORT(TAG, rep);
   }
 };

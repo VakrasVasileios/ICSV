@@ -2,9 +2,11 @@
 #include <assert.h>
 #include <string>
 
-class LongIdentifierDet : public icsv::detector::Detector {
+#define TAG "Excessively long identifier"
+
+class LongIdentifierDet final : public icsv::detector::Detector {
 public:
-  LongIdentifierDet() : Detector("long_identifier_det") {}
+  LongIdentifierDet() : Detector(TAG) {}
   ~LongIdentifierDet() override = default;
 
   void DetectSmell(const Json::Value& arch);
@@ -27,7 +29,7 @@ LongIdentifierDet::DetectSmell(const Json::Value& arch) {
                                     (*strct)["src_info"]["line"].asInt(),
                                     (*strct)["src_info"]["col"].asInt(),
                                     (*strct)["name"].asString());
-    REGISTER_REPORT("long_identifier", strct_rep);
+    REGISTER_REPORT(TAG, strct_rep);
 
     for (auto meth = (*strct)["methods"].begin();
          meth != (*strct)["methods"].end();
@@ -43,7 +45,7 @@ LongIdentifierDet::DetectSmell(const Json::Value& arch) {
                                      (*meth)["src_info"]["col"].asInt(),
                                      (*strct)["name"].asString(),
                                      (*meth)["name"].asString());
-      REGISTER_REPORT("long_identifier", meth_rep);
+      REGISTER_REPORT(TAG, meth_rep);
 
       for (auto arg = (*strct)["methods"]["args"].begin();
            arg != (*strct)["methods"]["args"].end();
@@ -60,7 +62,7 @@ LongIdentifierDet::DetectSmell(const Json::Value& arch) {
                                       (*arg)["src_info"]["col"].asInt(),
                                       (*strct)["name"].asString(),
                                       (*meth)["name"].asString());
-        REGISTER_REPORT("long_identifier", arg_rep);
+        REGISTER_REPORT(TAG, arg_rep);
       }
 
       for (auto def = (*strct)["methods"]["definitions"].begin();
@@ -78,7 +80,7 @@ LongIdentifierDet::DetectSmell(const Json::Value& arch) {
                                       (*def)["src_info"]["col"].asInt(),
                                       (*strct)["name"].asString(),
                                       (*meth)["name"].asString());
-        REGISTER_REPORT("long_identifier", def_rep);
+        REGISTER_REPORT(TAG, def_rep);
       }
     }
     for (auto field = (*strct)["fields"].begin();
@@ -95,7 +97,7 @@ LongIdentifierDet::DetectSmell(const Json::Value& arch) {
                                     (*field)["src_info"]["line"].asInt(),
                                     (*field)["src_info"]["col"].asInt(),
                                     (*strct)["name"].asString());
-      REGISTER_REPORT("long_identifier", fld_rep);
+      REGISTER_REPORT(TAG, fld_rep);
     }
   }
 }
