@@ -1,12 +1,7 @@
 set(FILES 
-  detector_manager.cpp
-	architecture_holder.cpp
-	report_center.cpp
-	smell_evaluator.cpp
+  architecture_holder.cpp
 )
-set(SUBDIRECTORIES 
-	arch
-)
+set(SUBDIRECTORIES )
 
 foreach(VAR ${SUBDIRECTORIES})
 	add_subdirectory(${VAR})

@@ -1,10 +1,9 @@
 #pragma once
 
-#include <fstream>
-#include <json/json.h>
+#include "architecture_data.hpp"
 #include <string>
 
-namespace icsv::detector {
+namespace icsv::detector::arch {
 
 class ArchitectureHolder final {
 public:
@@ -12,7 +11,7 @@ public:
 
   void DeserializeArchitecture(const std::string& path);
 
-  auto GetArchitecture(void) const -> const Json::Value& { return m_json_arch; }
+  auto GetArchitecture(void) const -> const ArchData& { return m_data; }
 
 private:
   ArchitectureHolder()                          = default;
@@ -20,7 +19,7 @@ private:
   ArchitectureHolder(ArchitectureHolder&&)      = delete;
   ~ArchitectureHolder()                         = default;
 
-  Json::Value m_json_arch;
+  ArchData m_data;
 };
 
-}  // namespace icsv::detector
+}  // namespace icsv::detector::arch
