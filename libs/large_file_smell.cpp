@@ -10,7 +10,7 @@ public:
   LargeFileDet() : icsv::detector::Detector(TAG) {}
   ~LargeFileDet() override = default;
 
-  void DetectSmell(const Json::Value& arch);
+  void DetectSmell(const ArchData& arch);
 
 private:
   unsigned FileLineCount(const std::string& path);
@@ -31,16 +31,15 @@ LargeFileDet::FileLineCount(const std::string& path) {
 }
 
 void
-LargeFileDet::DetectSmell(const Json::Value& arch) {
-  for (auto& src : arch["sources"]) {
+LargeFileDet::DetectSmell(const ArchData& arch) {
+  for (auto& src : arch.sources) {
     DetectorReport rep;
-    unsigned       lines
-        = FileLineCount(src.asString());  // FIXME: This will need the full,
+    unsigned lines = FileLineCount(src);  // FIXME: This will need the full,
                                           // json has only file name
-    rep.level   = lines;
-    rep.message = "Source file: " + src.asString() + " has "
-        + std::to_string(lines) + " of code.";
-    rep.src_info.file = src.asString();
+    rep.level = lines;
+    rep.message
+        = "Source file: " + src + " has " + std::to_string(lines) + " of code.";
+    rep.src_info.file = src;
     REGISTER_REPORT(TAG, rep);
   }
 };
