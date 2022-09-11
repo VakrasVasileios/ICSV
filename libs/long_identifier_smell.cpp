@@ -9,13 +9,13 @@ public:
   LongIdentifierDet() : Detector(TAG) {}
   ~LongIdentifierDet() override = default;
 
-  void DetectSmell(const Json::Value& arch);
+  void DetectSmell(const ArchData& arch);
 };
 
 LongIdentifierDet* l_id = new LongIdentifierDet();
 
 void
-LongIdentifierDet::DetectSmell(const Json::Value& arch) {
+LongIdentifierDet::DetectSmell(const ArchData& arch) {  // FIXME
   for (auto strct = arch["structures"].begin();
        strct != arch["structures"].end();
        strct++) {
