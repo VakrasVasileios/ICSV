@@ -1,5 +1,5 @@
 #include "icsv/detector/detector_manager.hpp"
-#include "icsv/detector/architecture_holder.hpp"
+#include "icsv/detector/arch/architecture_holder.hpp"
 #include "icsv/detector/detector.hpp"
 
 namespace icsv::detector {
@@ -24,7 +24,7 @@ DetectorManager::RegisterDetector(const std::string& tag, Detector* det) {
 void
 DetectorManager::UseDetectors(void) {
   for (auto& d : m_detectors) {
-    d.second->DetectSmell(ArchitectureHolder::Get().GetArchitecture());
+    d.second->DetectSmell(arch::ArchitectureHolder::Get().GetArchitecture());
   }
 }
 
