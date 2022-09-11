@@ -1,4 +1,5 @@
 #include "icsv/detector/smell_evaluator.hpp"
+#include "json/json.h"
 #include <assert.h>
 #include <fstream>
 
@@ -12,16 +13,15 @@ SmellEvaluator::Get() -> SmellEvaluator& {
 
 void
 SmellEvaluator::DeserializeSmellConfig(const std::string& path) {
+  Json::Value det_cnfg;
+
   std::ifstream file(path);
   assert(file.is_open());
-  file >> m_smell_cnfg;
-  assert(m_smell_cnfg.isObject());
+  file >> det_cnfg;
+  assert(det_cnfg.isObject());
 }
 
 auto
-SmellEvaluator::EvaluateSmell(const std::string& tag, int curr_lvl)
-    -> int {  // TODO: Get a sample and use it unit tests and this
-              // implementation
-}
+SmellEvaluator::EvaluateSmell(const std::string& tag, int curr_lvl) -> int {}
 
 }  // namespace icsv::detector

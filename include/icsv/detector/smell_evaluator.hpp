@@ -1,6 +1,5 @@
 #pragma once
 
-#include "json/json.h"
 #include <string>
 
 #define EVAL_SMELL(tag, curr_lvl) \
@@ -17,8 +16,6 @@ public:
   auto EvaluateSmell(const std::string& tag, int curr_lvl) -> int;
 
 private:
-  Json::Value m_smell_cnfg;
-
   SmellEvaluator()                      = default;
   SmellEvaluator(const SmellEvaluator&) = delete;
   SmellEvaluator(SmellEvaluator&&)      = delete;
