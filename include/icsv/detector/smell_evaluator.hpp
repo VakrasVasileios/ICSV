@@ -1,25 +1,21 @@
 #pragma once
 
+#include <json/json.h>
 #include <string>
-
-#define EVAL_SMELL(tag, curr_lvl) \
-  icsv::detector::SmellEvaluator::Get().EvaluateSmell(tag, curr_lvl);
 
 namespace icsv::detector {
 
-class SmellEvaluator final {
+class SmellEvaluator {
 public:
-  static auto Get() -> SmellEvaluator&;
+  using SmellLevel = unsigned;
 
-  void DeserializeSmellConfig(const std::string& path);
+public:
+  SmellEvaluator(const std::string& tag);
+  virtual ~SmellEvaluator() = default;
 
-  auto EvaluateSmell(const std::string& tag, int curr_lvl) -> int;
+  virtual void DeserializeSmellConfig(const Json::Value& doc) = 0;
 
-private:
-  SmellEvaluator()                      = default;
-  SmellEvaluator(const SmellEvaluator&) = delete;
-  SmellEvaluator(SmellEvaluator&&)      = delete;
-  ~SmellEvaluator()                     = default;
+  virtual auto EvaluateSmell(unsigned curr_lvl) -> SmellLevel = 0;
 };
 
 }  // namespace icsv::detector
