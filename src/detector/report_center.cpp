@@ -20,7 +20,7 @@ ReportCenter::GetReportsByTag(const std::string& tag) const
     -> const std::list<Report>& {
   if (m_report_log.find(tag) == m_report_log.end())
     std::cout << "Given tag \"" << tag << "\" not found in reports.\n";
-  assert(m_report_log.find(tag) == m_report_log.end());
+  assert(m_report_log.find(tag) != m_report_log.end());
 
   return m_report_log.find(tag)->second;
 }
