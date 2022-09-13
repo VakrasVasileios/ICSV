@@ -15,88 +15,78 @@ public:
 LongIdentifierDet* l_id = new LongIdentifierDet();
 
 void
-LongIdentifierDet::DetectSmell(const ArchData& arch) {  // FIXME
-  for (auto strct = arch["structures"].begin();
-       strct != arch["structures"].end();
-       strct++) {
+LongIdentifierDet::DetectSmell(const ArchData& arch) {
+  for (auto strct : arch.structures) {
 
-    auto           id_size = (*strct)["name"].asString().size();
+    auto           id_size = strct.name.size();
     DetectorReport strct_rep;
-    strct_rep.message = "Structure \"" + (*strct)["name"].asString()
-        + "\" has an id of " + std::to_string(id_size) + " characters";
+    strct_rep.message = "Structure \"" + strct.signature + "\" has an id of "
+        + std::to_string(id_size) + " characters";
     strct_rep.level    = id_size;
-    strct_rep.src_info = SourceInfo((*strct)["src_info"]["file"].asString(),
-                                    (*strct)["src_info"]["line"].asInt(),
-                                    (*strct)["src_info"]["col"].asInt(),
-                                    (*strct)["name"].asString());
+    strct_rep.src_info = SourceInfo(strct.src_info.file,
+                                    strct.src_info.line,
+                                    strct.src_info.col,
+                                    strct.name);
     REGISTER_REPORT(TAG, strct_rep);
 
-    for (auto meth = (*strct)["methods"].begin();
-         meth != (*strct)["methods"].end();
-         meth++) {
+    for (auto meth : strct.methods) {
 
-      id_size = (*meth)["name"].asString().size();
+      id_size = meth.name.size();
       DetectorReport meth_rep;
-      meth_rep.message = "Method \"" + (*meth)["name"].asString()
-          + "\" has an id of " + std::to_string(id_size) + " characters";
+      meth_rep.message = "Method \"" + meth.signature + "\" has an id of "
+          + std::to_string(id_size) + " characters";
       meth_rep.level    = id_size;
-      meth_rep.src_info = SourceInfo((*meth)["src_info"]["file"].asString(),
-                                     (*meth)["src_info"]["line"].asInt(),
-                                     (*meth)["src_info"]["col"].asInt(),
-                                     (*strct)["name"].asString(),
-                                     (*meth)["name"].asString());
+      meth_rep.src_info = SourceInfo(strct.src_info.file,
+                                     strct.src_info.line,
+                                     strct.src_info.col,
+                                     strct.name,
+                                     meth.name);
       REGISTER_REPORT(TAG, meth_rep);
 
-      for (auto arg = (*strct)["methods"]["args"].begin();
-           arg != (*strct)["methods"]["args"].end();
-           arg++) {
+      for (auto arg : meth.args) {
 
-        id_size = (*arg)["name"].asString().size();
+        id_size = arg.name.size();
         DetectorReport arg_rep;
-        arg_rep.message = "Argument \"" + (*arg)["name"].asString()
-            + "\" of method \"" + (*meth)["name"].asString()
-            + "\" has an id of " + std::to_string(id_size) + " characters";
+        arg_rep.message = "Argument \"" + arg.name + "\" of method \""
+            + meth.signature + "\" has an id of " + std::to_string(id_size)
+            + " characters";
         arg_rep.level    = id_size;
-        arg_rep.src_info = SourceInfo((*arg)["src_info"]["file"].asString(),
-                                      (*arg)["src_info"]["line"].asInt(),
-                                      (*arg)["src_info"]["col"].asInt(),
-                                      (*strct)["name"].asString(),
-                                      (*meth)["name"].asString());
+        arg_rep.src_info = SourceInfo(arg.src_info.file,
+                                      arg.src_info.line,
+                                      arg.src_info.col,
+                                      strct.name,
+                                      meth.name);
         REGISTER_REPORT(TAG, arg_rep);
       }
 
-      for (auto def = (*strct)["methods"]["definitions"].begin();
-           def != (*strct)["methods"]["definitions"].end();
-           def++) {
+      for (auto def : meth.definitions) {
 
-        id_size = (*def)["name"].asString().size();
+        id_size = def.name.size();
         DetectorReport def_rep;
-        def_rep.message = "Definition \"" + (*def)["name"].asString()
-            + "\" in method \"" + (*meth)["name"].asString()
-            + "\" has an id of " + std::to_string(id_size) + " characters";
+        def_rep.message = "Definition \"" + def.name + "\" in method \""
+            + meth.signature + "\" has an id of " + std::to_string(id_size)
+            + " characters";
         def_rep.level    = id_size;
-        def_rep.src_info = SourceInfo((*def)["src_info"]["file"].asString(),
-                                      (*def)["src_info"]["line"].asInt(),
-                                      (*def)["src_info"]["col"].asInt(),
-                                      (*strct)["name"].asString(),
-                                      (*meth)["name"].asString());
+        def_rep.src_info = SourceInfo(def.src_info.file,
+                                      def.src_info.line,
+                                      def.src_info.col,
+                                      strct.name,
+                                      meth.name);
         REGISTER_REPORT(TAG, def_rep);
       }
     }
-    for (auto field = (*strct)["fields"].begin();
-         field != (*strct)["fields"].end();
-         field++) {
+    for (auto field : strct.fields) {
 
-      id_size = (*field)["name"].asString().size();
+      id_size = field.definition.name.size();
       DetectorReport fld_rep;
-      fld_rep.message = "Field \"" + (*field)["name"].asString()
-          + "\" of structure \"" + (*strct)["name"].asString()
-          + "\" has an id of " + std::to_string(id_size) + " characters";
+      fld_rep.message = "Field \"" + field.signature + "\" of structure \""
+          + strct.signature + "\" has an id of " + std::to_string(id_size)
+          + " characters";
       fld_rep.level    = id_size;
-      fld_rep.src_info = SourceInfo((*field)["src_info"]["file"].asString(),
-                                    (*field)["src_info"]["line"].asInt(),
-                                    (*field)["src_info"]["col"].asInt(),
-                                    (*strct)["name"].asString());
+      fld_rep.src_info = SourceInfo(field.definition.src_info.file,
+                                    field.definition.src_info.line,
+                                    field.definition.src_info.col,
+                                    strct.name);
       REGISTER_REPORT(TAG, fld_rep);
     }
   }
