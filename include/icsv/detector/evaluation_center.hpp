@@ -15,14 +15,16 @@ class SmellEvaluator;
 
 class EvaluationCenter final {
 public:
+  using SmellLevel = double;
+
+public:
   static auto Get() -> EvaluationCenter&;
 
   void RegisterEvaluator(const std::string& tag, SmellEvaluator* ev);
 
   void DeseriallizeConfig(const std::string& file_path);
 
-  auto EvaluateSmell(const std::string& tag, unsigned curr_lvl)
-      -> SmellEvaluator::SmellLevel;
+  auto EvaluateSmell(const std::string& tag, int curr_lvl) -> SmellLevel;
 
 private:
   using Evaluators = std::unordered_map<std::string, SmellEvaluator*>;
@@ -33,7 +35,7 @@ private:
   EvaluationCenter()                        = default;
   EvaluationCenter(const EvaluationCenter&) = delete;
   EvaluationCenter(EvaluationCenter&&)      = delete;
-  ~EvaluationCenter()                       = default;
+  ~EvaluationCenter();
 };
 
 }  // namespace icsv::detector

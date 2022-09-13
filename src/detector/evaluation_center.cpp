@@ -7,6 +7,12 @@
 
 namespace icsv::detector {
 
+EvaluationCenter::~EvaluationCenter() {
+  for (auto& ev : m_eval_reg)
+    delete ev.second;
+  m_eval_reg.clear();
+}
+
 auto
 EvaluationCenter::Get() -> EvaluationCenter& {
   static EvaluationCenter singleton;
@@ -33,11 +39,11 @@ EvaluationCenter::DeseriallizeConfig(const std::string& file_path) {
   file.close();
 
   for (auto& eval : m_eval_reg)
-    (eval.second)->DeserializeSmellConfig(doc);
+    (eval.second)->DeserializeConfig(doc);
 }
 
 auto
-EvaluationCenter::EvaluateSmell(const std::string& tag, unsigned curr_lvl)
+EvaluationCenter::EvaluateSmell(const std::string& tag, int curr_lvl)
     -> SmellEvaluator::SmellLevel {
   if (m_eval_reg.find(tag) == m_eval_reg.end()) {
     std::cout << "Could not find evaluator with tag \"" << tag
