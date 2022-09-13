@@ -18,6 +18,10 @@ DetectorManager::Get() -> DetectorManager& {
 
 void
 DetectorManager::RegisterDetector(const std::string& tag, Detector* det) {
+  if (m_detectors.find(tag) != m_detectors.end())
+    std::cout << "Newly registered detector with tag \"" << tag
+              << "\" overwrites existing one!\n";
+
   m_detectors[tag] = det;
 }
 
