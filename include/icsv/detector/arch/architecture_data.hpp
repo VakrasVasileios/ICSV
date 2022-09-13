@@ -23,6 +23,25 @@ using Contains     = std::list<std::string>;
 using TemplateArgs = std::list<std::string>;
 using Definitions  = std::list<Definition>;
 
+struct SrcInfo {
+  unsigned    col;
+  std::string file;
+  unsigned    line;
+};
+
+struct Definition {
+  std::string full_type;
+  std::string name;
+  SrcInfo     src_info;
+  std::string type;
+};
+
+struct Field {
+  std::string access;
+  std::string signature;
+  Definition  definition;
+};
+
 struct ArchData {
   Structures   structures;
   Dependencies dependencies;
@@ -50,17 +69,10 @@ struct Dependency {
     std::string name;
     unsigned    number;
   };
-  using DepTypes = std::list<DepType>;
 
   std::string from;
   std::string to;
-  DepTypes    types;
-};
-
-struct SrcInfo {
-  unsigned    col;
-  std::string file;
-  unsigned    line;
+  DepType     types;
 };
 
 struct Method {
@@ -81,19 +93,6 @@ struct Method {
   unsigned     statements;
   TemplateArgs template_args;
   bool         is_virtual;
-};
-
-struct Definition {
-  std::string full_type;
-  std::string name;
-  SrcInfo     src_info;
-  std::string type;
-};
-
-struct Field {
-  std::string access;
-  std::string signature;
-  Definition  definition;
 };
 
 }  // namespace icsv::detector::arch
