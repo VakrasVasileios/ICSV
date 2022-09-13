@@ -2,6 +2,7 @@ set(FILES
   detector_manager.cpp
 	report_center.cpp
 	smell_evaluator.cpp
+	evaluation_center.cpp
 )
 set(SUBDIRECTORIES 
 	arch
