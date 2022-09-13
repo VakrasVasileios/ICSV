@@ -4,7 +4,6 @@ set(FILES
   report_center.hpp
   detector_report.hpp
   smell_evaluator.hpp
-  detector_config.hpp
 )
 set(SUBDIRECTORIES
   arch
