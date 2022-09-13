@@ -15,7 +15,7 @@ class SmellEvaluator;
 
 class EvaluationCenter final {
 public:
-  using SmellLevel = double;
+  using SmellLevel = int;
 
 public:
   static auto Get() -> EvaluationCenter&;

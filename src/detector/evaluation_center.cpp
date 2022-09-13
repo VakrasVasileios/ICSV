@@ -43,7 +43,7 @@ EvaluationCenter::DeseriallizeConfig(const std::string& file_path) {
 }
 
 auto
-EvaluationCenter::EvaluateSmell(const std::string& tag, int curr_lvl)
+EvaluationCenter::EvaluateSmell(const std::string& tag, const int curr_lvl)
     -> SmellEvaluator::SmellLevel {
   if (m_eval_reg.find(tag) == m_eval_reg.end()) {
     std::cout << "Could not find evaluator with tag \"" << tag

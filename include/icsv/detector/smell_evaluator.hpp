@@ -7,7 +7,7 @@ namespace icsv::detector {
 
 class SmellEvaluator {
 public:
-  using SmellLevel = double;
+  using SmellLevel = int;
 
 public:
   SmellEvaluator(const std::string& tag);
