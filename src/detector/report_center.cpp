@@ -18,7 +18,10 @@ ReportCenter::RegisterReport(const std::string& smell_tag, const Report& rep) {
 auto
 ReportCenter::GetReportsByTag(const std::string& tag) const
     -> const std::list<Report>& {
-  assert(m_report_log.find(tag) != m_report_log.end());
+  if (m_report_log.find(tag) == m_report_log.end())
+    std::cout << "Given tag \"" << tag << "\" not found in reports.\n";
+  assert(m_report_log.find(tag) == m_report_log.end());
+
   return m_report_log.find(tag)->second;
 }
 
