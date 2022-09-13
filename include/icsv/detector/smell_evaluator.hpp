@@ -15,7 +15,7 @@ public:
 
   virtual void DeserializeConfig(const Json::Value& doc) = 0;
 
-  virtual auto EvaluateSmell(unsigned curr_lvl) -> SmellLevel = 0;
+  virtual auto EvaluateSmell(int curr_lvl) -> SmellLevel = 0;
 };
 
 }  // namespace icsv::detector
