@@ -8,7 +8,7 @@
   Else if within range calculate and return smell level
 */
 auto
-RangeBasedEvaluator::EvaluateSmell(unsigned curr_lvl)
+RangeBasedEvaluator::EvaluateSmell(int curr_lvl)
     -> icsv::detector::SmellEvaluator::SmellLevel {
   return (curr_lvl < m_range.min) * 0 + (curr_lvl > m_range.max) * 10
       + IsWithinRange(curr_lvl)
