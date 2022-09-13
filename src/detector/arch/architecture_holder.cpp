@@ -29,12 +29,8 @@ ArchitectureHolder::DeserializeArchitecture(const std::string& path) {
     dep.from = d["from"].asString();
     dep.to   = d["to"].asString();
 
-    for (auto it = d["types"].begin(); it != d["types"].end(); it++) {
-      Dependency::DepType t;
-      t.name   = it.name();
-      t.number = (*it)[it.name()].asUInt();
-      dep.types.emplace_back(t);
-    }
+    dep.types.name   = std::cbegin(d["types"]).name();
+    dep.types.number = d["types"][dep.types.name].asUInt();
 
     m_data.dependencies.emplace_back(dep);
   }
@@ -134,7 +130,7 @@ ArchitectureHolder::DeserializeArchitecture(const std::string& path) {
       s.fields.emplace_back(field);
     }
 
-    m_data.dependencies.emplace_back(s);
+    m_data.structures.emplace_back(s);
   }
 }
 
