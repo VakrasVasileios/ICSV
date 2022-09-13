@@ -3,6 +3,7 @@
 #include "arch/architecture_data.hpp"
 #include "detector_manager.hpp"
 #include "detector_report.hpp"
+#include "icsv/detector/evaluation_center.hpp"
 #include "report_center.hpp"
 #include <iostream>
 #include <string>
@@ -12,6 +13,11 @@
 using DetectorReport = icsv::detector::DetectorReport;
 using SourceInfo     = icsv::detector::SourceInfo;
 using ArchData       = icsv::detector::arch::ArchData;
+
+#ifdef TAG
+#define EVAL(lvl)   EVAL_SMELL(TAG, lvl)
+#define REPORT(rep) REGISTER_REPORT(TAG, rep)
+#endif
 
 namespace icsv::detector {
 
