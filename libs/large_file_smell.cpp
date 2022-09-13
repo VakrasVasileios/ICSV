@@ -1,9 +1,10 @@
-#include "icsv/detector/detector.hpp"
+#include "range_based_smell_eval.hpp"
 #include <assert.h>
 #include <fstream>
 #include <string>
 
 #define TAG "Large File"
+#include "icsv/detector/detector.hpp"
 
 class LargeFileDet final : public icsv::detector::Detector {
 public:
@@ -17,6 +18,7 @@ private:
 };
 
 LargeFileDet* lgd = new LargeFileDet();
+CREATE_RANGE_BASED_EVAL(TAG)
 
 unsigned
 LargeFileDet::FileLineCount(const std::string& path) {
@@ -36,10 +38,10 @@ LargeFileDet::DetectSmell(const ArchData& arch) {
     DetectorReport rep;
     unsigned lines = FileLineCount(src);  // FIXME: This will need the full,
                                           // json has only file name
-    rep.level = lines;
+    rep.level = EVAL(lines);
     rep.message
         = "Source file: " + src + " has " + std::to_string(lines) + " of code.";
     rep.src_info.file = src;
-    REGISTER_REPORT(TAG, rep);
+    REPORT(rep);
   }
 };
