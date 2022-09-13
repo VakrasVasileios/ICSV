@@ -1,7 +1,9 @@
 {
-    "dependencies": [
-        { "dep1": "one" },
-        { "dep2": "two" },
-        { "dep3": "three" }
-    ]
+    "dependencies": [{
+        "from": "one",
+        "to": "two",
+        "types": { "dep1": 1 }
+    }],
+    "sources": [],
+    "structures": {}
 }
