@@ -7,13 +7,13 @@ namespace icsv::detector {
 
 class SmellEvaluator {
 public:
-  using SmellLevel = unsigned;
+  using SmellLevel = double;
 
 public:
   SmellEvaluator(const std::string& tag);
   virtual ~SmellEvaluator() = default;
 
-  virtual void DeserializeSmellConfig(const Json::Value& doc) = 0;
+  virtual void DeserializeConfig(const Json::Value& doc) = 0;
 
   virtual auto EvaluateSmell(unsigned curr_lvl) -> SmellLevel = 0;
 };
