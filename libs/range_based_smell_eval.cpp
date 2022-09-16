@@ -1,6 +1,5 @@
 #include "range_based_smell_eval.hpp"
 #include <assert.h>
-#include <math.h>
 
 /*
   Returns 0 if curr_lvl < minimum range
@@ -12,7 +11,7 @@ RangeBasedEvaluator::EvaluateSmell(const int curr_lvl)
     -> icsv::detector::SmellEvaluator::SmellLevel {
   return (curr_lvl < m_range.min) * 0 + (curr_lvl > m_range.max) * 10
       + IsWithinRange(curr_lvl)
-      * (((double) m_range.range() / (curr_lvl - m_range.min)) * 1000) / 100;
+      * (((double) m_range.range() / (curr_lvl - m_range.min)) * 10);
 }
 
 void
