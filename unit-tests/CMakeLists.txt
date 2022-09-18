@@ -1,6 +1,6 @@
 set(FILES
 	arch_deserialization.cpp
-	large_file_detecting.cpp
+	smell_detectors.cpp
 	tests.cpp
 )
 
