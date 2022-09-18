@@ -13,6 +13,7 @@
 using DetectorReport = icsv::detector::DetectorReport;
 using SourceInfo     = icsv::detector::SourceInfo;
 using ArchData       = icsv::detector::arch::ArchData;
+using Detector       = icsv::detector::Detector;
 
 #ifdef TAG
 #define EVAL(lvl)   EVAL_SMELL(TAG, lvl)

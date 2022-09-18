@@ -6,18 +6,18 @@
 #define TAG "Large File"
 #include "icsv/detector/detector.hpp"
 
-class LargeFileDet final : public icsv::detector::Detector {
+class LargeFileDet final : public Detector {
 public:
-  LargeFileDet() : icsv::detector::Detector(TAG) {}
+  LargeFileDet() : Detector(TAG) {}
   ~LargeFileDet() override = default;
 
-  void DetectSmell(const ArchData& arch);
+  void DetectSmell(const ArchData& arch) override;
 
 private:
   unsigned FileLineCount(const std::string& path);
 };
 
-LargeFileDet* lgd = new LargeFileDet();
+static LargeFileDet* lgd = new LargeFileDet();
 CREATE_RANGE_BASED_EVAL(TAG)
 
 unsigned

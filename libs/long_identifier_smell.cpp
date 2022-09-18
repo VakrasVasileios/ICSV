@@ -5,15 +5,15 @@
 #define TAG "Excessively long identifier"
 #include "icsv/detector/detector.hpp"
 
-class LongIdentifierDet final : public icsv::detector::Detector {
+class LongIdentifierDet final : public Detector {
 public:
   LongIdentifierDet() : Detector(TAG) {}
   ~LongIdentifierDet() override = default;
 
-  void DetectSmell(const ArchData& arch);
+  void DetectSmell(const ArchData& arch) override;
 };
 
-LongIdentifierDet* l_id = new LongIdentifierDet();
+static LongIdentifierDet* l_id = new LongIdentifierDet();
 CREATE_RANGE_BASED_EVAL(TAG)
 
 void
