@@ -38,7 +38,8 @@ LargeFileDet::DetectSmell(const ArchData& arch) {
     DetectorReport rep;
     unsigned lines = FileLineCount(src);  // FIXME: This will need the full,
                                           // json has only file name
-    rep.level = EVAL(lines);
+    rep.init_level = lines;
+    rep.level      = EVAL(lines);
     rep.message
         = "Source file: " + src + " has " + std::to_string(lines) + " of code.";
     rep.src_info.file = src;

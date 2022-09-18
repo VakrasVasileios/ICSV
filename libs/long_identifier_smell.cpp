@@ -24,8 +24,9 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
     DetectorReport strct_rep;
     strct_rep.message = "Structure \"" + strct.signature + "\" has an id of "
         + std::to_string(id_size) + " characters";
-    strct_rep.level    = EVAL(id_size);
-    strct_rep.src_info = SourceInfo(strct.src_info.file,
+    strct_rep.init_level = id_size;
+    strct_rep.level      = EVAL(id_size);
+    strct_rep.src_info   = SourceInfo(strct.src_info.file,
                                     strct.src_info.line,
                                     strct.src_info.col,
                                     strct.name);
@@ -37,8 +38,9 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
       DetectorReport meth_rep;
       meth_rep.message = "Method \"" + meth.signature + "\" has an id of "
           + std::to_string(id_size) + " characters";
-      meth_rep.level    = id_size;
-      meth_rep.src_info = SourceInfo(strct.src_info.file,
+      meth_rep.init_level = id_size;
+      meth_rep.level      = id_size;
+      meth_rep.src_info   = SourceInfo(strct.src_info.file,
                                      strct.src_info.line,
                                      strct.src_info.col,
                                      strct.name,
@@ -52,8 +54,9 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
         arg_rep.message = "Argument \"" + arg.name + "\" of method \""
             + meth.signature + "\" has an id of " + std::to_string(id_size)
             + " characters";
-        arg_rep.level    = EVAL(id_size);
-        arg_rep.src_info = SourceInfo(arg.src_info.file,
+        arg_rep.init_level = id_size;
+        arg_rep.level      = EVAL(id_size);
+        arg_rep.src_info   = SourceInfo(arg.src_info.file,
                                       arg.src_info.line,
                                       arg.src_info.col,
                                       strct.name,
@@ -68,8 +71,9 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
         def_rep.message = "Definition \"" + def.name + "\" in method \""
             + meth.signature + "\" has an id of " + std::to_string(id_size)
             + " characters";
-        def_rep.level    = EVAL(id_size);
-        def_rep.src_info = SourceInfo(def.src_info.file,
+        def_rep.init_level = id_size;
+        def_rep.level      = EVAL(id_size);
+        def_rep.src_info   = SourceInfo(def.src_info.file,
                                       def.src_info.line,
                                       def.src_info.col,
                                       strct.name,
@@ -84,8 +88,9 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
       fld_rep.message = "Field \"" + field.signature + "\" of structure \""
           + strct.signature + "\" has an id of " + std::to_string(id_size)
           + " characters";
-      fld_rep.level    = EVAL(id_size);
-      fld_rep.src_info = SourceInfo(field.definition.src_info.file,
+      fld_rep.init_level = id_size;
+      fld_rep.level      = EVAL(id_size);
+      fld_rep.src_info   = SourceInfo(field.definition.src_info.file,
                                     field.definition.src_info.line,
                                     field.definition.src_info.col,
                                     strct.name);

@@ -20,8 +20,9 @@ NestedScopesDet::DetectSmell(const ArchData& arch) {
   for (auto& strct : arch.structures) {
     for (auto& meth : strct.methods) {
       DetectorReport rep;
-      rep.level   = EVAL(meth.max_scope);
-      rep.message = "Method \"" + meth.signature + "\" has "
+      rep.init_level = meth.max_scope;
+      rep.level      = EVAL(meth.max_scope);
+      rep.message    = "Method \"" + meth.signature + "\" has "
           + std::to_string(rep.level) + " nested scopes.";
       rep.src_info = SourceInfo(meth.src_info.file,
                                 meth.src_info.line,

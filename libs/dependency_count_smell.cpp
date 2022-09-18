@@ -28,6 +28,7 @@ DependencyCountDet::DetectSmell(const ArchData& arch) {
   for (auto& dep_str : dep_map) {
     DetectorReport rep;
 
+    rep.init_level        = dep_str.second.size();
     rep.level             = EVAL(dep_str.second.size());
     std::string dep_names = "";
     for (std::size_t i = 0; i < dep_str.second.size() - 1; i++)
