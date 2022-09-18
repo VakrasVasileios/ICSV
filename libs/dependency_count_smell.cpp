@@ -32,7 +32,7 @@ DependencyCountDet::DetectSmell(const ArchData& arch) {
     std::string dep_names = "";
     for (std::size_t i = 0; i < dep_str.second.size() - 1; i++)
       dep_names += dep_str.second[i] + ", ";
-    dep_names += dep_str.second[dep_str.second.size() - 1] + '\n';
+    dep_names += dep_str.second[dep_str.second.size() - 1];
 
     auto strct  = std::find_if(arch.structures.begin(),
                               arch.structures.end(),
