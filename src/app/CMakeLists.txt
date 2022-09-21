@@ -1,7 +1,5 @@
-set(FILES )
-set(SUBDIRECTORIES 
-	app
-  detector
+set(FILES 
+	app.cpp
 )
 
 foreach(VAR ${SUBDIRECTORIES})
