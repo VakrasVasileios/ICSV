@@ -1,6 +1,7 @@
 #pragma once
 
 #include "detector_report.hpp"
+#include <exception>
 #include <list>
 #include <map>
 #include <string>
@@ -9,6 +10,16 @@
   icsv::detector::ReportCenter::Get().RegisterReport(smell_name, rep)
 
 namespace icsv::detector {
+
+class NoRegisteredReports : public std::exception {
+public:
+  NoRegisteredReports()           = default;
+  ~NoRegisteredReports() override = default;
+
+  virtual const char* what() const _GLIBCXX_TXN_SAFE_DYN _GLIBCXX_NOTHROW {
+    return "There are no reports under the given tag.";
+  }
+};
 
 class ReportCenter final {
 public:
@@ -25,12 +36,12 @@ public:
   void ClearReports(void);
 
 private:
+  std::map<std::string, std::list<Report>> m_report_log;
+
   ReportCenter()                    = default;
   ReportCenter(const ReportCenter&) = delete;
   ReportCenter(ReportCenter&&)      = delete;
   ~ReportCenter()                   = default;
-
-  std::map<std::string, std::list<Report>> m_report_log;
 };
 
 }  // namespace icsv::detector
