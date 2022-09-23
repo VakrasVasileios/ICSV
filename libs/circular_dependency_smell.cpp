@@ -3,7 +3,7 @@
 #define TAG "Circular Dependency"
 #include "icsv/detector/detector.hpp"
 
-class CircularDependencyDet : Detector {
+class CircularDependencyDet : Detector {  // TODO
 public:
   CircularDependencyDet() : Detector(TAG) {}
   ~CircularDependencyDet() override = default;
