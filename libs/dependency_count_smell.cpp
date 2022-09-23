@@ -35,14 +35,12 @@ DependencyCountDet::DetectSmell(const ArchData& arch) {
       dep_names += dep_str.second[i] + ", ";
     dep_names += dep_str.second[dep_str.second.size() - 1];
 
-    auto strct  = std::find_if(arch.structures.begin(),
-                              arch.structures.end(),
-                              [dep_str](const auto& m) {
-                                if (m.signature == dep_str.first)
-                                  return true;
-                                else
-                                  return false;
-                              });
+    auto strct
+        = std::find_if(arch.structures.begin(),
+                       arch.structures.end(),
+                       [dep_str](const auto& m) {
+                         return (m.signature == dep_str.first) ? true : false;
+                       });
     rep.message = "Structure \"" + dep_str.first + "\" directly depends upon "
         + std::to_string(dep_str.second.size())
         + " other classes. These are: " + dep_names;
