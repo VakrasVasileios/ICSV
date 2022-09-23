@@ -5,8 +5,6 @@
 #include "detector_report.hpp"
 #include "icsv/detector/evaluation_center.hpp"
 #include "report_center.hpp"
-#include <iostream>
-#include <string>
 
 // TODO: Add interface documentation
 
