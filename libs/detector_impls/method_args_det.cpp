@@ -1,29 +1,31 @@
-#include "range_based_smell_eval.hpp"
+#include "../evaluator_impls/range_based_eval.hpp"
 
-#define TAG "Too many function literals"
+#define TAG "Too many parameters"
 #include "icsv/detector/detector.hpp"
 
-class MethodLiteralsDet : public Detector {
+class MethodArgsDet : public Detector {
 public:
-  MethodLiteralsDet() : Detector(TAG) {}
-  ~MethodLiteralsDet() override = default;
+  MethodArgsDet() : Detector(TAG) {}
+  ~MethodArgsDet() override = default;
 
   void DetectSmell(const ArchData& arch) override;
 };
 
-static MethodLiteralsDet* mltd = new MethodLiteralsDet();
+static MethodArgsDet* mad = new MethodArgsDet();
 CREATE_RANGE_BASED_EVAL(TAG);
 
 void
-MethodLiteralsDet::DetectSmell(const ArchData& arch) {
+MethodArgsDet::DetectSmell(const ArchData& arch) {
   for (auto& strct : arch.structures) {
     for (auto& meth : strct.methods) {
-      auto           literals = meth.literals;
+      auto argc = meth.args.size();
+      if (argc == 0)
+        continue;
       DetectorReport rep;
-      rep.init_level = literals;
-      rep.level      = EVAL(literals);
+      rep.init_level = argc;
+      rep.level      = EVAL(argc);
       rep.message    = "Method \"" + meth.signature + "\" has "
-          + std::to_string(literals) + " literals";
+          + std::to_string(argc) + " arguments";
       rep.src_info = SourceInfo(meth.src_info.file,
                                 meth.src_info.line,
                                 meth.src_info.col,
