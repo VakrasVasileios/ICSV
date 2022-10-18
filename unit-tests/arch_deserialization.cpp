@@ -19,8 +19,8 @@ TEST_F(Correct_deserialization_check, Checking_for_correct_deserialization) {
 
   GTEST_ASSERT_EQ(data.dependencies.front().from, "one");
   GTEST_ASSERT_EQ(data.dependencies.front().to, "two");
-  GTEST_ASSERT_EQ(data.dependencies.front().types.name, "dep1");
-  GTEST_ASSERT_EQ(data.dependencies.front().types.number, 1);
+  GTEST_ASSERT_EQ(data.dependencies.front().types.front().name, "dep1");
+  GTEST_ASSERT_EQ(data.dependencies.front().types.front().number, 1);
 }
 
 }  // namespace icsv::unit_tests
