@@ -23,7 +23,7 @@ namespace icsv::unit_tests {
 class Correct_level_assignment : public testing::Test {
   void SetUp() override {
     icsv::detector::arch::ArchitectureHolder::Get().DeserializeArchitecture(
-        "/home/vkrs/Documents/ICSV/unit-tests/graph.json");
+        "/home/vkrs/Documents/ICSV/unit-tests/graphme2.json");
     icsv::detector::EvaluationCenter::Get().DeseriallizeConfig(
         "/home/vkrs/Documents/ICSV/unit-tests/DetectorsConfig.json");
     icsv::detector::DetectorManager::Get().UseDetectors();
@@ -70,6 +70,16 @@ TEST_F(Correct_level_assignment,
 TEST_F(Correct_level_assignment,
        Checking_correct_scoring_for_method_definition_count) {
   ASSERT_REPORTS("Too many locals");
+}
+
+TEST_F(Correct_level_assignment,
+       Checking_correct_scoring_for_redundant_protected_accesses) {
+  ASSERT_REPORTS("Redundant protected access");
+}
+
+TEST_F(Correct_level_assignment,
+       Checking_correct_scoring_for_naming_conventions) {
+  ASSERT_REPORTS("Naming conventions");
 }
 
 }  // namespace icsv::unit_tests
