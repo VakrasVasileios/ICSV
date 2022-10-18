@@ -69,10 +69,11 @@ struct Dependency {
     std::string name;
     unsigned    number;
   };
+  using DepTypes = std::list<DepType>;
 
   std::string from;
   std::string to;
-  DepType     types;
+  DepTypes    types;
 };
 
 struct Method {
