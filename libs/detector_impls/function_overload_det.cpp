@@ -1,4 +1,5 @@
 #include "../evaluator_impls/range_based_eval.hpp"
+#include "utils/utils.hpp"
 #include <string>
 #include <unordered_map>
 
@@ -11,25 +12,10 @@ public:
   ~FuncOverloadDet() override = default;
 
   void DetectSmell(const ArchData& arch) override;
-
-private:
-  bool IsClassFunc(const std::string& meth_name, const std::string& strct_name);
 };
 
 static FuncOverloadDet* fod = new FuncOverloadDet();
 CREATE_RANGE_BASED_EVAL(TAG);
-
-bool
-FuncOverloadDet::IsClassFunc(const std::string& meth_name,
-                             const std::string& strct_name) {
-  if (meth_name == strct_name)
-    return true;
-  if (meth_name == ("~" + strct_name))
-    return true;
-  if (meth_name.starts_with("operator"))
-    return true;
-  return false;
-}
 
 void
 FuncOverloadDet::DetectSmell(const ArchData& arch) {
@@ -38,7 +24,7 @@ FuncOverloadDet::DetectSmell(const ArchData& arch) {
   for (auto& strct : arch.structures) {
     OverMap overloads;
     for (auto& meth : strct.methods) {
-      if (IsClassFunc(meth.name, strct.name))
+      if (icsv::utils::is_standard_class_func(meth.name, strct.name))
         continue;
       if (overloads.find(meth.name) == overloads.end())
         overloads[meth.name] = 0;
