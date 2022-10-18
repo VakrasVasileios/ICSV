@@ -7,7 +7,9 @@ set(FILES # Detector Interface Implementations
   method_args_det.cpp
   method_literals_det.cpp
   method_locals_det.cpp
+  naming_conventions_det.cpp
 	nested_scopes_det.cpp
+  redundant_protected_det.cpp
   virtual_destructor_det.cpp
 )
 
