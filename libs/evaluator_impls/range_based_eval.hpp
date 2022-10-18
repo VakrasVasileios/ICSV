@@ -11,14 +11,16 @@ public:
   auto EvaluateSmell(int curr_lvl)
       -> icsv::detector::SmellEvaluator::SmellLevel override;
 
-  void DeserializeConfig(const Json::Value& doc) override;
+  virtual void DeserializeConfig(const Json::Value& doc) override;
 
-private:
-  std::string m_tag;
+protected:
   struct Range {
     int min, max;
     int range() { return max - min; }
   } m_range;
+
+private:
+  std::string m_tag;
 
   bool IsWithinRange(int curr_lvl) {
     return curr_lvl >= m_range.min && curr_lvl <= m_range.max;
