@@ -1,232 +1,199 @@
 {
-    "Too many parameters": {
-        "description": "Detects methods with an excessive amount of parameters",
-        "range": {
-            "min": 5,
-            "max": 10
-        }
-    },
-    "Too many function literals": {
-        "description": "Detects excessive method literal count",
-        "range": {
-            "min": 12,
-            "max": 30
-        }
-    },
-    "Too many locals": {
-        "description": "Detects excessive method local variable declarations",
-        "range": {
-            "min": 10,
-            "max": 24
-        }
-    },
-    "Long function": {
-        "description": "Detects methods with too many statemets or too many lines",
-        "args": [{
-                "tag": "max_statements",
-                "formal_name": "Maximum method statement count",
-                "type": "range",
-                "range": [
-                    70,
-                    161
-                ],
-                "limits": [
-                    20,
-                    200
-                ]
-            },
-            {
-                "tag": "max_lines",
-                "formal_name": "Maximum Method line count",
-                "type": "range",
-                "range": [
-                    70,
-                    120
-                ],
-                "limits": [
-                    5,
-                    200
-                ]
-            }
-        ]
-    },
-    "Cyclomatic complexity": {
-        "description": "Detects methods with excessive branches (if, switch, while, for, continue, break, return)",
-        "args": [{
-                "tag": "max_loops",
-                "formal_name": "Maximum method loops",
-                "type": "range",
-                "range": [
-                    6,
-                    12
-                ],
-                "limits": [
-                    1,
-                    30
-                ]
-            },
-            {
-                "tag": "max_branches",
-                "formal_name": "Maximum method branching statements",
-                "type": "range",
-                "range": [
-                    14,
-                    20
-                ],
-                "limits": [
-                    1,
-                    60
-                ]
-            }
-        ]
-    },
-    "Excessively long identifier": {
-        "description": "Detects identifiers with too many characters",
-        "range": {
-            "min": 25,
-            "max": 45
-        }
-    },
-    "Excessively long line of code": {
-        "description": "Detects too long lines of un-commented code",
-        "range": {
-            "min": 120,
-            "max": 150
-        }
-    },
-    "Naming conventions": {
-        "description": "Detects identifiers that do not follow naming conventions",
-        "args": [{
-                "tag": "Case style regex",
-                "value": [{
-                        "tag": "UpperCamelCase",
-                        "value": "([A-Z][a-z0-9]*)((\\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?"
-                    },
-                    {
-                        "tag": "lowerCamelCase",
-                        "value": "[a-z]+((\\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?"
-                    },
-                    {
-                        "tag": "snake_case",
-                        "value": "([a-z]*_?[a-z]*)*"
-                    },
-                    {
-                        "tag": "any",
-                        "value": "[\\s\\S]*"
-                    }
-                ]
-            },
-            {
-                "tag": "class_names",
-                "formal_name": "Class names",
-                "value": "UpperCamelCase"
-            },
-            {
-                "tag": "method_names",
-                "formal_name": "Method names",
-                "value": "UpperCamelCase"
-            },
-            {
-                "tag": "var_names",
-                "formal_name": "Variable names",
-                "value": "any"
-            },
-            { "use_id_len_as_score": false },
-            {
-                "tag": "max_chars_ignored",
-                "formal_name": "Maximum characters ignored",
-                "range": [
-                    0,
-                    32
-                ],
-                "limits": [
-                    0,
-                    60
-                ]
-            }
-        ]
-    },
-    "Nested Scopes": {
-        "description": "Detects methods that nest scopes too deep",
-        "range": {
-            "min": 3,
-            "max": 7
-        }
-    },
-    "Circular Dependency": {
-        "description": "Detects circlular dependency between structures",
-        "range": {
-            "min": 2,
-            "max": 6
-        }
-    },
-    "Large Class": {
-        "description": "Detects structures with too many methods or fields",
-        "public_only": true,
-        "args": [{
-                "tag": "max_methods",
-                "formal_name": "Maximum count of methods",
-                "range": [
-                    8,
-                    29
-                ],
-                "limits": [
-                    2,
-                    40
-                ]
-            },
-            {
-                "tag": "max_fields",
-                "formal_name": "Maximum count of fields",
-                "range": [
-                    6,
-                    17
-                ],
-                "limits": [
-                    2,
-                    40
-                ]
-            },
-            {}
-        ]
-    },
-    "Large File": {
-        "description": "Detects code files with too many lines",
-        "range": {
-            "min": 619,
-            "max": 1200
-        }
-    },
-    "Inappropriate Intimacy": {
-        "description": "@argument max_member_expr: Max count of member expr from one class to any other class.",
-        "range": {
-            "min": 50,
-            "max": 120
-        }
-    },
-    "Non virtual base destructor": {
-        "description": "Flags destructors of base classes that are not virtual.",
-        "args": []
-    },
-    "Redundant protected access": {
-        "description": "Detects protected member functions or variables declared in classes that are not inherited from.",
-        "range": {
-            "min": 1,
-            "max": 5
-        }
-    },
-    "Excessive function overloading": {
-        "description": "Detects functions that are overloaded too many times.",
-        "range": {
-            "min": 8,
-            "max": 14
-        }
-    },
-    "Many Dependencies": {
-        "description": "Detects structures that directly depend upon too many other structures. Indirect dependencies are not counted.",
-        "range": {
-            "min": 8,
-            "max": 16
-        }
+  "Too many parameters": {
+    "description": "Detects methods with an excessive amount of parameters",
+    "range": {
+      "min": 5,
+      "max": 10
     }
+  },
+  "Too many function literals": {
+    "description": "Detects excessive method literal count",
+    "range": {
+      "min": 12,
+      "max": 30
+    }
+  },
+  "Too many locals": {
+    "description": "Detects excessive method local variable declarations",
+    "range": {
+      "min": 10,
+      "max": 24
+    }
+  },
+  "Long function": {
+    "description": "Detects methods with too many statemets or too many lines",
+    "args": [
+      {
+        "tag": "max_statements",
+        "formal_name": "Maximum method statement count",
+        "type": "range",
+        "range": [
+          70,
+          161
+        ],
+        "limits": [
+          20,
+          200
+        ]
+      },
+      {
+        "tag": "max_lines",
+        "formal_name": "Maximum Method line count",
+        "type": "range",
+        "range": [
+          70,
+          120
+        ],
+        "limits": [
+          5,
+          200
+        ]
+      }
+    ]
+  },
+  "Cyclomatic complexity": {
+    "description": "Detects methods with excessive branches (if, switch, while, for, continue, break, return)",
+    "args": [
+      {
+        "tag": "max_loops",
+        "formal_name": "Maximum method loops",
+        "type": "range",
+        "range": [
+          6,
+          12
+        ],
+        "limits": [
+          1,
+          30
+        ]
+      },
+      {
+        "tag": "max_branches",
+        "formal_name": "Maximum method branching statements",
+        "type": "range",
+        "range": [
+          14,
+          20
+        ],
+        "limits": [
+          1,
+          60
+        ]
+      }
+    ]
+  },
+  "Excessively long identifier": {
+    "description": "Detects identifiers with too many characters",
+    "range": {
+      "min": 25,
+      "max": 45
+    }
+  },
+  "Excessively long line of code": {
+    "description": "Detects too long lines of un-commented code",
+    "range": {
+      "min": 120,
+      "max": 150
+    }
+  },
+  "Naming conventions": {
+    "description": "Detects identifiers that do not follow naming conventions",
+    "conventions": {
+      "UpperCamelCase": "([A-Z][a-z0-9]*)((\\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?",
+      "LowerCamelCase": "[a-z]+((\\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?",
+      "SnakeCase": "([a-z]*_?[a-z]*)*",
+      "any": "[\\s\\S]*"
+    },
+    "class_names": "UpperCamelCase",
+    "method_names": "UpperCamelCase",
+    "var_names": "any",
+    "max_chars_ignored": {
+      "min": 0,
+      "max": 32
+    }
+  },
+  "Nested Scopes": {
+    "description": "Detects methods that nest scopes too deep",
+    "range": {
+      "min": 3,
+      "max": 7
+    }
+  },
+  "Circular Dependency": {
+    "description": "Detects circlular dependency between structures",
+    "range": {
+      "min": 2,
+      "max": 6
+    }
+  },
+  "Large Class": {
+    "description": "Detects structures with too many methods or fields",
+    "public_only": true,
+    "args": [
+      {
+        "tag": "max_methods",
+        "formal_name": "Maximum count of methods",
+        "range": [
+          8,
+          29
+        ],
+        "limits": [
+          2,
+          40
+        ]
+      },
+      {
+        "tag": "max_fields",
+        "formal_name": "Maximum count of fields",
+        "range": [
+          6,
+          17
+        ],
+        "limits": [
+          2,
+          40
+        ]
+      },
+      {}
+    ]
+  },
+  "Large File": {
+    "description": "Detects code files with too many lines",
+    "range": {
+      "min": 619,
+      "max": 1200
+    }
+  },
+  "Inappropriate Intimacy": {
+    "description": "@argument max_member_expr: Max count of member expr from one class to any other class.",
+    "range": {
+      "min": 50,
+      "max": 120
+    }
+  },
+  "Non virtual base destructor": {
+    "description": "Flags destructors of base classes that are not virtual.",
+    "args": []
+  },
+  "Redundant protected access": {
+    "description": "Detects protected member functions or variables declared in classes that are not inherited from.",
+    "range": {
+      "min": 1,
+      "max": 5
+    }
+  },
+  "Excessive function overloading": {
+    "description": "Detects functions that are overloaded too many times.",
+    "range": {
+      "min": 8,
+      "max": 14
+    }
+  },
+  "Many Dependencies": {
+    "description": "Detects structures that directly depend upon too many other structures. Indirect dependencies are not counted.",
+    "range": {
+      "min": 8,
+      "max": 16
+    }
+  }
 }
