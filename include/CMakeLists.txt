@@ -1,5 +1,8 @@
 set(FILES )
-set(SUBDIRECTORIES icsv)
+set(SUBDIRECTORIES
+  icsv
+  utils
+)
 
 foreach(VAR ${SUBDIRECTORIES})
 	add_subdirectory(${VAR})

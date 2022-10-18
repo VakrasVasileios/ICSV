@@ -1,6 +1,7 @@
 set(FILES )
 set(SUBDIRECTORIES 
   detector
+  utils
 )
 
 foreach(VAR ${SUBDIRECTORIES})
