@@ -14,35 +14,18 @@ endif()
 
 add_library(${PROJECT_NAME} )
 
-# if(EXISTS "/usr/local/lib/OGRE/cmake")
-
-# 	set(CMAKE_MODULE_PATH "/usr/local/lib/OGRE/cmake/;${CMAKE_MODULE_PATH}")
-# 	set(OGRE_SAMPLES_INCLUDEPATH "/usr/local/share/OGRE/samples/Common/include/") # We could just *assume* that developers uses this basepath : /usr/local
-
-# elseif(EXISTS "/usr/lib/OGRE/cmake")
-
-# 	set(CMAKE_MODULE_PATH "/usr/lib/OGRE/cmake/;${CMAKE_MODULE_PATH}")
-# 	set(OGRE_SAMPLES_INCLUDEPATH "/usr/share/OGRE/samples/Common/include/") # Otherwise, this one
-
-# else ()
-# 	message(SEND_ERROR "Failed to find module path.")
-# endif(EXISTS "/usr/local/lib/OGRE/cmake")
-
-# find_package(OGRE REQUIRED COMPONENTS Bites CONFIG)
+# The COMPONENTS part checks that OGRE was built the way we need it
+# The CONFIG flag makes sure we get OGRE instead of OGRE-next
+find_package(OGRE REQUIRED COMPONENTS Bites CONFIG)
  
-# # add the source files as usual
-# add_executable(0_Bootstrap Bootstrap.cpp)
- 
-# # this also sets the includes and pulls third party dependencies
-# target_link_libraries(0_Bootstrap OgreBites)
-
 set(JSONCPP_LIBS libjsoncpp.so)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${JSONCPP_LIBS} )
+target_link_libraries(${PROJECT_NAME} PUBLIC ${JSONCPP_LIBS} ${OGRE_LIBRARIES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
 set(SUBDIRECTORIES 
+  ICSV-app
   external
   include
   libs
