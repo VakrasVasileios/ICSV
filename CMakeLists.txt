@@ -12,15 +12,20 @@ else()
   add_compile_options(-Wall -Wextra -pedantic )
 endif()
 
+set(IMGUI_INCLUDE_DIR "/usr/include/imgui")
+include_directories(${IMGUI_INCLUDE_DIR})
+
 add_library(${PROJECT_NAME} )
 
-# The COMPONENTS part checks that OGRE was built the way we need it
-# The CONFIG flag makes sure we get OGRE instead of OGRE-next
-find_package(OGRE REQUIRED COMPONENTS Bites CONFIG)
+add_definitions(-DPROJECT_HOME_DIR="${${CMAKE_HOME_DIRECTORY}}")
  
 set(JSONCPP_LIBS libjsoncpp.so)
+set(IMGUI_LIBS libimgui.a)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ${JSONCPP_LIBS} ${OGRE_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PUBLIC 
+  ${JSONCPP_LIBS}
+  ${IMGUI_LIBS}
+)
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
