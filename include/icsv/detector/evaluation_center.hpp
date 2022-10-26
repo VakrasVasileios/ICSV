@@ -4,10 +4,13 @@
 #include <unordered_map>
 
 #define REGISTER_EVALUATOR(tag, eval) \
-  icsv::detector::EvaluationCenter::Get().RegisterEvaluator(tag, eval);
+  icsv::detector::EvaluationCenter::Get().RegisterEvaluator(tag, eval)
 
 #define EVAL_SMELL(tag, curr_lvl) \
   icsv::detector::EvaluationCenter::Get().EvaluateSmell(tag, curr_lvl)
+
+#define DESERIALLIZE_DET_CONF(path) \
+  icsv::detector::EvaluationCenter::Get().DeseriallizeConfig(path)
 
 namespace icsv::detector {
 

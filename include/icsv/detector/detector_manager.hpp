@@ -8,6 +8,8 @@
 #define REGISTER_DETECTOR(tag, det) \
   icsv::detector::DetectorManager::Get().RegisterDetector(tag, det)
 
+#define USE_DETECTORS icsv::detector::DetectorManager::Get().UseDetectors()
+
 namespace icsv::detector {
 
 class Detector;
