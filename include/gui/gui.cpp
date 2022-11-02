@@ -9,8 +9,6 @@
 static void show_import_conf_gui(void);
 
 static ImGui::FileBrowser file_dialog;
-// ("Select dectector config");
-// ("Select architecture graph");
 
 // Main show GUI function
 void
