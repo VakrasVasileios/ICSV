@@ -39,7 +39,7 @@ ICSVapp::setup() {
   m_root   = getRoot();
   m_scnMgr = m_root->createSceneManager();
 
-  EntityManager::Get().SetSceneManager(m_scnMgr);
+  set_scene_manager(m_scnMgr);
 
   // IMGUI !!!!!!!!!!!!!!!!!!!!!!
 
