@@ -76,6 +76,7 @@ TabWidth: 2
 UseTab: Never
 BreakBeforeBraces: Attach
 SortUsingDeclarations: true
+SortIncludes: false
 # Used to do this, not anymore
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
