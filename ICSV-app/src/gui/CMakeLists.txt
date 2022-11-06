@@ -5,5 +5,5 @@ set(FILES
 )
 
 if(FILES)
-	target_sources(${PROJECT_NAME} PUBLIC ${FILES})
+	target_sources(${ICSVAPP} PUBLIC ${FILES})
 endif()

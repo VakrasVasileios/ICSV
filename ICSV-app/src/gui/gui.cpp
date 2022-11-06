@@ -2,7 +2,7 @@
 #include "icsv/detector/arch/architecture_holder.hpp"
 #include "icsv/detector/detector_manager.hpp"
 #include "icsv/detector/evaluation_center.hpp"
-#include "imgui.h"
+#include <imgui/imgui.h>
 #include "imguifilebrowser.hpp"
 
 // Forward declarations

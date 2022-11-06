@@ -1,6 +1,5 @@
 set(FILES )
 set(SUBDIRECTORIES
-  gui 
   icsv
   utils
 )
