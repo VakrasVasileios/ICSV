@@ -6,6 +6,7 @@
 #include <OGRE/Overlay/OgreOverlaySystem.h>
 #include <Ogre.h>
 #include <OgreApplicationContext.h>
+#include "gui/gui.hpp"
 
 namespace ICSVapp {
 
@@ -30,6 +31,7 @@ private:
   Ogre::SceneManager* m_scnMgr{ nullptr };
   Ogre::SceneNode*    m_camNode{ nullptr };
   Ogre::Camera*       m_cam{ nullptr };
+  IcsvGui m_gui;
 
   float m_rotSpd = 0.1f;
   bool  m_LMouseDown{ false }, m_RMouseDown{ false };

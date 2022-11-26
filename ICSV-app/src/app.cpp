@@ -1,5 +1,4 @@
 #include "app.hpp"
-#include "gui/gui.hpp"
 #include "icsv_entity.hpp"
 #include "entity_manager.hpp"
 #include <SDL2/SDL.h>
@@ -13,7 +12,7 @@ ICSVapp::frameStarted(const Ogre::FrameEvent& evt) {
   Ogre::ImGuiOverlay::NewFrame();
 
   ImGui::ShowDemoWindow();
-  show_menu();
+  m_gui.Display();
 
   return true;
 }
