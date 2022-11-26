@@ -3,9 +3,6 @@
 #include "architecture_data.hpp"
 #include <string>
 
-#define DESERIALLIZE_ARCH_CONF(path) \
-  icsv::detector::arch::ArchitectureHolder::Get().DeserializeArchitecture(path)
-
 namespace icsv::detector::arch {
 
 class ArchitectureHolder final {
@@ -24,5 +21,10 @@ private:
 
   ArchData m_data;
 };
+
+inline void
+deserialize_arch_conf(const std::string& path) {
+  icsv::detector::arch::ArchitectureHolder::Get().DeserializeArchitecture(path);
+}
 
 }  // namespace icsv::detector::arch

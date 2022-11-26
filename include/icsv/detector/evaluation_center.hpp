@@ -9,9 +9,6 @@
 #define EVAL_SMELL(tag, curr_lvl) \
   icsv::detector::EvaluationCenter::Get().EvaluateSmell(tag, curr_lvl)
 
-#define DESERIALLIZE_DET_CONF(path) \
-  icsv::detector::EvaluationCenter::Get().DeseriallizeConfig(path)
-
 namespace icsv::detector {
 
 class SmellEvaluator;
@@ -40,5 +37,10 @@ private:
   EvaluationCenter(EvaluationCenter&&)      = delete;
   ~EvaluationCenter();
 };
+
+inline void
+deserialize_det_conf(const std::string& path) {
+  icsv::detector::EvaluationCenter::Get().DeseriallizeConfig(path);
+}
 
 }  // namespace icsv::detector
