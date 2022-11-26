@@ -14,7 +14,8 @@ public:
   auto CreateIcsvEntity(const char* mesh_name) -> IcsvEntity*;
 
 private:
-  Ogre::SceneManager* m_scnMan{ nullptr };
+  Ogre::SceneManager*    m_scnMan{ nullptr };
+  std::list<IcsvEntity*> m_entt_list;
 
   EntityManager()                     = default;
   EntityManager(const EntityManager&) = delete;

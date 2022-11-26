@@ -24,6 +24,7 @@ EntityManager::CreateIcsvEntity(const char* mesh_name) -> IcsvEntity* {
   IcsvEntity* ent = (IcsvEntity*) m_scnMan->createEntity(mesh_name);
   ent->m_node     = m_scnMan->getRootSceneNode()->createChildSceneNode();
   ent->m_node->attachObject(ent);
+  m_entt_list.push_back(ent);
   return ent;
 }
 
