@@ -15,7 +15,7 @@ public:
   void SetDetectorReport(DetectorReport* rep) { m_report = rep; }
   void SetPosition(double x, double y, double z);
   void SetScale(double x, double y, double z);
-  void ShowDetectorReport();
+  void ShowDetectorReportGUI();
 
   friend class EntityManager;
 

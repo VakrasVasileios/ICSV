@@ -19,7 +19,7 @@ IcsvEntity::SetScale(double x, double y, double z) {
 }
 
 void
-IcsvEntity::ShowDetectorReport() {
+IcsvEntity::ShowDetectorReportGUI() {
   ImGui::Begin("Detector Report");
   ImGui::BeginMenu("");
 
