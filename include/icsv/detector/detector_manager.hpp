@@ -8,8 +8,6 @@
 #define REGISTER_DETECTOR(tag, det) \
   icsv::detector::DetectorManager::Get().RegisterDetector(tag, det)
 
-#define USE_DETECTORS icsv::detector::DetectorManager::Get().UseDetectors()
-
 namespace icsv::detector {
 
 class Detector;
@@ -30,5 +28,10 @@ private:
 
   std::unordered_map<std::string, Detector*> m_detectors;
 };
+
+inline void
+use_smell_detectors(void) {
+  icsv::detector::DetectorManager::Get().UseDetectors();
+}
 
 }  // namespace icsv::detector
