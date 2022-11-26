@@ -2,46 +2,55 @@
 #include "icsv/detector/arch/architecture_holder.hpp"
 #include "icsv/detector/detector_manager.hpp"
 #include "icsv/detector/evaluation_center.hpp"
-#include <imgui/imgui.h>
-#include "imguifilebrowser.hpp"
+#include "iostream"
 
-// Forward declarations
-static void show_import_conf_gui(void);
+namespace ICSVapp {
 
-static ImGui::FileBrowser file_dialog;
-
-// Main show GUI function
 void
-show_menu(void) {
-  if (ImGui::BeginMainMenuBar()) {
-    show_import_conf_gui();
-    ImGui::EndMainMenuBar();
-  }
+IcsvGui::Display(void) {
+  ImGui::Begin("Menu");
+  ShowConfigSelect();
+  ImGui::Separator();
+  ImGui::Text("Smell Report");
+  // check if something was clicked by Raycast
+  // and Display Report
+  ImGui::End();
 }
 
-// Implementations
 void
-show_import_conf_gui(void) {
-  if (ImGui::BeginMenu("File")) {
-    if (ImGui::BeginMenu("Import")) {
-      if (ImGui::MenuItem("Detector Config")) {
-        file_dialog.SetTitle("Select Dectector Config");
-        file_dialog.Open();
-        if (file_dialog.HasSelected()) {
-          DESERIALLIZE_DET_CONF(file_dialog.GetSelected());
-          USE_DETECTORS;
-        }
-      }
-      if (ImGui::MenuItem("Architecture Graph")) {
-        file_dialog.SetTitle("Select Architecture Graph");
-        file_dialog.Open();
-        if (file_dialog.HasSelected()) {
-          DESERIALLIZE_ARCH_CONF(file_dialog.GetSelected());
-        }
-      }
-      ImGui::EndMenu();
-    }
-    ImGui::EndMenu();
+IcsvGui::ShowConfigSelect(void) {
+  static std::string det_conf_file   = "";
+  static std::string graph_conf_file = "";
+  static char        graph_buf[200];
+  static char        det_buf[200];
+
+  ImGui::Text("Dectector Config File");
+  ImGui::InputText("Selected Config", det_buf, 200);
+  if (ImGui::Button("Select Config")) {
+    m_conf_brwsr.SetTitle("Select Dectector Config");
+    m_conf_brwsr.Open();
   }
-  file_dialog.Display();
+  if (m_conf_brwsr.HasSelected()) {
+    std::strncpy(det_buf, det_conf_file.c_str(), det_conf_file.size());
+    det_conf_file = m_conf_brwsr.GetSelected();
+    icsv::detector::deserialize_det_conf(m_conf_brwsr.GetSelected());
+  }
+
+  ImGui::Separator();
+
+  ImGui::Text("Architecture Graph File");
+  ImGui::InputText("Selected Graph", graph_buf, 200);
+  if (ImGui::Button("Select Graph")) {
+    m_graph_brwsr.SetTitle("Select Architecture Graph");
+    m_graph_brwsr.Open();
+  }
+  if (m_graph_brwsr.HasSelected()) {
+    std::strncpy(graph_buf, graph_conf_file.c_str(), graph_conf_file.size());
+    graph_conf_file = m_graph_brwsr.GetSelected();
+    icsv::detector::arch::deserialize_arch_conf(m_graph_brwsr.GetSelected());
+  }
+  m_conf_brwsr.Display();
+  m_graph_brwsr.Display();
 }
+
+}  // namespace ICSVapp
