@@ -12,10 +12,15 @@ public:
   IcsvEntity() = default;
 
   void AdjustScaleBy(double x, double y, double z);
-  void SetDetectorReport(DetectorReport* rep) { m_report = rep; }
-  void SetPosition(double x, double y, double z);
-  void SetScale(double x, double y, double z);
+
   auto GetDetectorReport() const -> DetectorReport* { return m_report; }
+  void SetDetectorReport(DetectorReport* rep) { m_report = rep; }
+
+  void SetPosition(double x, double y, double z);
+  auto GetPosition(void) -> Ogre::Vector3f;
+
+  void SetScale(double x, double y, double z);
+  auto GetScale(void) -> Ogre::Vector3f;
 
   friend class EntityManager;
 
