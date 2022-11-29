@@ -13,8 +13,6 @@ IcsvGui::Display(void) {
   ImGui::Begin("Menu");
   ShowConfigSelect();
   ShowSmellButton();
-  ImGui::Separator();
-  ImGui::Text("Smell Report");
   ShowDetectorReport();
   ImGui::End();
 }
@@ -59,7 +57,6 @@ void
 IcsvGui::ShowDetectorReport(void) {
   if (m_rep_dspld != nullptr) {
     ImGui::Begin("Detector Report");
-    ImGui::BeginMenu("");
     ImGui::MenuItem("Message: ");
     ImGui::SameLine();
     ImGui::MenuItem(m_rep_dspld->message.c_str());
