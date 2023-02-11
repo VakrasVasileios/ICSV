@@ -4,7 +4,7 @@
 namespace icsv::detector {
 
 SmellEvaluator::SmellEvaluator(const std::string& tag) {
-  REGISTER_EVALUATOR(tag, this);
+  register_evaluator(tag, this);
 }
 
 }  // namespace icsv::detector
