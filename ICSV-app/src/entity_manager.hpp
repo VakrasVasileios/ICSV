@@ -2,6 +2,7 @@
 
 #include "icsv_entity.hpp"
 #include <Ogre.h>
+#include <OgreManualObject.h>
 
 namespace ICSVapp {
 
@@ -27,6 +28,8 @@ private:
   ~EntityManager()                    = default;
 
   auto RequestChildNode(void) -> Ogre::SceneNode*;
+
+  Ogre::ManualObject* CreateCubeMesh(Ogre::String name, Ogre::String matName);
 };
 
 inline void
