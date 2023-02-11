@@ -7,9 +7,9 @@ namespace ICSVapp {
 
 using DetectorReport = icsv::detector::DetectorReport;
 
-class IcsvEntity : public Ogre::Entity {
+class IcsvEntity {
 public:
-  IcsvEntity() = default;
+  ~IcsvEntity() = default;
 
   void AdjustScaleBy(double x, double y, double z);
 
@@ -24,8 +24,12 @@ public:
 
   friend class EntityManager;
 
+protected:
+  IcsvEntity() = default;
+
 private:
   Ogre::SceneNode* m_node;
+  Ogre::Entity*    m_ent;
   DetectorReport*  m_report{ nullptr };
 };
 
