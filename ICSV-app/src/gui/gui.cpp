@@ -97,8 +97,26 @@ IcsvGui::ShowDetectorReport(void) {
 void
 IcsvGui::ShowSmellButton(void) {
   if (ImGui::Button("Smell Code")) {
+    icsv::detector::clear_reports();
     icsv::detector::use_smell_detectors();
-    // TODO: create icsv entities
+    const auto& replst = icsv::detector::ReportCenter::Get().GetReportList();
+
+    double x = 0, z = 0;
+    auto   tag = replst.front()->smell_tag;
+    for (auto* rep : replst) {
+      if (tag != rep->smell_tag) {
+        x++;
+        z   = 0;
+        tag = rep->smell_tag;
+      }
+      if (rep->level > 0) {
+        IcsvEntity* ent = create_icsv_entity("ogrehead.mesh", rep);
+        double      y   = 0.1 * rep->level;
+        ent->SetScale(0.1, y, 0.1);
+        ent->SetPosition(x, y / 2, z);
+        z++;
+      }
+    }
   }
 }
 
