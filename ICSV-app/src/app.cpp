@@ -77,10 +77,10 @@ ICSVapp::setup() {
   m_raycaster = m_scnMgr->createRayQuery(Ogre::Ray());
   m_raycaster->setSortByDistance(true, 3);
 
-  static DetectorReport rep;
-  rep.message     = "Mock report";
-  IcsvEntity* ent = create_icsv_entity("ogrehead.mesh", &rep);
-  ent->SetScale(0.1, 0.1, 0.1);
+  // static DetectorReport rep;
+  // rep.message     = "Mock report";
+  // IcsvEntity* ent = create_icsv_entity("ogrehead.mesh", &rep);
+  // ent->SetScale(0.1, 0.1, 0.1);
 }
 
 inline auto
@@ -92,7 +92,6 @@ operator<<(std::ostream& os, const OgreBites::KeyboardEvent& e)
 
 bool
 ICSVapp::keyPressed(const OgreBites::KeyboardEvent& evnt) {
-  std::cout << evnt;
   if (evnt.keysym.sym == 119)  // Camera Forward W
     m_camNode->setPosition(m_camNode->getPosition() + Ogre::Vector3(0, 0, -1));
 
@@ -126,7 +125,7 @@ operator<<(std::ostream& os, const OgreBites::MouseButtonEvent& e)
 }
 
 bool
-ICSVapp::mousePressed(const OgreBites::MouseButtonEvent& evnt) {  // FIXME
+ICSVapp::mousePressed(const OgreBites::MouseButtonEvent& evnt) {
   if (evnt.button == (unsigned char) OgreBites::ButtonType::BUTTON_LEFT) {
     m_LMouseDown = true;
     BeginRayCastProcessAt(evnt.x, evnt.y);
@@ -138,7 +137,7 @@ ICSVapp::mousePressed(const OgreBites::MouseButtonEvent& evnt) {  // FIXME
 }
 
 bool
-ICSVapp::mouseReleased(const OgreBites::MouseButtonEvent& evnt) {  // FIXME
+ICSVapp::mouseReleased(const OgreBites::MouseButtonEvent& evnt) {
   if (evnt.button == (unsigned char) OgreBites::ButtonType::BUTTON_LEFT) {
     m_LMouseDown = false;
   }
@@ -149,7 +148,7 @@ ICSVapp::mouseReleased(const OgreBites::MouseButtonEvent& evnt) {  // FIXME
 }
 
 bool
-ICSVapp::mouseMoved(const OgreBites::MouseMotionEvent& evnt) {  // FIXME
+ICSVapp::mouseMoved(const OgreBites::MouseMotionEvent& evnt) {
   if (m_RMouseDown) {
     m_camNode->yaw(Ogre::Degree(-evnt.xrel * m_rotSpd));
     m_camNode->pitch(Ogre::Degree(-evnt.yrel * m_rotSpd));
@@ -159,7 +158,9 @@ ICSVapp::mouseMoved(const OgreBites::MouseMotionEvent& evnt) {  // FIXME
 }
 
 void
-ICSVapp::BeginRayCastProcessAt(int xPix, int yPix) {
+ICSVapp::BeginRayCastProcessAt(
+    int xPix,
+    int yPix) {  // FIXME: vector direction same as camera lookAt
   static Ogre::Ray ray;
 
   // screen to world coordinates
@@ -178,7 +179,7 @@ ICSVapp::BeginRayCastProcessAt(int xPix, int yPix) {
   rayDir.normalise();
   ray.setDirection(rayDir);
   m_raycaster->setRay(ray);
-  auto results = m_raycaster->execute();  // get sorted by distance results
+  auto results = m_raycaster->execute();  // get results sorted by distance
   if (!results.empty()) {
     auto entt_pos = results.front().movable->getParentNode()->getPosition();
     static auto entt_pos_pred = [&entt_pos](auto ref) -> bool {
@@ -192,7 +193,8 @@ ICSVapp::BeginRayCastProcessAt(int xPix, int yPix) {
                             // pass report to gui display
       m_gui.SetReportToDisplay(entt->GetDetectorReport());
     }
-  }
+  } else  // if the hits nothing then display nothing
+    m_gui.SetReportToDisplay(nullptr);
 }
 
 }  // namespace ICSVapp
