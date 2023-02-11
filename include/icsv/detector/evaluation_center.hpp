@@ -3,12 +3,6 @@
 #include <string>
 #include <unordered_map>
 
-#define REGISTER_EVALUATOR(tag, eval) \
-  icsv::detector::EvaluationCenter::Get().RegisterEvaluator(tag, eval)
-
-#define EVAL_SMELL(tag, curr_lvl) \
-  icsv::detector::EvaluationCenter::Get().EvaluateSmell(tag, curr_lvl)
-
 namespace icsv::detector {
 
 class SmellEvaluator;
@@ -40,7 +34,18 @@ private:
 
 inline void
 deserialize_det_conf(const std::string& path) {
-  icsv::detector::EvaluationCenter::Get().DeseriallizeConfig(path);
+  EvaluationCenter::Get().DeseriallizeConfig(path);
+}
+
+inline auto
+evaluate_smell(const std::string& tag, int curr_lvl)
+    -> EvaluationCenter::SmellLevel {
+  return EvaluationCenter::Get().EvaluateSmell(tag, curr_lvl);
+}
+
+inline void
+register_evaluator(const std::string& tag, SmellEvaluator* ev) {
+  EvaluationCenter::Get().RegisterEvaluator(tag, ev);
 }
 
 }  // namespace icsv::detector
