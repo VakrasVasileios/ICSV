@@ -12,31 +12,40 @@ ReportCenter::Get() -> ReportCenter& {
 
 void
 ReportCenter::RegisterReport(const std::string& smell_tag, const Report& rep) {
-  m_report_log[smell_tag].push_back(rep);
+  auto* in      = new Report(rep);
+  in->smell_tag = smell_tag;
+  m_report_log.push_back(in);
 }
 
 auto
 ReportCenter::GetReportsByTag(const std::string& tag) const
-    -> const std::list<Report>& {
-  if (m_report_log.find(tag) == m_report_log.end()) {
-    std::cout << "Given tag \"" << tag << "\" not found in reports.\n";
+    -> std::list<Report*> {
+  std::list<Report*> ret;
+
+  for (auto* rep : m_report_log) {
+    if (rep->smell_tag == tag)
+      ret.push_back(rep);
+  }
+  if (ret.empty()) {
+    std::cout << "Given tag \"" << tag << "\" not found in reports."
+              << std::endl;
     throw NoRegisteredReports();
   }
-  assert(m_report_log.find(tag) != m_report_log.end());
+  assert(!ret.empty());
 
-  return m_report_log.find(tag)->second;
+  return ret;
 }
 
 auto
-ReportCenter::GetAllReports(void) const
-    -> const std::map<std::string, std::list<Report>>& {
+ReportCenter::GetReportList(void) const -> const std::list<Report*>& {
   return m_report_log;
 }
 
 void
 ReportCenter::ClearReports(void) {
-  for (auto& log : m_report_log)
-    log.second.clear();
+  for (auto* log : m_report_log)
+    delete log;
+  m_report_log.clear();
 }
 
 }  // namespace icsv::detector
