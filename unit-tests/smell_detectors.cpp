@@ -6,16 +6,16 @@
 #include "gtest/gtest.h"
 #include <iostream>
 
-#define ASSERT_REPORTS(tag)                                                \
-  try {                                                                    \
-    auto& reps = icsv::detector::ReportCenter::Get().GetReportsByTag(tag); \
-    for (auto& r : reps) {                                                 \
-      GTEST_ASSERT_GE(r.level, 0);                                         \
-      GTEST_ASSERT_LE(r.level, 10);                                        \
-    }                                                                      \
-  } catch (icsv::detector::NoRegisteredReports & e) {                      \
-    std::cout << e.what() << std::endl;                                    \
-    GTEST_ASSERT_TRUE(true);                                               \
+#define ASSERT_REPORTS(tag)                                               \
+  try {                                                                   \
+    auto reps = icsv::detector::ReportCenter::Get().GetReportsByTag(tag); \
+    for (auto* r : reps) {                                                \
+      GTEST_ASSERT_GE(r->level, 0);                                       \
+      GTEST_ASSERT_LE(r->level, 10);                                      \
+    }                                                                     \
+  } catch (icsv::detector::NoRegisteredReports & e) {                     \
+    std::cout << e.what() << std::endl;                                   \
+    GTEST_ASSERT_TRUE(true);                                              \
   }
 
 namespace icsv::unit_tests {
@@ -23,7 +23,7 @@ namespace icsv::unit_tests {
 class Correct_level_assignment : public testing::Test {
   void SetUp() override {
     icsv::detector::arch::ArchitectureHolder::Get().DeserializeArchitecture(
-        "/home/vkrs/Documents/ICSV/unit-tests/graphme2.json");
+        "/home/vkrs/Documents/ICSV/unit-tests/graph.json");
     icsv::detector::EvaluationCenter::Get().DeseriallizeConfig(
         "/home/vkrs/Documents/ICSV/unit-tests/DetectorsConfig.json");
     icsv::detector::DetectorManager::Get().UseDetectors();
