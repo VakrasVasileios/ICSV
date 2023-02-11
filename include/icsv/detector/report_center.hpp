@@ -3,11 +3,7 @@
 #include "detector_report.hpp"
 #include <exception>
 #include <list>
-#include <map>
 #include <string>
-
-#define REGISTER_REPORT(smell_name, rep) \
-  icsv::detector::ReportCenter::Get().RegisterReport(smell_name, rep)
 
 namespace icsv::detector {
 
@@ -27,21 +23,27 @@ public:
 
   void RegisterReport(const std::string& smell_tag, const Report& rep);
 
-  auto GetReportsByTag(const std::string& tag) const
-      -> const std::list<Report>&;
+  auto GetReportsByTag(const std::string& tag) const -> std::list<Report*>;
 
-  auto GetAllReports(void) const
-      -> const std::map<std::string, std::list<Report>>&;
+  auto GetReportList(void) const -> const std::list<Report*>&;
+
+  void SortReportListBy(/* functor with which the list is sorted */);  // TODO
 
   void ClearReports(void);
 
 private:
-  std::map<std::string, std::list<Report>> m_report_log;
+  std::list<Report*>
+      m_report_log;  // FIXME: Report needs to be a pointer so... refactor
 
   ReportCenter()                    = default;
   ReportCenter(const ReportCenter&) = delete;
   ReportCenter(ReportCenter&&)      = delete;
   ~ReportCenter()                   = default;
 };
+
+inline void
+register_report(const std::string& smell_tag, const Report& rep) {
+  ReportCenter::Get().RegisterReport(smell_tag, rep);
+}
 
 }  // namespace icsv::detector
