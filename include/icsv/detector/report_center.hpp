@@ -32,8 +32,7 @@ public:
   void ClearReports(void);
 
 private:
-  std::list<Report*>
-      m_report_log;  // FIXME: Report needs to be a pointer so... refactor
+  std::list<Report*> m_report_log;
 
   ReportCenter()                    = default;
   ReportCenter(const ReportCenter&) = delete;
@@ -44,6 +43,11 @@ private:
 inline void
 register_report(const std::string& smell_tag, const Report& rep) {
   ReportCenter::Get().RegisterReport(smell_tag, rep);
+}
+
+inline void
+clear_reports(void) {
+  ReportCenter::Get().ClearReports();
 }
 
 }  // namespace icsv::detector
