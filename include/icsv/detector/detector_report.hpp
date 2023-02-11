@@ -30,7 +30,8 @@ operator<<(std::ostream& os, const SourceInfo& s) -> std::ostream& {
 }
 
 typedef struct DetectorReport {
-  std::string message = "";
+  std::string smell_tag = "";
+  std::string message   = "";
   SourceInfo  src_info;
   int         level      = -1;
   int         init_level = -1;
