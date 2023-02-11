@@ -25,12 +25,12 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
     strct_rep.message = "Structure \"" + strct.signature + "\" has an id of "
         + std::to_string(id_size) + " characters";
     strct_rep.init_level = id_size;
-    strct_rep.level      = EVAL(id_size);
+    strct_rep.level      = icsv::detector::evaluate_smell(TAG, id_size);
     strct_rep.src_info   = SourceInfo(strct.src_info.file,
                                     strct.src_info.line,
                                     strct.src_info.col,
                                     strct.name);
-    REPORT(strct_rep);
+    icsv::detector::register_report(TAG, strct_rep);
 
     for (auto meth : strct.methods) {
 
@@ -45,7 +45,7 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
                                      strct.src_info.col,
                                      strct.name,
                                      meth.name);
-      REPORT(meth_rep);
+      icsv::detector::register_report(TAG, meth_rep);
 
       for (auto arg : meth.args) {
 
@@ -55,13 +55,13 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
             + meth.signature + "\" has an id of " + std::to_string(id_size)
             + " characters";
         arg_rep.init_level = id_size;
-        arg_rep.level      = EVAL(id_size);
+        arg_rep.level      = icsv::detector::evaluate_smell(TAG, id_size);
         arg_rep.src_info   = SourceInfo(arg.src_info.file,
                                       arg.src_info.line,
                                       arg.src_info.col,
                                       strct.name,
                                       meth.name);
-        REPORT(arg_rep);
+        icsv::detector::register_report(TAG, arg_rep);
       }
 
       for (auto def : meth.definitions) {
@@ -72,13 +72,13 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
             + meth.signature + "\" has an id of " + std::to_string(id_size)
             + " characters";
         def_rep.init_level = id_size;
-        def_rep.level      = EVAL(id_size);
+        def_rep.level      = icsv::detector::evaluate_smell(TAG, id_size);
         def_rep.src_info   = SourceInfo(def.src_info.file,
                                       def.src_info.line,
                                       def.src_info.col,
                                       strct.name,
                                       meth.name);
-        REPORT(def_rep);
+        icsv::detector::register_report(TAG, def_rep);
       }
     }
     for (auto field : strct.fields) {
@@ -89,12 +89,12 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
           + strct.signature + "\" has an id of " + std::to_string(id_size)
           + " characters";
       fld_rep.init_level = id_size;
-      fld_rep.level      = EVAL(id_size);
+      fld_rep.level      = icsv::detector::evaluate_smell(TAG, id_size);
       fld_rep.src_info   = SourceInfo(field.definition.src_info.file,
                                     field.definition.src_info.line,
                                     field.definition.src_info.col,
                                     strct.name);
-      REPORT(fld_rep);
+      icsv::detector::register_report(TAG, fld_rep);
     }
   }
 }

@@ -34,7 +34,7 @@ FuncOverloadDet::DetectSmell(const ArchData& arch) {
     for (auto& entr : overloads) {
       DetectorReport rep;
       rep.init_level = entr.second;
-      rep.level      = EVAL(entr.second);
+      rep.level      = icsv::detector::evaluate_smell(TAG, entr.second);
       rep.message    = "Method \"" + entr.first + "\" of structure \""
           + strct.signature + "\" is overloaded " + std::to_string(entr.second)
           + " times.";
@@ -42,7 +42,7 @@ FuncOverloadDet::DetectSmell(const ArchData& arch) {
                                 strct.src_info.line,
                                 strct.src_info.col,
                                 strct.signature);
-      REPORT(rep);
+      icsv::detector::register_report(TAG, rep);
     }
   }
 }

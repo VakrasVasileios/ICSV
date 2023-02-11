@@ -39,10 +39,11 @@ LargeFileDet::DetectSmell(const ArchData& arch) {
     unsigned lines = FileLineCount(src);  // FIXME: This will need the full
                                           // path, json has only file name
     rep.init_level = lines;
-    rep.level      = EVAL(lines);
+    rep.level      = icsv::detector::evaluate_smell(TAG, lines);
     rep.message
         = "Source file: " + src + " has " + std::to_string(lines) + " of code.";
     rep.src_info.file = src;
-    REPORT(rep);
+
+    icsv::detector::register_report(TAG, rep);
   }
 };

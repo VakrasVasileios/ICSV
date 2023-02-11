@@ -28,8 +28,8 @@ DependencyCountDet::DetectSmell(const ArchData& arch) {
   for (auto& dep_str : dep_map) {
     DetectorReport rep;
 
-    rep.init_level        = dep_str.second.size();
-    rep.level             = EVAL(dep_str.second.size());
+    rep.init_level = dep_str.second.size();
+    rep.level      = icsv::detector::evaluate_smell(TAG, dep_str.second.size());
     std::string dep_names = "";
     for (std::size_t i = 0; i < dep_str.second.size() - 1; i++)
       dep_names += dep_str.second[i] + ", ";
@@ -48,6 +48,7 @@ DependencyCountDet::DetectSmell(const ArchData& arch) {
                               strct->src_info.line,
                               strct->src_info.col,
                               dep_str.first);
-    REPORT(rep);
+
+    icsv::detector::register_report(TAG, rep);
   }
 }

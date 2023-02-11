@@ -63,7 +63,7 @@ VirtualDectructorDet::DetectSmell(const ArchData& arch) {
                                 m_meth_iter->src_info.col,
                                 m_strct_iter->signature,
                                 m_meth_iter->signature);
-      REPORT(rep);
+      icsv::detector::register_report(TAG, rep);
     }
   }
 }

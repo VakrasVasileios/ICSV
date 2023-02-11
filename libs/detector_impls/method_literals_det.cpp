@@ -21,7 +21,7 @@ MethodLiteralsDet::DetectSmell(const ArchData& arch) {
       auto           literals = meth.literals;
       DetectorReport rep;
       rep.init_level = literals;
-      rep.level      = EVAL(literals);
+      rep.level      = icsv::detector::evaluate_smell(TAG, literals);
       rep.message    = "Method \"" + meth.signature + "\" has "
           + std::to_string(literals) + " literals";
       rep.src_info = SourceInfo(meth.src_info.file,
@@ -29,7 +29,7 @@ MethodLiteralsDet::DetectSmell(const ArchData& arch) {
                                 meth.src_info.col,
                                 strct.signature,
                                 meth.signature);
-      REPORT(rep);
+      icsv::detector::register_report(TAG, rep);
     }
   }
 }

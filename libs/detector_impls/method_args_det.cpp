@@ -23,7 +23,7 @@ MethodArgsDet::DetectSmell(const ArchData& arch) {
         continue;
       DetectorReport rep;
       rep.init_level = argc;
-      rep.level      = EVAL(argc);
+      rep.level      = icsv::detector::evaluate_smell(TAG, argc);
       rep.message    = "Method \"" + meth.signature + "\" has "
           + std::to_string(argc) + " arguments";
       rep.src_info = SourceInfo(meth.src_info.file,
@@ -31,7 +31,8 @@ MethodArgsDet::DetectSmell(const ArchData& arch) {
                                 meth.src_info.col,
                                 strct.signature,
                                 meth.signature);
-      REPORT(rep);
+
+      icsv::detector::register_report(TAG, rep);
     }
   }
 }
