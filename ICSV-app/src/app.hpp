@@ -37,7 +37,7 @@ private:
   float m_rotSpd = 0.1f;
   bool  m_LMouseDown{ false }, m_RMouseDown{ false };
 
-  void BeginRayCastProcessAt(int x, int y);
+  void RayCastAt(int x, int y);
 };
 
 }  // namespace ICSVapp

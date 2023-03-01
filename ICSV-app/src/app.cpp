@@ -39,7 +39,7 @@ ICSVapp::setup() {
   m_scnMgr = m_root->createSceneManager();
 
   set_scene_manager(m_scnMgr);
-
+  m_scnMgr->setSkyBox(true, "Examples/CloudyNoonSkyBox", 500, false);
   // IMGUI !!!!!!!!!!!!!!!!!!!!!!
 
   auto imguiOverlay = new Ogre::ImGuiOverlay();
@@ -57,14 +57,19 @@ ICSVapp::setup() {
       = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
   shadergen->addSceneManager(m_scnMgr);
 
+  static float color[] = { 255.f, 255.f, 255.f, 255.f };
+  m_gui.SetSkyboxColorPtr(color);
+
   Ogre::Light*     light = m_scnMgr->createLight("MainLight");
   Ogre::SceneNode* lightNode
       = m_scnMgr->getRootSceneNode()->createChildSceneNode();
-  lightNode->setPosition(0, 50, 0);
+  light->setType(Ogre::Light::LT_DIRECTIONAL);
+  lightNode->setDirection(1, -1, -1);
+  // lightNode->setPosition(0, 0, 0);
   lightNode->attachObject(light);
 
   m_camNode = m_scnMgr->getRootSceneNode()->createChildSceneNode();
-  m_camNode->setPosition(0, 0, 15);
+  m_camNode->setPosition(0, 10, 15);
   m_camNode->lookAt(Ogre::Vector3(0, 0, -1), Ogre::Node::TS_PARENT);
 
   m_cam = m_scnMgr->createCamera("myCam");
@@ -128,7 +133,7 @@ bool
 ICSVapp::mousePressed(const OgreBites::MouseButtonEvent& evnt) {
   if (evnt.button == (unsigned char) OgreBites::ButtonType::BUTTON_LEFT) {
     m_LMouseDown = true;
-    BeginRayCastProcessAt(evnt.x, evnt.y);
+    RayCastAt(evnt.x, evnt.y);
   }
   if (evnt.button == (unsigned char) OgreBites::ButtonType::BUTTON_RIGHT) {
     m_RMouseDown = true;
@@ -149,18 +154,17 @@ ICSVapp::mouseReleased(const OgreBites::MouseButtonEvent& evnt) {
 
 bool
 ICSVapp::mouseMoved(const OgreBites::MouseMotionEvent& evnt) {
-  if (m_RMouseDown) {
+  if (m_RMouseDown) {  // FIXME: camera goes crazy after a certain point
     m_camNode->yaw(Ogre::Degree(-evnt.xrel * m_rotSpd));
     m_camNode->pitch(Ogre::Degree(-evnt.yrel * m_rotSpd));
-    m_camNode->roll(-m_camNode->getOrientation().getRoll());
+    m_camNode->roll(Ogre::Degree(-m_camNode->getOrientation().getRoll()));
   }
   return true;
 }
 
 void
-ICSVapp::BeginRayCastProcessAt(
-    int xPix,
-    int yPix) {  // FIXME: vector direction same as camera lookAt
+ICSVapp::RayCastAt(int xPix,
+                   int yPix) {  // FIXME: vector direction same as camera lookAt
   static Ogre::Ray ray;
 
   // screen to world coordinates
