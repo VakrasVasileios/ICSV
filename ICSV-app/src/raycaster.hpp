@@ -13,7 +13,8 @@ public:
 };
 
 #if (0)
-class RayCasterListener : public Ogre::RaySceneQueryListener {  // TODO
+class RayCasterListener
+    : public Ogre::RaySceneQueryListener {  // TODO if it's needed
 public:
   RayCasterListener() : Ogre::RaySceneQueryListener() {}
   ~RayCasterListener() override = default;

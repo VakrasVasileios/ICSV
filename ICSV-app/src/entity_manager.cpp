@@ -20,9 +20,7 @@ EntityManager::CreateIcsvEntity(DetectorReport* rep) -> IcsvEntity* {
   // icsv_ent->m_ent      = m_scnMan->createEntity(mesh_name);
 
   icsv_ent->m_node = m_scnMan->getRootSceneNode()->createChildSceneNode();
-  icsv_ent->m_node->attachObject(CreateCubeMesh()
-                                 /*icsv_ent->m_ent*/);  // FIXME: Add
-                                                        // some material
+  icsv_ent->m_node->attachObject(CreateCubeMesh());
   icsv_ent->SetDetectorReport(rep);
   m_entt_list.push_back(icsv_ent);
   return icsv_ent;
