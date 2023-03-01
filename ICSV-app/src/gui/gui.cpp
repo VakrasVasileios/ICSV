@@ -11,8 +11,16 @@ namespace ICSVapp {
 void
 IcsvGui::Display(void) {
   ImGui::Begin("Menu");
-  ShowConfigSelect();
-  ShowSmellButton();
+  if (ImGui::CollapsingHeader("Smell Configuration")) {
+    ShowConfigSelect();
+    ShowSmellButton();
+    ImGui::Separator();
+  }
+  if (ImGui::CollapsingHeader("Environment Settings")) {
+    ShowSkyboxSettings();
+    ImGui::Separator();
+  }
+
   ShowDetectorReport();
   ImGui::End();
 }
@@ -110,14 +118,58 @@ IcsvGui::ShowSmellButton(void) {
         tag = rep->smell_tag;
       }
       if (rep->level > 0) {
-        IcsvEntity* ent = create_icsv_entity("ogrehead.mesh", rep);
-        double      y   = 0.1 * rep->level;
-        ent->SetScale(0.1, y, 0.1);
+        IcsvEntity* ent = create_icsv_entity(rep);
+        double      y   = 0.2 * rep->level;
+        ent->SetScale(0.2, y, 0.2);
         ent->SetPosition(x, y / 2, z);
         z++;
       }
     }
   }
+}
+
+void
+IcsvGui::ShowSkyboxSettings(void) {
+  ImGui::Text("Skybox Color:");
+  static bool   alpha        = true;
+  static bool   alpha_bar    = true;
+  static bool   side_preview = true;
+  static int    display_mode = 0;
+  static int    picker_mode  = 0;
+  static ImVec4 color        = ImVec4(114.0f / 255.0f,
+                               144.0f / 255.0f,
+                               154.0f / 255.0f,
+                               200.0f / 255.0f);
+
+  ImGui::Checkbox("With Alpha", &alpha);
+  ImGui::Checkbox("With Alpha Bar", &alpha_bar);
+  ImGui::Checkbox("With Side Preview", &side_preview);
+
+  ImGui::Combo("Display Mode",
+               &display_mode,
+               "Auto/Current\0None\0RGB Only\0HSV Only\0Hex Only\0");
+  ImGuiColorEditFlags flags = 0;
+  if (!alpha)
+    flags |= ImGuiColorEditFlags_NoAlpha;  // This is by default if you call
+                                           // ColorPicker3() instead of
+                                           // ColorPicker4()
+  if (alpha_bar)
+    flags |= ImGuiColorEditFlags_AlphaBar;
+  if (!side_preview)
+    flags |= ImGuiColorEditFlags_NoSidePreview;
+  if (picker_mode == 1)
+    flags |= ImGuiColorEditFlags_PickerHueBar;
+  if (picker_mode == 2)
+    flags |= ImGuiColorEditFlags_PickerHueWheel;
+  if (display_mode == 1)
+    flags |= ImGuiColorEditFlags_NoInputs;  // Disable all RGB/HSV/Hex displays
+  if (display_mode == 2)
+    flags |= ImGuiColorEditFlags_DisplayRGB;  // Override display mode
+  if (display_mode == 3)
+    flags |= ImGuiColorEditFlags_DisplayHSV;
+  if (display_mode == 4)
+    flags |= ImGuiColorEditFlags_DisplayHex;
+  ImGui::ColorPicker4("MyColor##4", (float*) &color, flags, NULL);
 }
 
 }  // namespace ICSVapp
