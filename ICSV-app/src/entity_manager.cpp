@@ -15,14 +15,14 @@ EntityManager::SetSceneManager(Ogre::SceneManager* scnMan) {
 }
 
 auto
-EntityManager::CreateIcsvEntity(const char* mesh_name, DetectorReport* rep)
-    -> IcsvEntity* {
+EntityManager::CreateIcsvEntity(DetectorReport* rep) -> IcsvEntity* {
   IcsvEntity* icsv_ent = new IcsvEntity();
   // icsv_ent->m_ent      = m_scnMan->createEntity(mesh_name);
+
   icsv_ent->m_node = m_scnMan->getRootSceneNode()->createChildSceneNode();
-  icsv_ent->m_node->attachObject(
-      /*icsv_ent->m_ent*/ CreateCubeMesh("Cube", "Glass"));  // FIXME: Add
-                                                             // some material
+  icsv_ent->m_node->attachObject(CreateCubeMesh()
+                                 /*icsv_ent->m_ent*/);  // FIXME: Add
+                                                        // some material
   icsv_ent->SetDetectorReport(rep);
   m_entt_list.push_back(icsv_ent);
   return icsv_ent;
@@ -41,11 +41,11 @@ EntityManager::RequestChildNode(void) -> Ogre::SceneNode* {
   return m_scnMan->getRootSceneNode()->createChildSceneNode();
 }
 
-Ogre::ManualObject*
-EntityManager::CreateCubeMesh(Ogre::String name, Ogre::String matName) {
+auto
+EntityManager::CreateCubeMesh(void) -> Ogre::ManualObject* {
 
-  Ogre::ManualObject* cube = new Ogre::ManualObject(name);
-  cube->begin(matName);
+  Ogre::ManualObject* cube = new Ogre::ManualObject("Cube");
+  cube->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
   cube->position(0.5, -0.5, 1.0);
   cube->normal(0.408248, -0.816497, 0.408248);
