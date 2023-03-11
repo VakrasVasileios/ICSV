@@ -119,7 +119,8 @@ IcsvGui::ShowSmellButton(void) {
       }
       if (rep->level > 0) {
         IcsvEntity* ent = create_icsv_entity(rep);
-        double      y   = 0.2 * rep->level / 2;
+        ent->FlipVisibility();
+        double y = 0.2 * rep->level / 2;
         ent->SetScale(0.2, y, 0.2);
         ent->SetPosition(x, y / 2, z);
         z++;
