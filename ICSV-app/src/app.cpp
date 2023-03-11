@@ -79,13 +79,17 @@ ICSVapp::setup() {
   m_camNode->attachObject(m_cam);
   getRenderWindow()->addViewport(m_cam);
 
+  m_camMotor = new SmoothCamMove(m_camNode);
+  m_root->addFrameListener(m_camMotor);
+
   m_raycaster = m_scnMgr->createRayQuery(Ogre::Ray());
   m_raycaster->setSortByDistance(true, 3);
 
-  // static DetectorReport rep;
-  // rep.message     = "Mock report";
-  // IcsvEntity* ent = create_icsv_entity("ogrehead.mesh", &rep);
-  // ent->SetScale(0.1, 0.1, 0.1);
+  static DetectorReport rep;
+  rep.message     = "Mock report";
+  IcsvEntity* ent = create_icsv_entity(&rep);
+  ent->SetScale(1, 1, 1);
+  m_scnMgr->showBoundingBoxes(true);
 }
 
 inline auto
@@ -96,24 +100,39 @@ operator<<(std::ostream& os, const OgreBites::KeyboardEvent& e)
 }
 
 bool
+ICSVapp::keyReleased(const OgreBites::KeyboardEvent& evnt) {
+  if (evnt.keysym.sym == 119 || evnt.keysym.sym == 115)  // Camera Forward W
+    m_camMotor->HaltZ();
+
+  if (evnt.keysym.sym == 97 || evnt.keysym.sym == 100)  // Camera Left A
+    m_camMotor->HaltX();
+
+  if (evnt.keysym.sym == SDLK_SPACE
+      || evnt.keysym.sym == SDLK_LCTRL)  // Camera Up
+    m_camMotor->HaltY();
+
+  return true;
+}
+
+bool
 ICSVapp::keyPressed(const OgreBites::KeyboardEvent& evnt) {
   if (evnt.keysym.sym == 119)  // Camera Forward W
-    m_camNode->setPosition(m_camNode->getPosition() + Ogre::Vector3(0, 0, -1));
+    m_camMotor->Forward();
 
   if (evnt.keysym.sym == 97)  // Camera Left A
-    m_camNode->setPosition(m_camNode->getPosition() + Ogre::Vector3(-1, 0, 0));
+    m_camMotor->Left();
 
   if (evnt.keysym.sym == 115)  // Camera Back S
-    m_camNode->setPosition(m_camNode->getPosition() + Ogre::Vector3(0, 0, 1));
+    m_camMotor->Back();
 
   if (evnt.keysym.sym == 100)  // Camera Right D
-    m_camNode->setPosition(m_camNode->getPosition() + Ogre::Vector3(1, 0, 0));
+    m_camMotor->Right();
 
   if (evnt.keysym.sym == SDLK_SPACE)  // Camera Up
-    m_camNode->setPosition(m_camNode->getPosition() + Ogre::Vector3(0, 1, 0));
+    m_camMotor->Up();
 
   if (evnt.keysym.sym == SDLK_LCTRL)  // Camera Down
-    m_camNode->setPosition(m_camNode->getPosition() + Ogre::Vector3(0, -1, 0));
+    m_camMotor->Down();
 
   if (evnt.keysym.sym == SDLK_ESCAPE)  // Quit
     getRoot()->queueEndRendering();
@@ -162,25 +181,69 @@ ICSVapp::mouseMoved(const OgreBites::MouseMotionEvent& evnt) {
   return true;
 }
 
+auto
+ICSVapp::XPixelToZRot(int xPix) -> Ogre::Degree {
+  int  w    = m_cam->getViewport()->getActualWidth();
+  auto yFov = m_cam->getFOVy().valueDegrees();
+  if (w / 2 < xPix)
+    return Ogre::Degree(yFov * (xPix - w / 2) / w);
+  else
+    return Ogre::Degree(yFov * ((w / 2) - xPix) / w);
+}
+
+auto
+ICSVapp::YPixelToXRot(int yPix) -> Ogre::Degree {
+  int  h    = m_cam->getViewport()->getActualHeight();
+  int  w    = m_cam->getViewport()->getActualWidth();
+  auto xFov = 2
+      * std::atan(std::tan(m_cam->getFOVy().valueDegrees() * 0.5) * (w / h));
+  if (h / 2 < yPix)
+    return Ogre::Degree(xFov * (yPix - h / 2) / h);
+  else
+    return Ogre::Degree(xFov * ((h / 2) - yPix) / h);
+}
+
+auto
+ICSVapp::RotateVector(Ogre::Vector3 v, double xRot, double zRot)
+    -> Ogre::Vector3f {
+  Ogre::Vector3f ret = v;
+
+  // rotate around Z-axis
+  v.x = v.x * std::cos(zRot) - v.y * std::sin(zRot);
+  v.y = v.x * std::sin(zRot) + v.y * std::cos(zRot);
+
+  // rotate around X-axis
+  v.y = v.y * std::cos(xRot) - v.z * std::sin(xRot);
+  v.z = v.y * std::sin(xRot) + v.z * std::cos(xRot);
+
+  return ret;
+}
+
 void
 ICSVapp::RayCastAt(int xPix,
                    int yPix) {  // FIXME: vector direction same as camera lookAt
   static Ogre::Ray ray;
 
-  // screen to world coordinates
-  float frayX = (m_cam->getAspectRatio() * xPix + 0.5f)
-          / (m_cam->getViewport()->getActualWidth() / 2)
-      - 1.0f;
-  float frayY = 1.0f
-      - (m_cam->getAspectRatio() * yPix + 0.5f)
-          / (m_cam->getViewport()->getActualHeight() / 2);
+  auto lookAt = m_cam->getDerivedDirection();
+  auto zRot   = XPixelToZRot(xPix);
+  auto xRot   = YPixelToXRot(yPix);
 
-  auto rayDir
-      = Ogre::Vector3(frayX - m_camNode->getPosition().x,
-                      frayY - m_camNode->getPosition().y,
-                      m_cam->getFarClipDistance() - m_camNode->getPosition().z)
-      * m_cam->getDerivedDirection();
-  rayDir.normalise();
+  // // screen to world coordinates
+  // float frayX = (m_cam->getAspectRatio() * xPix + 0.5f)
+  //         / (m_cam->getViewport()->getActualWidth() / 2)
+  //     - 1.0f;
+  // float frayY = 1.0f
+  //     - (m_cam->getAspectRatio() * yPix + 0.5f)
+  //         / (m_cam->getViewport()->getActualHeight() / 2);
+
+  // auto rayDir
+  //     = Ogre::Vector3(frayX - m_camNode->getPosition().x,
+  //                     frayY - m_camNode->getPosition().y,
+  //                     m_cam->getFarClipDistance() -
+  //                     m_camNode->getPosition().z)
+  //     * m_cam->getDerivedDirection();
+  // rayDir.normalise();
+  auto rayDir = RotateVector(lookAt, xRot.valueDegrees(), zRot.valueDegrees());
   ray.setDirection(rayDir);
   m_raycaster->setRay(ray);
   auto results = m_raycaster->execute();  // get results sorted by distance
@@ -199,6 +262,13 @@ ICSVapp::RayCastAt(int xPix,
     }
   } else  // if the hits nothing then display nothing
     m_gui.SetReportToDisplay(nullptr);
+}
+
+bool
+SmoothCamMove::frameStarted(const Ogre::FrameEvent& evt) {
+  m_camNodeRef->setPosition(m_camNodeRef->getPosition()
+                            + m_speed * m_dir * evt.timeSinceLastFrame);
+  return true;
 }
 
 }  // namespace ICSVapp
