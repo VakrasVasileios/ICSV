@@ -8,6 +8,8 @@
 
 namespace ICSVapp {
 
+#define BUFFSIZE 400
+
 void
 IcsvGui::Display(void) {
   ImGui::Begin("Menu");
@@ -29,12 +31,12 @@ void
 IcsvGui::ShowConfigSelect(void) {
   static std::string det_conf_file   = "";
   static std::string graph_conf_file = "";
-  static char        graph_buf[200];
-  static char        det_buf[200];
+  static char        graph_buf[BUFFSIZE];
+  static char        det_buf[BUFFSIZE];
 
   ImGui::Text("Dectector Config File");
-  ImGui::InputText("Selected Config", det_buf, 200);
-  if (ImGui::Button("Select Config")) {
+  ImGui::InputText("Config", det_buf, BUFFSIZE);
+  if (ImGui::Button("Select", ImVec2(100, 20))) {
     m_conf_brwsr.SetTitle("Select Dectector Config");
     m_conf_brwsr.Open();
   }
@@ -47,8 +49,8 @@ IcsvGui::ShowConfigSelect(void) {
   ImGui::Separator();
 
   ImGui::Text("Architecture Graph File");
-  ImGui::InputText("Selected Graph", graph_buf, 200);
-  if (ImGui::Button("Select Graph")) {
+  ImGui::InputText("Graph", graph_buf, BUFFSIZE);
+  if (ImGui::Button("Select ", ImVec2(100, 20))) {
     m_graph_brwsr.SetTitle("Select Architecture Graph");
     m_graph_brwsr.Open();
   }
@@ -104,7 +106,7 @@ IcsvGui::ShowDetectorReport(void) {
 
 void
 IcsvGui::ShowSmellButton(void) {
-  if (ImGui::Button("Smell Code")) {
+  if (ImGui::Button("Smell Code", ImVec2(250, 50))) {
     icsv::detector::clear_reports();
     icsv::detector::use_smell_detectors();
     const auto& replst = icsv::detector::ReportCenter::Get().GetReportList();
@@ -118,11 +120,11 @@ IcsvGui::ShowSmellButton(void) {
         tag = rep->smell_tag;
       }
       if (rep->level > 0) {
-        IcsvEntity* ent = create_icsv_entity(rep);
+        double      y   = 0.2 * rep->level / 2;
+        IcsvEntity* ent = create_icsv_entity(rep,
+                                             Ogre::Vector3f(x, y / 2, z),
+                                             Ogre::Vector3f(0.2, y, 0.2));
         ent->FlipVisibility();
-        double y = 0.2 * rep->level / 2;
-        ent->SetScale(0.2, y, 0.2);
-        ent->SetPosition(x, y / 2, z);
         z++;
       }
     }
