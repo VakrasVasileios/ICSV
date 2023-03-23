@@ -19,6 +19,9 @@ public:
   auto GetBoundingBox(void) -> const Ogre::AxisAlignedBox& {
     return m_ent->getBoundingBox();
   }
+  void SetBoundingBox(const Ogre::AxisAlignedBox& box) {
+    m_ent->setBoundingBox(box);
+  }
 
   void SetPosition(double x, double y, double z);
   auto GetPosition(void) -> Ogre::Vector3f;

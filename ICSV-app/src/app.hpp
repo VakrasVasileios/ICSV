@@ -43,17 +43,12 @@ private:
   float m_rotSpd = 0.1f;
   bool  m_LMouseDown{ false }, m_RMouseDown{ false };
 
-  void RayCastAt(int x, int y);
-  auto XPixelToZRot(int xPix) -> Ogre::Degree;
-  auto YPixelToXRot(int yPix) -> Ogre::Degree;
-  auto RotateVector(Ogre::Vector3 v, double xRot, double zRot)
-      -> Ogre::Vector3f;
+  void Raycast(void);
 };
 
 class SmoothCamMove : public Ogre::FrameListener {
 public:
-  SmoothCamMove(Ogre::SceneNode* camNode)
-      : m_camNodeRef(camNode), Ogre::FrameListener() {}
+  SmoothCamMove(Ogre::SceneNode* camNode) : m_camNodeRef(camNode) {}
   ~SmoothCamMove() override = default;
 
   void Forward() { m_dir.z = -1; }
@@ -66,10 +61,14 @@ public:
   void Down() { m_dir.y = -1; }
   void HaltY() { m_dir.y = 0; }
 
+  void CamRotating(bool is) { m_is_rot = is; }
+
   bool frameStarted(const Ogre::FrameEvent& evt) override;
 
 private:
-  float            m_speed = 2.f;
+  float            m_speed      = 2.f;
+  float            m_rot_smooth = 0.6f;
+  bool             m_is_rot     = false;
   Ogre::Vector3    m_dir{ 0, 0, 0 };
   Ogre::SceneNode* m_camNodeRef;
 };

@@ -14,7 +14,9 @@ public:
   static auto Get(void) -> EntityManager&;
 
   void SetSceneManager(Ogre::SceneManager* scnMan);
-  auto CreateIcsvEntity(DetectorReport* rep) -> IcsvEntity*;
+  auto CreateIcsvEntity(DetectorReport*       rep,
+                        const Ogre::Vector3f& pos,
+                        const Ogre::Vector3f& scale) -> IcsvEntity*;
   auto FindEntityIf(const Pred& pred) const -> IcsvEntity*;
   auto GetEntityList(void) const -> const std::list<IcsvEntity*>&;
 
@@ -29,7 +31,8 @@ private:
 
   auto RequestChildNode(void) -> Ogre::SceneNode*;
 
-  Ogre::ManualObject* CreateCubeMesh(void);
+  Ogre::ManualObject* CreateCubeMesh(const Ogre::Vector3f& pos,
+                                     const Ogre::Vector3f& scale);
 };
 
 inline void
@@ -38,8 +41,10 @@ set_scene_manager(Ogre::SceneManager* scnMan) {
 }
 
 inline auto
-create_icsv_entity(DetectorReport* rep) -> IcsvEntity* {
-  return EntityManager::Get().CreateIcsvEntity(rep);
+create_icsv_entity(DetectorReport*       rep,
+                   const Ogre::Vector3f& pos,
+                   const Ogre::Vector3f& scale) -> IcsvEntity* {
+  return EntityManager::Get().CreateIcsvEntity(rep, pos, scale);
 }
 
 inline auto

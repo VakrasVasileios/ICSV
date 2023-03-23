@@ -15,12 +15,14 @@ EntityManager::SetSceneManager(Ogre::SceneManager* scnMan) {
 }
 
 auto
-EntityManager::CreateIcsvEntity(DetectorReport* rep) -> IcsvEntity* {
+EntityManager::CreateIcsvEntity(DetectorReport*       rep,
+                                const Ogre::Vector3f& pos,
+                                const Ogre::Vector3f& scale) -> IcsvEntity* {
   IcsvEntity* icsv_ent = new IcsvEntity();
   // icsv_ent->m_ent      = m_scnMan->createEntity(mesh_name);
 
   icsv_ent->m_node = m_scnMan->getRootSceneNode()->createChildSceneNode();
-  icsv_ent->m_ent  = CreateCubeMesh();
+  icsv_ent->m_ent  = CreateCubeMesh(pos, scale);
   // std::cout << "Bounding box " << manObj->getBoundingBox() << std::endl;
   icsv_ent->m_node->attachObject(icsv_ent->m_ent);
   icsv_ent->SetDetectorReport(rep);
@@ -47,69 +49,71 @@ EntityManager::RequestChildNode(void) -> Ogre::SceneNode* {
 }
 
 auto
-EntityManager::CreateCubeMesh(void) -> Ogre::ManualObject* {
+EntityManager::CreateCubeMesh(const Ogre::Vector3f& pos,
+                              const Ogre::Vector3f& scale)
+    -> Ogre::ManualObject* {
 
   Ogre::ManualObject* cube = new Ogre::ManualObject("Cube");
   cube->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
-  cube->position(0.5, -0.5, 1.0);
+  cube->position(pos.x + scale.x / 2, pos.y - scale.y / 2, pos.z + scale.z / 2);
   cube->normal(0.408248, -0.816497, 0.408248);
   cube->textureCoord(1, 0);
-  cube->position(-0.5, -0.5, 0.0);
+  cube->position(pos.x - scale.x / 2, pos.y - scale.y / 2, pos.z - scale.z / 2);
   cube->normal(-0.408248, -0.816497, -0.408248);
   cube->textureCoord(0, 1);
-  cube->position(0.5, -0.5, 0.0);
+  cube->position(pos.x + scale.x / 2, pos.y - scale.y / 2, pos.z - scale.z / 2);
   cube->normal(0.666667, -0.333333, -0.666667);
   cube->textureCoord(1, 1);
-  cube->position(-0.5, -0.5, 1.0);
+  cube->position(pos.x - scale.x / 2, pos.y - scale.y / 2, pos.z + scale.z / 2);
   cube->normal(-0.666667, -0.333333, 0.666667);
   cube->textureCoord(0, 0);
-  cube->position(0.5, 0.5, 1.0);
+  cube->position(pos.x + scale.x / 2, pos.y + scale.y / 2, pos.z + scale.z / 2);
   cube->normal(0.666667, 0.333333, 0.666667);
   cube->textureCoord(1, 0);
-  cube->position(-0.5, -0.5, 1.0);
+  cube->position(pos.x - scale.x / 2, pos.y - scale.y / 2, pos.z + scale.z / 2);
   cube->normal(-0.666667, -0.333333, 0.666667);
   cube->textureCoord(0, 1);
-  cube->position(0.5, -0.5, 1.0);
+  cube->position(pos.x + scale.x / 2, pos.y - scale.y / 2, pos.z + scale.z / 2);
   cube->normal(0.408248, -0.816497, 0.408248);
   cube->textureCoord(1, 1);
-  cube->position(-0.5, 0.5, 1.0);
+  cube->position(pos.x - scale.x / 2, pos.y + scale.y / 2, pos.z + scale.z / 2);
   cube->normal(-0.408248, 0.816497, 0.408248);
   cube->textureCoord(0, 0);
-  cube->position(-0.5, 0.5, 0.0);
+  cube->position(pos.x - scale.x / 2, pos.y + scale.y / 2, pos.z - scale.z / 2);
   cube->normal(-0.666667, 0.333333, -0.666667);
   cube->textureCoord(0, 1);
-  cube->position(-0.5, -0.5, 0.0);
+  cube->position(pos.x - scale.x / 2, pos.y - scale.y / 2, pos.z - scale.z / 2);
   cube->normal(-0.408248, -0.816497, -0.408248);
   cube->textureCoord(1, 1);
-  cube->position(-0.5, -0.5, 1.0);
+  cube->position(pos.x - scale.x / 2, pos.y - scale.y / 2, pos.z + scale.z / 2);
   cube->normal(-0.666667, -0.333333, 0.666667);
   cube->textureCoord(1, 0);
-  cube->position(0.5, -0.5, 0.0);
+  cube->position(pos.x + scale.x / 2, pos.y - scale.y / 2, pos.z - scale.z / 2);
   cube->normal(0.666667, -0.333333, -0.666667);
   cube->textureCoord(0, 1);
-  cube->position(0.5, 0.5, 0.0);
+  cube->position(pos.x + scale.x / 2, pos.y + scale.y / 2, pos.z - scale.z / 2);
   cube->normal(0.408248, 0.816497, -0.408248);
   cube->textureCoord(1, 1);
-  cube->position(0.5, -0.5, 1.0);
+  cube->position(pos.x + scale.x / 2, pos.y - scale.y / 2, pos.z + scale.z / 2);
   cube->normal(0.408248, -0.816497, 0.408248);
   cube->textureCoord(0, 0);
-  cube->position(0.5, -0.5, 0.0);
+  cube->position(pos.x + scale.x / 2, pos.y - scale.y / 2, pos.z - scale.z / 2);
   cube->normal(0.666667, -0.333333, -0.666667);
   cube->textureCoord(1, 0);
-  cube->position(-0.5, -0.5, 0.0);
+  cube->position(pos.x - scale.x / 2, pos.y - scale.y / 2, pos.z - scale.z / 2);
   cube->normal(-0.408248, -0.816497, -0.408248);
   cube->textureCoord(0, 0);
-  cube->position(-0.5, 0.5, 1.0);
+  cube->position(pos.x - scale.x / 2, pos.y + scale.y / 2, pos.z + scale.z / 2);
   cube->normal(-0.408248, 0.816497, 0.408248);
   cube->textureCoord(1, 0);
-  cube->position(0.5, 0.5, 0.0);
+  cube->position(pos.x + scale.x / 2, pos.y + scale.y / 2, pos.z - scale.z / 2);
   cube->normal(0.408248, 0.816497, -0.408248);
   cube->textureCoord(0, 1);
-  cube->position(-0.5, 0.5, 0.0);
+  cube->position(pos.x - scale.x / 2, pos.y + scale.y / 2, pos.z - scale.z / 2);
   cube->normal(-0.666667, 0.333333, -0.666667);
   cube->textureCoord(1, 1);
-  cube->position(0.5, 0.5, 1.0);
+  cube->position(pos.x + scale.x / 2, pos.y + scale.y / 2, pos.z + scale.z / 2);
   cube->normal(0.666667, 0.333333, 0.666667);
   cube->textureCoord(0, 0);
 

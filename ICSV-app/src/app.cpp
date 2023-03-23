@@ -82,11 +82,11 @@ ICSVapp::setup() {
   m_camMotor = new SmoothCamMove(m_camNode);
   m_root->addFrameListener(m_camMotor);
 
-  static DetectorReport rep;
-  rep.message     = "Mock report";
-  IcsvEntity* ent = create_icsv_entity(&rep);
-  ent->SetScale(1, 1, 1);
-  ent->FlipVisibility();
+  // static DetectorReport rep;
+  // rep.message     = "Mock report";
+  // IcsvEntity* ent = create_icsv_entity(&rep);
+  // ent->SetScale(1, 1, 1);
+  // ent->FlipVisibility();
   m_scnMgr->showBoundingBoxes(true);
 }
 
@@ -150,7 +150,7 @@ bool
 ICSVapp::mousePressed(const OgreBites::MouseButtonEvent& evnt) {
   if (evnt.button == (unsigned char) OgreBites::ButtonType::BUTTON_LEFT) {
     m_LMouseDown = true;
-    RayCastAt(evnt.x, evnt.y);
+    Raycast();
   }
   if (evnt.button == (unsigned char) OgreBites::ButtonType::BUTTON_RIGHT) {
     m_RMouseDown = true;
@@ -179,68 +179,26 @@ ICSVapp::mouseMoved(const OgreBites::MouseMotionEvent& evnt) {
   return true;
 }
 
-auto
-ICSVapp::XPixelToZRot(int xPix) -> Ogre::Degree {
-  int  w    = m_cam->getViewport()->getActualWidth();
-  auto yFov = m_cam->getFOVy().valueDegrees();
-  if (w / 2 < xPix)
-    return Ogre::Degree(yFov * (xPix - w / 2) / w);
-  else
-    return Ogre::Degree(yFov * ((w / 2) - xPix) / w);
-}
-
-auto
-ICSVapp::YPixelToXRot(int yPix) -> Ogre::Degree {
-  int  h    = m_cam->getViewport()->getActualHeight();
-  int  w    = m_cam->getViewport()->getActualWidth();
-  auto xFov = 2
-      * std::atan(std::tan(m_cam->getFOVy().valueDegrees() * 0.5) * (w / h));
-  if (h / 2 < yPix)
-    return Ogre::Degree(xFov * (yPix - h / 2) / h);
-  else
-    return Ogre::Degree(xFov * ((h / 2) - yPix) / h);
-}
-
-auto
-ICSVapp::RotateVector(Ogre::Vector3 v, double xRot, double zRot)
-    -> Ogre::Vector3f {
-  Ogre::Vector3f ret = v;
-
-  // rotate around Z-axis
-  v.x = v.x * std::cos(zRot) - v.y * std::sin(zRot);
-  v.y = v.x * std::sin(zRot) + v.y * std::cos(zRot);
-
-  // rotate around X-axis
-  v.y = v.y * std::cos(xRot) - v.z * std::sin(xRot);
-  v.z = v.y * std::sin(xRot) + v.z * std::cos(xRot);
-
-  return ret;
-}
-
 void
-ICSVapp::RayCastAt(int, int) {
+ICSVapp::Raycast(void) {
   static Ogre::Ray ray;
   ray.setOrigin(m_camNode->getPosition());
   ray.setDirection(m_cam->getDerivedDirection() * m_cam->getFarClipDistance());
 
-  IcsvEntity* ret  = nullptr;
   float       dist = -1;
   const auto& entl = get_entity_list();
 
   for (auto* ref : entl) {
     auto res = ray.intersects(ref->GetBoundingBox());
     if (res.first) {
-      if (dist < 0 || res.second < dist) {
+      std::cout << "HIT!!!\n";
+      if (dist < 0 || res.second > dist) {
         dist = res.second;
-        ret  = ref;
+        m_gui.SetReportToDisplay(ref->GetDetectorReport());
+        std::cout << "GOT: " << *(ref->GetDetectorReport()) << std::endl;
       }
     }
   }
-
-  if (ret != nullptr)
-    m_gui.SetReportToDisplay(ret->GetDetectorReport());
-  else if (ret == nullptr)
-    m_gui.SetReportToDisplay(nullptr);
 }
 
 bool
