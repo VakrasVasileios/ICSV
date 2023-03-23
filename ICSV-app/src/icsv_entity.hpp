@@ -13,8 +13,12 @@ public:
 
   void AdjustScaleBy(double x, double y, double z);
 
-  auto GetDetectorReport() const -> DetectorReport* { return m_report; }
+  auto GetDetectorReport(void) const -> DetectorReport* { return m_report; }
   void SetDetectorReport(DetectorReport* rep) { m_report = rep; }
+
+  auto GetBoundingBox(void) -> const Ogre::AxisAlignedBox& {
+    return m_ent->getBoundingBox();
+  }
 
   void SetPosition(double x, double y, double z);
   auto GetPosition(void) -> Ogre::Vector3f;
@@ -30,9 +34,9 @@ protected:
   IcsvEntity() = default;
 
 private:
-  Ogre::SceneNode* m_node;
-  Ogre::Entity*    m_ent;
-  DetectorReport*  m_report{ nullptr };
+  Ogre::SceneNode*    m_node;
+  Ogre::ManualObject* m_ent;
+  DetectorReport*     m_report{ nullptr };
 };
 
 }  // namespace ICSVapp

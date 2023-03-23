@@ -33,13 +33,12 @@ public:
   friend class SmoothCamMove;
 
 private:
-  Ogre::Root*          m_root{ nullptr };
-  Ogre::SceneManager*  m_scnMgr{ nullptr };
-  Ogre::SceneNode*     m_camNode{ nullptr };
-  Ogre::Camera*        m_cam{ nullptr };
-  Ogre::RaySceneQuery* m_raycaster{ nullptr };
-  SmoothCamMove*       m_camMotor{ nullptr };
-  IcsvGui              m_gui;
+  Ogre::Root*         m_root{ nullptr };
+  Ogre::SceneManager* m_scnMgr{ nullptr };
+  Ogre::SceneNode*    m_camNode{ nullptr };
+  Ogre::Camera*       m_cam{ nullptr };
+  SmoothCamMove*      m_camMotor{ nullptr };
+  IcsvGui             m_gui;
 
   float m_rotSpd = 0.1f;
   bool  m_LMouseDown{ false }, m_RMouseDown{ false };

@@ -82,13 +82,11 @@ ICSVapp::setup() {
   m_camMotor = new SmoothCamMove(m_camNode);
   m_root->addFrameListener(m_camMotor);
 
-  m_raycaster = m_scnMgr->createRayQuery(Ogre::Ray());
-  m_raycaster->setSortByDistance(true, 3);
-
   static DetectorReport rep;
   rep.message     = "Mock report";
   IcsvEntity* ent = create_icsv_entity(&rep);
   ent->SetScale(1, 1, 1);
+  ent->FlipVisibility();
   m_scnMgr->showBoundingBoxes(true);
 }
 
@@ -220,47 +218,28 @@ ICSVapp::RotateVector(Ogre::Vector3 v, double xRot, double zRot)
 }
 
 void
-ICSVapp::RayCastAt(int xPix,
-                   int yPix) {  // FIXME: vector direction same as camera lookAt
+ICSVapp::RayCastAt(int, int) {
   static Ogre::Ray ray;
+  ray.setOrigin(m_camNode->getPosition());
+  ray.setDirection(m_cam->getDerivedDirection() * m_cam->getFarClipDistance());
 
-  auto lookAt = m_cam->getDerivedDirection();
-  auto zRot   = XPixelToZRot(xPix);
-  auto xRot   = YPixelToXRot(yPix);
+  IcsvEntity* ret  = nullptr;
+  float       dist = -1;
+  const auto& entl = get_entity_list();
 
-  // // screen to world coordinates
-  // float frayX = (m_cam->getAspectRatio() * xPix + 0.5f)
-  //         / (m_cam->getViewport()->getActualWidth() / 2)
-  //     - 1.0f;
-  // float frayY = 1.0f
-  //     - (m_cam->getAspectRatio() * yPix + 0.5f)
-  //         / (m_cam->getViewport()->getActualHeight() / 2);
-
-  // auto rayDir
-  //     = Ogre::Vector3(frayX - m_camNode->getPosition().x,
-  //                     frayY - m_camNode->getPosition().y,
-  //                     m_cam->getFarClipDistance() -
-  //                     m_camNode->getPosition().z)
-  //     * m_cam->getDerivedDirection();
-  // rayDir.normalise();
-  auto rayDir = RotateVector(lookAt, xRot.valueDegrees(), zRot.valueDegrees());
-  ray.setDirection(rayDir);
-  m_raycaster->setRay(ray);
-  auto results = m_raycaster->execute();  // get results sorted by distance
-  if (!results.empty()) {
-    auto entt_pos = results.front().movable->getParentNode()->getPosition();
-    static auto entt_pos_pred = [&entt_pos](auto ref) -> bool {
-      if (ref->GetPosition() == entt_pos)
-        return true;
-      else
-        return false;
-    };
-    auto entt = find_entt_if(entt_pos_pred);
-    if (entt != nullptr) {  // check if object hit is IcsvEntity
-                            // pass report to gui display
-      m_gui.SetReportToDisplay(entt->GetDetectorReport());
+  for (auto* ref : entl) {
+    auto res = ray.intersects(ref->GetBoundingBox());
+    if (res.first) {
+      if (dist < 0 || res.second < dist) {
+        dist = res.second;
+        ret  = ref;
+      }
     }
-  } else  // if the hits nothing then display nothing
+  }
+
+  if (ret != nullptr)
+    m_gui.SetReportToDisplay(ret->GetDetectorReport());
+  else if (ret == nullptr)
     m_gui.SetReportToDisplay(nullptr);
 }
 

@@ -16,6 +16,7 @@ public:
   void SetSceneManager(Ogre::SceneManager* scnMan);
   auto CreateIcsvEntity(DetectorReport* rep) -> IcsvEntity*;
   auto FindEntityIf(const Pred& pred) const -> IcsvEntity*;
+  auto GetEntityList(void) const -> const std::list<IcsvEntity*>&;
 
 private:
   Ogre::SceneManager*    m_scnMan{ nullptr };
@@ -44,6 +45,11 @@ create_icsv_entity(DetectorReport* rep) -> IcsvEntity* {
 inline auto
 find_entt_if(const EntityManager::Pred& pred) -> IcsvEntity* {
   return EntityManager::Get().FindEntityIf(pred);
+}
+
+inline auto
+get_entity_list(void) -> const std::list<IcsvEntity*>& {
+  return EntityManager::Get().GetEntityList();
 }
 
 }  // namespace ICSVapp
