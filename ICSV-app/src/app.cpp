@@ -12,7 +12,7 @@ ICSVapp::frameStarted(const Ogre::FrameEvent& evnt) {
   Ogre::ImGuiOverlay::NewFrame();
 
   ImGui::ShowDemoWindow();
-  m_gui.Display();
+  IcsvGui::Get().Display();
 
   return true;
 }
@@ -58,7 +58,7 @@ ICSVapp::setup() {
   shadergen->addSceneManager(m_scnMgr);
 
   static float color[] = { 255.f, 255.f, 255.f, 255.f };
-  m_gui.SetSkyboxColorPtr(color);
+  IcsvGui::Get().SetSkyboxColorPtr(color);
 
   Ogre::Light*     light = m_scnMgr->createLight("MainLight");
   Ogre::SceneNode* lightNode
@@ -81,6 +81,9 @@ ICSVapp::setup() {
 
   m_camMotor = new SmoothCamMove(m_camNode);
   m_root->addFrameListener(m_camMotor);
+
+  IcsvGui::Get().SetCameraData(m_camMotor->GetSpeedRef(),
+                               m_camMotor->GetRotSmoothRef());
 
   // static DetectorReport rep;
   // rep.message     = "Mock report";
@@ -191,11 +194,9 @@ ICSVapp::Raycast(void) {
   for (auto* ref : entl) {
     auto res = ray.intersects(ref->GetBoundingBox());
     if (res.first) {
-      std::cout << "HIT!!!\n";
       if (dist < 0 || res.second > dist) {
         dist = res.second;
-        m_gui.SetReportToDisplay(ref->GetDetectorReport());
-        std::cout << "GOT: " << *(ref->GetDetectorReport()) << std::endl;
+        IcsvGui::Get().SetReportToDisplay(ref->GetDetectorReport());
       }
     }
   }

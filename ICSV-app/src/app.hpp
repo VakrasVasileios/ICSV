@@ -38,7 +38,6 @@ private:
   Ogre::SceneNode*    m_camNode{ nullptr };
   Ogre::Camera*       m_cam{ nullptr };
   SmoothCamMove*      m_camMotor{ nullptr };
-  IcsvGui             m_gui;
 
   float m_rotSpd = 0.1f;
   bool  m_LMouseDown{ false }, m_RMouseDown{ false };
@@ -60,6 +59,9 @@ public:
   void Up() { m_dir.y = 1; }
   void Down() { m_dir.y = -1; }
   void HaltY() { m_dir.y = 0; }
+
+  auto GetSpeedRef(void) -> float* { return &m_speed; }
+  auto GetRotSmoothRef(void) -> float* { return &m_rot_smooth; }
 
   void CamRotating(bool is) { m_is_rot = is; }
 

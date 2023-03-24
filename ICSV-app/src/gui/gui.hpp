@@ -10,23 +10,36 @@ using DetectorReport = icsv::detector::DetectorReport;
 
 class IcsvGui final {
 public:
-  IcsvGui()  = default;
-  ~IcsvGui() = default;
+  static auto Get() -> IcsvGui&;
 
   void Display(void);
   void SetReportToDisplay(DetectorReport* rep) { m_rep_dspld = rep; }
   void SetSkyboxColorPtr(float* sb_color) { m_skybox_color = sb_color; }
+  void SetCameraData(float* speed, float* rot_smooth) {
+    m_cam_data = CameraGuiData(speed, rot_smooth);
+  }
 
 private:
   ImGui::FileBrowser              m_graph_brwsr;
   ImGui::FileBrowser              m_conf_brwsr;
   icsv::detector::DetectorReport* m_rep_dspld{ nullptr };
   float*                          m_skybox_color{ nullptr };
+  struct CameraGuiData {
+    float* cam_speed{ nullptr };
+    float* rot_smooth{ nullptr };
+    CameraGuiData(float* _s, float* _r) : cam_speed(_s), rot_smooth(_r) {}
+  } m_cam_data;
+
+  IcsvGui()               = default;
+  IcsvGui(const IcsvGui&) = delete;
+  IcsvGui(IcsvGui&&)      = delete;
+  ~IcsvGui()              = default;
 
   void ShowConfigSelect(void);
   void ShowDetectorReport(void);
   void ShowSmellButton(void);
   void ShowSkyboxSettings(void);
+  void ShowCameraSettings(void);
 };
 
 }  // namespace ICSVapp

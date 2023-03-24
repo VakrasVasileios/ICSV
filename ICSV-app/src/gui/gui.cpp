@@ -10,12 +10,22 @@ namespace ICSVapp {
 
 #define BUFFSIZE 400
 
+auto
+IcsvGui::Get() -> IcsvGui& {
+  static IcsvGui singleton;
+  return singleton;
+}
+
 void
 IcsvGui::Display(void) {
   ImGui::Begin("Menu");
   if (ImGui::CollapsingHeader("Smell Configuration")) {
     ShowConfigSelect();
     ShowSmellButton();
+    ImGui::Separator();
+  }
+  if (ImGui::CollapsingHeader("Camera Settings")) {
+    ShowCameraSettings();
     ImGui::Separator();
   }
   if (ImGui::CollapsingHeader("Environment Settings")) {
@@ -173,6 +183,12 @@ IcsvGui::ShowSkyboxSettings(void) {
   if (display_mode == 4)
     flags |= ImGuiColorEditFlags_DisplayHex;
   ImGui::ColorPicker4("MyColor##4", (float*) &color, flags, NULL);
+}
+
+void
+IcsvGui::ShowCameraSettings(void) {
+  ImGui::InputFloat("Camera Speed", m_cam_data.cam_speed);
+  ImGui::InputFloat("Camera Rotation Speed", m_cam_data.rot_smooth);
 }
 
 }  // namespace ICSVapp
