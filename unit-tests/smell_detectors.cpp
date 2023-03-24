@@ -23,7 +23,7 @@ namespace icsv::unit_tests {
 class Correct_level_assignment : public testing::Test {
   void SetUp() override {
     icsv::detector::arch::ArchitectureHolder::Get().DeserializeArchitecture(
-        "/home/vkrs/Documents/ICSV/unit-tests/graph.json");
+        "/home/vkrs/Documents/ICSV/unit-tests/graphme2.json");
     icsv::detector::EvaluationCenter::Get().DeseriallizeConfig(
         "/home/vkrs/Documents/ICSV/unit-tests/DetectorsConfig.json");
     icsv::detector::DetectorManager::Get().UseDetectors();

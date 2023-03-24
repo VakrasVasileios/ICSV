@@ -9,9 +9,9 @@
 auto
 RangeBasedEvaluator::EvaluateSmell(const int curr_lvl)
     -> icsv::detector::SmellEvaluator::SmellLevel {
-  return (curr_lvl < m_range.min) * 0 + (curr_lvl > m_range.max) * 10
+  return (curr_lvl < m_range.min) * 0 + (curr_lvl >= m_range.max) * 10
       + IsWithinRange(curr_lvl)
-      * (((double) m_range.range() / (curr_lvl - m_range.min)) * 10);
+      * (((double) (curr_lvl - m_range.min) / m_range.range()) * 10);
 }
 
 void

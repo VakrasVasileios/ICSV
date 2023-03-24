@@ -22,8 +22,9 @@ protected:
 private:
   std::string m_tag;
 
+  // curr_lvl within [min,max)
   bool IsWithinRange(int curr_lvl) {
-    return curr_lvl >= m_range.min && curr_lvl <= m_range.max;
+    return curr_lvl >= m_range.min && curr_lvl < m_range.max;
   }
 };
 
