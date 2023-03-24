@@ -12,7 +12,7 @@ using BasesList = std::list<std::string>;
  * the base classes signature name
  *
  * @param arch The deserialized architecture data
- * @return BasesList A list of strings
+ * @return A list of base class/structure names
  */
 auto get_base_structures(const ArchData& arch) -> BasesList;
 
