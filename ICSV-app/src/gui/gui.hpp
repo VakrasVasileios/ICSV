@@ -27,6 +27,7 @@ private:
   struct CameraGuiData {
     float* cam_speed{ nullptr };
     float* rot_smooth{ nullptr };
+    CameraGuiData() = default;
     CameraGuiData(float* _s, float* _r) : cam_speed(_s), rot_smooth(_r) {}
   } m_cam_data;
 
