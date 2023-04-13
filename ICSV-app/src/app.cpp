@@ -153,7 +153,7 @@ bool
 ICSVapp::mousePressed(const OgreBites::MouseButtonEvent& evnt) {
   if (evnt.button == (unsigned char) OgreBites::ButtonType::BUTTON_LEFT) {
     m_LMouseDown = true;
-    Raycast();
+    Raycast(evnt.x, evnt.y);
   }
   if (evnt.button == (unsigned char) OgreBites::ButtonType::BUTTON_RIGHT) {
     m_RMouseDown = true;
@@ -183,11 +183,16 @@ ICSVapp::mouseMoved(const OgreBites::MouseMotionEvent& evnt) {
 }
 
 void
-ICSVapp::Raycast(void) {
+ICSVapp::Raycast(float scrn_x, float scrn_y) {
   static Ogre::Ray ray;
   ray.setOrigin(m_camNode->getPosition());
-  ray.setDirection(m_cam->getDerivedDirection() * m_cam->getFarClipDistance());
-
+  ray.setDirection(m_cam->getCameraToViewportRay(scrn_x
+                                                     / m_cam->getViewport()
+                                                           ->getActualWidth(),
+                                                 scrn_y
+                                                     / m_cam->getViewport()
+                                                           ->getActualHeight())
+                   * m_cam->getFarClipDistance());
   float       dist = -1;
   const auto& entl = get_entity_list();
 

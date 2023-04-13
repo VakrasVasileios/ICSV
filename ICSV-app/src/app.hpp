@@ -42,7 +42,7 @@ private:
   float m_rotSpd = 0.1f;
   bool  m_LMouseDown{ false }, m_RMouseDown{ false };
 
-  void Raycast(void);
+  void Raycast(float scrn_x, float scrn_y);
 };
 
 class SmoothCamMove : public Ogre::FrameListener {
