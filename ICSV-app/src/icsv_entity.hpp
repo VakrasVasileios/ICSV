@@ -22,6 +22,7 @@ public:
   void SetBoundingBox(const Ogre::AxisAlignedBox& box) {
     m_ent->setBoundingBox(box);
   }
+  void ShowBoundingBox(bool show) { m_node->showBoundingBox(show); }
 
   void SetPosition(double x, double y, double z);
   auto GetPosition(void) -> Ogre::Vector3f;
