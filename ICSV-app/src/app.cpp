@@ -38,7 +38,16 @@ ICSVapp::setup() {
   m_root   = getRoot();
   m_scnMgr = m_root->createSceneManager();
 
+  auto floc   = std::string(__FILE__);
+  auto fstart = floc.find("app.cpp");
+  floc.replace(fstart, 11, "../scripts");
+  Ogre::ResourceGroupManager::getSingleton()
+      .addResourceLocation(floc, "FileSystem", "ICSV_RESOURCES");
+  Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup(
+      "ICSV_RESOURCES");
+
   set_scene_manager(m_scnMgr);
+  EntityManager::Get().MakeBillboardSet();
   m_scnMgr->setSkyBox(true, "Examples/CloudyNoonSkyBox", 500, false);
   // IMGUI !!!!!!!!!!!!!!!!!!!!!!
 
@@ -85,12 +94,7 @@ ICSVapp::setup() {
   IcsvGui::Get().SetCameraData(m_camMotor->GetSpeedRef(),
                                m_camMotor->GetRotSmoothRef());
 
-  // static DetectorReport rep;
-  // rep.message     = "Mock report";
-  // IcsvEntity* ent = create_icsv_entity(&rep);
-  // ent->SetScale(1, 1, 1);
-  // ent->FlipVisibility();
-  m_scnMgr->showBoundingBoxes(true);
+  EntityManager::Get().CreateBillboard({ 0, 0, 0 }, "Mock Billboard Text");
 }
 
 inline auto
@@ -177,14 +181,15 @@ ICSVapp::mouseMoved(const OgreBites::MouseMotionEvent& evnt) {
   if (m_RMouseDown) {  // FIXME: camera goes crazy after a certain point
     m_camNode->yaw(Ogre::Degree(-evnt.xrel * m_rotSpd));
     m_camNode->pitch(Ogre::Degree(-evnt.yrel * m_rotSpd));
-    m_camNode->roll(Ogre::Degree(-m_camNode->getOrientation().getRoll()));
+    // m_camNode->roll(Ogre::Degree(-m_camNode->getOrientation().getRoll()));
   }
   return true;
 }
 
 void
 ICSVapp::Raycast(float scrn_x, float scrn_y) {
-  static Ogre::Ray ray;
+  static Ogre::Ray   ray;
+  static IcsvEntity* chosen = nullptr;
   ray.setOrigin(m_camNode->getPosition());
   ray.setDirection(m_cam->getCameraToViewportRay(scrn_x
                                                      / m_cam->getViewport()
@@ -202,6 +207,10 @@ ICSVapp::Raycast(float scrn_x, float scrn_y) {
       if (dist < 0 || res.second > dist) {
         dist = res.second;
         IcsvGui::Get().SetReportToDisplay(ref->GetDetectorReport());
+        if (chosen != nullptr)
+          chosen->ShowBoundingBox(false);
+        chosen = ref;
+        chosen->ShowBoundingBox(true);
       }
     }
   }
