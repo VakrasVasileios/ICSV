@@ -134,7 +134,6 @@ IcsvGui::ShowSmellButton(void) {
         IcsvEntity* ent = create_icsv_entity(rep,
                                              Ogre::Vector3f(x, y / 2, z),
                                              Ogre::Vector3f(0.2, y, 0.2));
-        ent->FlipVisibility();
         z++;
       }
     }
