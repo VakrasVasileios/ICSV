@@ -2,6 +2,11 @@
 
 namespace ICSVapp {
 
+EntityManager::EntityManager() {
+  m_font = Ogre::FontManager::getSingleton().getByName("IcsvFont",
+                                                       "ICSV_RESOURCES");
+}
+
 auto
 EntityManager::Get(void) -> EntityManager& {
   static EntityManager singleton;
@@ -12,6 +17,28 @@ void
 EntityManager::SetSceneManager(Ogre::SceneManager* scnMan) {
   assert(m_scnMan == nullptr);
   m_scnMan = scnMan;
+}
+
+void
+EntityManager::MakeBillboardSet(void) {
+  m_billbset = m_scnMan->createBillboardSet();
+}
+
+void
+EntityManager::ClearBillboardSet(void) {
+  auto size = m_billbset->getNumBillboards();
+  for (int i = 0; i < size; i++) {
+    auto* ptr = m_billbset->getBillboard(i);
+    if (ptr != nullptr)
+      delete ptr;
+  }
+  m_billbset->clear();
+}
+
+void
+EntityManager::CreateBillboard(Ogre::Vector3 pos, const std::string& msg) {
+  m_billbset->createBillboard(pos);
+  m_font->putText(m_billbset, msg, 3.f);
 }
 
 auto
@@ -54,7 +81,9 @@ EntityManager::CreateCubeMesh(const Ogre::Vector3f& pos,
     -> Ogre::ManualObject* {
 
   Ogre::ManualObject* cube = new Ogre::ManualObject("Cube");
-  cube->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+  cube->begin("CubeMat",
+              Ogre::RenderOperation::OT_TRIANGLE_LIST,
+              "ICSV_RESOURCES");
 
   cube->position(pos.x + scale.x / 2, pos.y - scale.y / 2, pos.z + scale.z / 2);
   cube->normal(0.408248, -0.816497, 0.408248);

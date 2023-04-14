@@ -2,7 +2,9 @@
 
 #include "icsv_entity.hpp"
 #include <Ogre.h>
+#include <OgreBillboardSet.h>
 #include <OgreManualObject.h>
+#include <OgreFontManager.h>
 
 namespace ICSVapp {
 
@@ -14,6 +16,9 @@ public:
   static auto Get(void) -> EntityManager&;
 
   void SetSceneManager(Ogre::SceneManager* scnMan);
+  void MakeBillboardSet(void);
+  void ClearBillboardSet(void);
+  void CreateBillboard(Ogre::Vector3 pos, const std::string& msg);
   auto CreateIcsvEntity(DetectorReport*       rep,
                         const Ogre::Vector3f& pos,
                         const Ogre::Vector3f& scale) -> IcsvEntity*;
@@ -22,9 +27,11 @@ public:
 
 private:
   Ogre::SceneManager*    m_scnMan{ nullptr };
+  Ogre::BillboardSet*    m_billbset{ nullptr };
   std::list<IcsvEntity*> m_entt_list;
+  Ogre::FontPtr          m_font;
 
-  EntityManager()                     = default;
+  EntityManager();
   EntityManager(const EntityManager&) = delete;
   EntityManager(EntityManager&&)      = delete;
   ~EntityManager()                    = default;
