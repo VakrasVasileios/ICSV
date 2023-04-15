@@ -18,3 +18,20 @@ material CubeMat
 		}
   }
 }
+
+material BillboardMat
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			lighting off
+      scene_blend alpha_blend
+
+      ambient 0 0 0 1
+			diffuse 0 0 0 1
+ 			emissive 0 0 0 1
+		}
+  }
+}

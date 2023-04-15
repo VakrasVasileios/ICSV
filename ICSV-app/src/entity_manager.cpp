@@ -22,6 +22,7 @@ EntityManager::SetSceneManager(Ogre::SceneManager* scnMan) {
 void
 EntityManager::MakeBillboardSet(void) {
   m_billbset = m_scnMan->createBillboardSet();
+  m_billbset->setMaterialName("BillboardMat", "ICSV_RESOURCES");
 }
 
 void
@@ -38,7 +39,7 @@ EntityManager::ClearBillboardSet(void) {
 void
 EntityManager::CreateBillboard(Ogre::Vector3 pos, const std::string& msg) {
   m_billbset->createBillboard(pos);
-  m_font->putText(m_billbset, msg, 3.f);
+  m_font->putText(m_billbset, msg, 10.f);
 }
 
 auto

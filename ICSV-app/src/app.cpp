@@ -94,7 +94,7 @@ ICSVapp::setup() {
   IcsvGui::Get().SetCameraData(m_camMotor->GetSpeedRef(),
                                m_camMotor->GetRotSmoothRef());
 
-  EntityManager::Get().CreateBillboard({ 0, 0, 0 }, "Mock Billboard Text");
+  EntityManager::Get().CreateBillboard({ 0, 10, 20 }, "MOCK");
 }
 
 inline auto
