@@ -13,6 +13,12 @@ namespace ICSVapp {
 
 class SmoothCamMove;
 
+struct Mouse {
+  float x_rel = 0, y_rel = 0;
+
+  Mouse() = default;
+};
+
 class ICSVapp : public OgreBites::ApplicationContext,
                 public OgreBites::InputListener {
 public:
@@ -39,8 +45,8 @@ private:
   Ogre::Camera*       m_cam{ nullptr };
   SmoothCamMove*      m_camMotor{ nullptr };
 
-  float m_rotSpd = 0.1f;
   bool  m_LMouseDown{ false }, m_RMouseDown{ false };
+  Mouse m_mouse;
 
   void Raycast(float scrn_x, float scrn_y);
 };
@@ -61,16 +67,19 @@ public:
   void HaltY() { m_dir.y = 0; }
 
   auto GetSpeedRef(void) -> float* { return &m_speed; }
-  auto GetRotSmoothRef(void) -> float* { return &m_rot_smooth; }
+  auto GetRotSpeedRef(void) -> float* { return &m_rotSpd; }
+
+  void SetMouseRef(Mouse* m) { m_mouseRef = m; }
 
   void CamRotating(bool is) { m_is_rot = is; }
 
   bool frameStarted(const Ogre::FrameEvent& evt) override;
 
 private:
-  float            m_speed      = 2.f;
-  float            m_rot_smooth = 0.6f;
-  bool             m_is_rot     = false;
+  float            m_speed  = 2.f;
+  float            m_rotSpd = 0.1f;
+  bool             m_is_rot = false;
+  Mouse*           m_mouseRef;
   Ogre::Vector3    m_dir{ 0, 0, 0 };
   Ogre::SceneNode* m_camNodeRef;
 };

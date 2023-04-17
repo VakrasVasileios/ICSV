@@ -90,11 +90,12 @@ ICSVapp::setup() {
 
   m_camMotor = new SmoothCamMove(m_camNode);
   m_root->addFrameListener(m_camMotor);
+  m_camMotor->SetMouseRef(&m_mouse);
 
   IcsvGui::Get().SetCameraData(m_camMotor->GetSpeedRef(),
-                               m_camMotor->GetRotSmoothRef());
+                               m_camMotor->GetRotSpeedRef());
 
-  EntityManager::Get().CreateBillboard({ 0, 10, 20 }, "MOCK");
+  EntityManager::Get().CreateBillboard({ 0, 0, 0 }, "MOCK");
 }
 
 inline auto
@@ -161,6 +162,7 @@ ICSVapp::mousePressed(const OgreBites::MouseButtonEvent& evnt) {
   }
   if (evnt.button == (unsigned char) OgreBites::ButtonType::BUTTON_RIGHT) {
     m_RMouseDown = true;
+    m_camMotor->CamRotating(true);
   }
   return true;
 }
@@ -172,16 +174,16 @@ ICSVapp::mouseReleased(const OgreBites::MouseButtonEvent& evnt) {
   }
   if (evnt.button == (unsigned char) OgreBites::ButtonType::BUTTON_RIGHT) {
     m_RMouseDown = false;
+    m_camMotor->CamRotating(false);
   }
   return true;
 }
 
 bool
 ICSVapp::mouseMoved(const OgreBites::MouseMotionEvent& evnt) {
-  if (m_RMouseDown) {  // FIXME: camera goes crazy after a certain point
-    m_camNode->yaw(Ogre::Degree(-evnt.xrel * m_rotSpd));
-    m_camNode->pitch(Ogre::Degree(-evnt.yrel * m_rotSpd));
-    // m_camNode->roll(Ogre::Degree(-m_camNode->getOrientation().getRoll()));
+  if (m_RMouseDown) {
+    m_mouse.x_rel = evnt.xrel;
+    m_mouse.y_rel = evnt.yrel;
   }
   return true;
 }
@@ -220,6 +222,13 @@ bool
 SmoothCamMove::frameStarted(const Ogre::FrameEvent& evt) {
   m_camNodeRef->setPosition(m_camNodeRef->getPosition()
                             + m_speed * m_dir * evt.timeSinceLastFrame);
+  if (m_is_rot) {
+    m_camNodeRef->yaw(
+        Ogre::Radian(-m_mouseRef->x_rel * m_rotSpd * evt.timeSinceLastFrame));
+    m_camNodeRef->pitch(
+        Ogre::Radian(-m_mouseRef->y_rel * m_rotSpd * evt.timeSinceLastFrame));
+  }
+
   return true;
 }
 
