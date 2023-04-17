@@ -8,6 +8,8 @@ namespace ICSVapp {
 
 using DetectorReport = icsv::detector::DetectorReport;
 
+struct Selectable;
+
 class IcsvGui final {
 public:
   static auto Get() -> IcsvGui&;
@@ -41,6 +43,15 @@ private:
   void ShowSmellButton(void);
   void ShowSkyboxSettings(void);
   void ShowCameraSettings(void);
+  void ShowSortingSettings(void);
+
+  void SortEntityList(const std::string& by_tag);
+};
+
+struct Selectable {
+  Selectable(const std::string& tag = "") : m_tag(tag) {}
+  std::string m_tag;
+  bool        m_sel = false;
 };
 
 }  // namespace ICSVapp

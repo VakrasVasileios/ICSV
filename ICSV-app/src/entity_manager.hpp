@@ -10,7 +10,8 @@ namespace ICSVapp {
 
 class EntityManager final {
 public:
-  using Pred = std::function<bool(IcsvEntity*)>;
+  using Pred     = std::function<bool(IcsvEntity*)>;
+  using SortFunc = std::function<bool(IcsvEntity*, IcsvEntity*)>;
 
 public:
   static auto Get(void) -> EntityManager&;
@@ -23,7 +24,12 @@ public:
                         const Ogre::Vector3f& pos,
                         const Ogre::Vector3f& scale) -> IcsvEntity*;
   auto FindEntityIf(const Pred& pred) const -> IcsvEntity*;
+
   auto GetEntityList(void) const -> const std::list<IcsvEntity*>&;
+  void SortEnttsWith(const SortFunc& f);
+
+  void RepositionEnttsOnAxisX(void);
+  void RepositionEnttsOnAxisZ(void);
 
 private:
   Ogre::SceneManager*    m_scnMan{ nullptr };

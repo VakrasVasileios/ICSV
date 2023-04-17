@@ -80,9 +80,32 @@ EntityManager::GetEntityList(void) const -> const std::list<IcsvEntity*>& {
   return m_entt_list;
 }
 
+void
+EntityManager::SortEnttsWith(const SortFunc& f) {
+  m_entt_list.sort(f);
+}
+
 auto
 EntityManager::RequestChildNode(void) -> Ogre::SceneNode* {
   return m_scnMan->getRootSceneNode()->createChildSceneNode();
+}
+
+void
+EntityManager::RepositionEnttsOnAxisX(void) {
+  int x = 0;
+  for (auto& i : m_entt_list) {
+    auto pos = i->GetPosition();
+    i->SetPosition(x++, pos.y, pos.z);
+  }
+}
+
+void
+EntityManager::RepositionEnttsOnAxisZ(void) {
+  int z = 0;
+  for (auto& i : m_entt_list) {
+    auto pos = i->GetPosition();
+    i->SetPosition(pos.x, pos.y, z++);
+  }
 }
 
 auto
