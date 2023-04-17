@@ -46,15 +46,24 @@ auto
 EntityManager::CreateIcsvEntity(DetectorReport*       rep,
                                 const Ogre::Vector3f& pos,
                                 const Ogre::Vector3f& scale) -> IcsvEntity* {
-  IcsvEntity* icsv_ent = new IcsvEntity();
-  // icsv_ent->m_ent      = m_scnMan->createEntity(mesh_name);
+  IcsvEntity*        icsv_ent = new IcsvEntity();
+  static std::size_t ps_c     = 0;
 
   icsv_ent->m_node = m_scnMan->getRootSceneNode()->createChildSceneNode();
-  icsv_ent->m_ent  = CreateCubeMesh(pos, scale);
-  // std::cout << "Bounding box " << manObj->getBoundingBox() << std::endl;
+
+  icsv_ent->m_ent = CreateCubeMesh(pos, scale);
   icsv_ent->m_node->attachObject(icsv_ent->m_ent);
+
+  // icsv_ent->m_sfx_node = icsv_ent->m_node->createChildSceneNode();
+  // icsv_ent->m_sfx
+  //     = m_scnMan->createParticleSystem("ps" + std::to_string(ps_c++),
+  //                                      "Examples/PurpleFountain");
+  // icsv_ent->m_sfx_node->attachObject(icsv_ent->m_sfx);
+  // icsv_ent->m_sfx->setEmitting(false);
+
   icsv_ent->SetDetectorReport(rep);
   m_entt_list.push_back(icsv_ent);
+
   return icsv_ent;
 }
 
