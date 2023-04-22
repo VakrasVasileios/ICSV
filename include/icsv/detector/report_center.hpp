@@ -27,9 +27,6 @@ public:
 
   auto GetReportList(void) const -> const std::list<Report*>&;
 
-  void SortReportListBy(
-      /* functor with which the list is sorted */);  // TODO: sort reports
-
   void ClearReports(void);
 
 private:
