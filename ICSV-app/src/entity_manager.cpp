@@ -48,18 +48,24 @@ EntityManager::CreateIcsvEntity(DetectorReport*       rep,
                                 const Ogre::Vector3f& scale) -> IcsvEntity* {
   IcsvEntity*        icsv_ent = new IcsvEntity();
   static std::size_t ps_c     = 0;
+  static std::size_t ent_c    = 0;
 
   icsv_ent->m_node = m_scnMan->getRootSceneNode()->createChildSceneNode();
-
-  icsv_ent->m_ent = CreateCubeMesh(pos, scale);
+  icsv_ent->m_ent  = m_scnMan->createEntity("ent" + std::to_string(ent_c++),
+                                           "Cube.mesh",
+                                           "ICSV_RESOURCES");
   icsv_ent->m_node->attachObject(icsv_ent->m_ent);
+  icsv_ent->m_node->setPosition(pos);
+  icsv_ent->m_node->setScale(scale);
 
-  // icsv_ent->m_sfx_node = icsv_ent->m_node->createChildSceneNode();
-  // icsv_ent->m_sfx
-  //     = m_scnMan->createParticleSystem("ps" + std::to_string(ps_c++),
-  //                                      "Examples/PurpleFountain");
-  // icsv_ent->m_sfx_node->attachObject(icsv_ent->m_sfx);
-  // icsv_ent->m_sfx->setEmitting(false);
+  // FIXME: bounding box starts to expand when particles emit
+  icsv_ent->m_sfx_node = icsv_ent->m_node->createChildSceneNode();
+  icsv_ent->m_sfx_node->setPosition(pos);
+  icsv_ent->m_sfx
+      = m_scnMan->createParticleSystem("ps" + std::to_string(ps_c++),
+                                       "Examples/PurpleFountain");
+  icsv_ent->m_sfx_node->attachObject(icsv_ent->m_sfx);
+  icsv_ent->m_sfx->setEmitting(false);
 
   icsv_ent->SetDetectorReport(rep);
   m_entt_list.push_back(icsv_ent);
@@ -108,6 +114,7 @@ EntityManager::RepositionEnttsOnAxisZ(void) {
   }
 }
 
+#if (0)
 auto
 EntityManager::CreateCubeMesh(const Ogre::Vector3f& pos,
                               const Ogre::Vector3f& scale)
@@ -195,5 +202,6 @@ EntityManager::CreateCubeMesh(const Ogre::Vector3f& pos,
 
   return cube;
 }
+#endif
 
 }  // namespace ICSVapp
