@@ -33,7 +33,7 @@ public:
   void SetScale(double x, double y, double z);
   auto GetScale(void) -> Ogre::Vector3f;
 
-  void Emmision(bool e) { m_sfx->setEmitting(e); }
+  void Emission(bool e) { m_sfx->setEmitting(e); }
 
   void FlipVisibility(void) { m_node->flipVisibility(false); }
 

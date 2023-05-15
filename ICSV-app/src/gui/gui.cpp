@@ -261,9 +261,9 @@ IcsvGui::ShowSpecialFX(void) {
     auto lst = ICSVapp::EntityManager::Get().GetEntityList();
     for (auto i : lst)
       if (i->GetDetectorReport()->level > lvl)
-        i->Emmision(true);
+        i->Emission(true);
       else
-        i->Emmision(false);
+        i->Emission(false);
   }
 }
 
