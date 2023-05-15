@@ -36,6 +36,10 @@ IcsvGui::Display(void) {
     ShowSortingSettings();
     ImGui::Separator();
   }
+  if (ImGui::CollapsingHeader("Special Effects")) {
+    ShowSpecialFX();
+    ImGui::Separator();
+  }
 
   ShowDetectorReport();
   ImGui::End();
@@ -244,6 +248,20 @@ IcsvGui::ShowSortingSettings(void) {
     ICSVapp::EntityManager::Get().RepositionEnttsOnAxisX();
     SortEntityList(z->m_tag);
     ICSVapp::EntityManager::Get().RepositionEnttsOnAxisZ();
+  }
+}
+
+void
+IcsvGui::ShowSpecialFX(void) {
+  static int lvl = 0;
+
+  ImGui::SliderInt("If Level above: ", &lvl, 0, 10);
+
+  if (ImGui::Button("Emit")) {
+    auto lst = ICSVapp::EntityManager::Get().GetEntityList();
+    for (auto i : lst)
+      if (i->GetDetectorReport()->level > lvl)
+        i->Emmision(true);
   }
 }
 
