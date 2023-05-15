@@ -42,9 +42,6 @@ ReportCenter::GetReportList(void) const -> const std::list<Report*>& {
 }
 
 void
-ReportCenter::SortReportListBy(/* functor with which the list is sorted */) {}
-
-void
 ReportCenter::ClearReports(void) {
   for (auto* log : m_report_log)
     delete log;
