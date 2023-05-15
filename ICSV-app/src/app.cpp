@@ -48,7 +48,7 @@ ICSVapp::setup() {
 
   set_scene_manager(m_scnMgr);
   EntityManager::Get().MakeBillboardSet();
-  m_scnMgr->setSkyBox(true, "Examples/CloudyNoonSkyBox", 500, false);
+  // m_scnMgr->setSkyBox(true, "Examples/CloudyNoonSkyBox", 500, false);
   // IMGUI !!!!!!!!!!!!!!!!!!!!!!
 
   auto imguiOverlay = new Ogre::ImGuiOverlay();
