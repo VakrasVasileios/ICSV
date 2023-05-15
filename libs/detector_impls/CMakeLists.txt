@@ -1,5 +1,5 @@
 set(FILES # Detector Interface Implementations
-  # circular_dependency_det.cpp
+  circular_dependency_det.cpp
   dependency_count_det.cpp
   function_overload_det.cpp
 	large_file_det.cpp

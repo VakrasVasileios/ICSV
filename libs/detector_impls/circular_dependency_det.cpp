@@ -22,21 +22,24 @@ private:
     int  lowLink;
 
     Entry(int in, int ll) : index(in), lowLink(ll) {}
-  };
+  };  // Entry
 
   using MetaMap = std::map<std::string, Entry>;
 
   class Graph {
   public:
-    Graph(std::list<std::string>&& nds)
-        : m_nodes(nds), m_tarjan(m_arrows, m_nodes) {}
+    Graph(std::list<std::string> nds, Map a_list)
+        : m_nodes(nds), m_arrows(a_list), m_tarjan(m_arrows, m_nodes) {}
+
+    void FindCircuits(void);
+    auto GetCircuits(void) -> std::list<std::list<std::string>> {
+      return m_circuits;
+    }
 
   private:
     class Tarjan final {
     public:
-      Tarjan(std::map<std::string, std::list<std::string>>& a,
-             std::list<std::string>&                        n)
-          : arrows(a), nodes(n) {}
+      Tarjan(Map& a, std::list<std::string>& n) : arrows(a), nodes(n) {}
       ~Tarjan() = default;
 
       auto operator()() -> std::list<std::list<std::string>>;
@@ -52,28 +55,67 @@ private:
 
       void Connect(const std::string& node);
       void CleanUp(void);
-    };
+    };  // Tarjan
+
+    void AddCircuit(const std::string& strt_node);
+    bool Circuit(const std::string& node);
 
   private:
     std::map<std::string, std::list<std::string>> m_arrows;
     std::list<std::string>                        m_nodes;
+    std::list<std::list<std::string>>             m_circuits;
     Tarjan                                        m_tarjan;
-  };
+
+    std::string                 start_node;
+    std::list<std::string>      stck;
+    std::map<std::string, bool> blocked;
+  };  // Graph
 
 private:
   auto GetNodes(const Dependencies& deps) -> std::list<std::string>;
   auto AdjacencyList(const Dependencies& deps) -> Map;
-};
+};  // CircularDependencyDet
 
-#if (0)
 static CircularDependencyDet* cdd = new CircularDependencyDet();
 CREATE_RANGE_BASED_EVAL(TAG);
-#endif
 
 void
 CircularDependencyDet::DetectSmell(const ArchData& arch) {
-  auto nodes    = GetNodes(arch.dependencies);
-  auto adj_list = AdjacencyList(arch.dependencies);
+  auto  nodes    = GetNodes(arch.dependencies);
+  auto  adj_list = AdjacencyList(arch.dependencies);
+  Graph g        = Graph(nodes, adj_list);
+
+  g.FindCircuits();
+  auto circuits = g.GetCircuits();
+
+  for (auto& crc : circuits) {
+    DetectorReport rep;
+    rep.smell_tag  = TAG;
+    rep.init_level = crc.size();
+    rep.level      = icsv::detector::evaluate_smell(TAG, crc.size());
+    if (rep.level > 0) {
+      auto strct
+          = std::find_if(arch.structures.begin(),
+                         arch.structures.end(),
+                         [&crc](auto& strc) {
+                           return std::string(crc.front()) == strc.signature;
+                         });
+      rep.message
+          = "Structure: " + crc.front() + " is part of this dependency cycle: ";
+
+      for (auto c : crc) {
+        if (c != crc.back())
+          rep.message += c + " -> ";
+      }
+      rep.message += crc.back() + "\n";
+      rep.src_info.file  = strct->src_info.file;
+      rep.src_info.col   = strct->src_info.col;
+      rep.src_info.line  = strct->src_info.line;
+      rep.src_info.strct = crc.front();
+
+      icsv::detector::register_report(TAG, rep);
+    }
+  }
 }
 
 auto
@@ -149,4 +191,48 @@ CircularDependencyDet::Graph::Tarjan::operator()(void)
   }
 
   return result;
+}
+
+void
+CircularDependencyDet::Graph::FindCircuits(void) {
+  for (auto n : m_nodes) {
+    start_node     = n;
+    auto node_list = m_arrows[n];
+    for (auto nd : node_list)
+      Circuit(nd);
+  }
+}
+
+void
+CircularDependencyDet::Graph::AddCircuit(const std::string& strt_node) {
+  m_circuits.push_back(stck);
+  m_circuits.back().push_back(strt_node);
+}
+
+bool
+CircularDependencyDet::Graph::Circuit(const std::string& node) {
+  bool found = false;
+
+  stck.push_back(node);
+  blocked[node]  = true;
+  auto node_list = m_arrows[node];
+  if (!node_list.empty()) {
+    for (auto n : node_list) {
+      auto blckd = blocked.find(n);
+      if (n == start_node) {
+        found = true;
+        AddCircuit(start_node);
+      } else if (blckd != blocked.end() && !blckd->second) {
+        if (Circuit(n))
+          found = true;
+      }
+    }
+  }
+
+  if (found)
+    blocked[node] = false;
+
+  stck.pop_back();
+
+  return found;
 }
