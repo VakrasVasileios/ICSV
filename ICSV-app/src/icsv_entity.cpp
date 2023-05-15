@@ -11,6 +11,7 @@ IcsvEntity::AdjustScaleBy(double x, double y, double z) {
 void
 IcsvEntity::SetPosition(double x, double y, double z) {
   m_node->setPosition(x, y, z);
+  m_sfx_node->setPosition(x, y, z);
 }
 
 auto

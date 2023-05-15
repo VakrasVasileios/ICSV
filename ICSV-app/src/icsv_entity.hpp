@@ -18,11 +18,13 @@ public:
   void SetDetectorReport(DetectorReport* rep) { m_report = rep; }
 
   auto GetBoundingBox(void) -> const Ogre::AxisAlignedBox& {
-    return m_ent->getBoundingBox();
+    return m_ent->getWorldBoundingBox();
   }
+#if (0)
   void SetBoundingBox(const Ogre::AxisAlignedBox& box) {
-    m_ent->setBoundingBox(box);
+    // m_ent->setBoundingBox(box);
   }
+#endif
   void ShowBoundingBox(bool show) { m_node->showBoundingBox(show); }
 
   void SetPosition(double x, double y, double z);
@@ -42,7 +44,7 @@ protected:
 
 private:
   Ogre::SceneNode*      m_node;
-  Ogre::ManualObject*   m_ent;
+  Ogre::Entity*         m_ent;
   Ogre::ParticleSystem* m_sfx;
   Ogre::SceneNode*      m_sfx_node;
   DetectorReport*       m_report{ nullptr };
