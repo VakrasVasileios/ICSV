@@ -262,6 +262,8 @@ IcsvGui::ShowSpecialFX(void) {
     for (auto i : lst)
       if (i->GetDetectorReport()->level > lvl)
         i->Emmision(true);
+      else
+        i->Emmision(false);
   }
 }
 

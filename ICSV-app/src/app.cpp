@@ -40,7 +40,7 @@ ICSVapp::setup() {
 
   auto floc   = std::string(__FILE__);
   auto fstart = floc.find("app.cpp");
-  floc.replace(fstart, 11, "../scripts");
+  floc.replace(fstart, 11, "../assets");
   Ogre::ResourceGroupManager::getSingleton()
       .addResourceLocation(floc, "FileSystem", "ICSV_RESOURCES");
   Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup(
