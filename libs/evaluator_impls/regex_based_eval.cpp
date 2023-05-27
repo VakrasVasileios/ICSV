@@ -1,23 +1,24 @@
 #include "regex_based_eval.hpp"
+#include <imgui/imgui.h>
 #include <assert.h>
 #include <iostream>
 
 auto
 RegexBasedEval::EvaluateClassName(const std::string& _name)
     -> icsv::detector::SmellEvaluator::SmellLevel {
-  return EvaluateName(_name, m_class_names);
+  return EvaluateName(_name, std::regex(m_class_names));
 }
 
 auto
 RegexBasedEval::EvaluateMethodName(const std::string& _name)
     -> icsv::detector::SmellEvaluator::SmellLevel {
-  return EvaluateName(_name, m_method_names);
+  return EvaluateName(_name, std::regex(m_method_names));
 }
 
 auto
 RegexBasedEval::EvaluateVarName(const std::string& _name)
     -> icsv::detector::SmellEvaluator::SmellLevel {
-  return EvaluateName(_name, m_var_names);
+  return EvaluateName(_name, std::regex(m_var_names));
 }
 
 void
@@ -37,6 +38,32 @@ RegexBasedEval::DeserializeConfig(const Json::Value& doc) {
 
   m_range.min = convs["max_chars_ignored"]["min"].asInt();
   m_range.max = convs["max_chars_ignored"]["max"].asInt();
+}
+
+#define BUFF 100
+
+void
+RegexBasedEval::DisplayGui(void) {
+  static char cname[BUFF];
+  static char mname[BUFF];
+  static char vname[BUFF];
+  static bool init = false;
+
+  if (!init) {
+    std::strcpy(cname, m_class_names.c_str());
+    std::strcpy(mname, m_method_names.c_str());
+    std::strcpy(vname, m_var_names.c_str());
+    init = true;
+  }
+
+  ImGui::Text("%s", m_tag.c_str());
+  ImGui::InputInt(std::string("Min " + m_tag).c_str(), &(m_range.min));
+  ImGui::InputInt(std::string("Max " + m_tag).c_str(), &(m_range.max));
+  ImGui::InputText("Class name regex", cname, BUFF);
+  ImGui::InputText("Method name regex", mname, BUFF);
+  ImGui::InputText("Var name regex", vname, BUFF);
+
+  ImGui::Separator();
 }
 
 auto

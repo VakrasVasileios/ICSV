@@ -20,6 +20,8 @@ public:
 
   auto EvaluateSmell(const std::string& tag, int curr_lvl) -> SmellLevel;
 
+  void DisplayEvalGui(void);
+
 private:
   using Evaluators = std::unordered_map<std::string, SmellEvaluator*>;
 

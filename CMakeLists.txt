@@ -16,11 +16,16 @@ add_library(${PROJECT_NAME} )
  
 set(JSONCPP_LIBS libjsoncpp.so)
 
+set(IMGUI_INCLUDE_DIR "/usr/include/imgui")
+include_directories(${IMGUI_INCLUDE_DIR})
+set(IMGUI_LIBS libimgui.a)
+
 target_link_libraries(${PROJECT_NAME} PUBLIC 
   ${JSONCPP_LIBS}
+  ${IMGUI_LIBS}
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_include_directories(${PROJECT_NAME} PUBLIC include ${IMGUI_INCLUDE_DIR})
 
 set(SUBDIRECTORIES 
   ICSV-app

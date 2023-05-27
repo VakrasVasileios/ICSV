@@ -40,6 +40,10 @@ IcsvGui::Display(void) {
     ShowSpecialFX();
     ImGui::Separator();
   }
+  if (ImGui::CollapsingHeader("Smell Eval Configs")) {
+    ShowEvalConfigs();
+    ImGui::Separator();
+  }
 
   ShowDetectorReport();
   ImGui::End();
@@ -265,6 +269,11 @@ IcsvGui::ShowSpecialFX(void) {
       else
         i->Emission(false);
   }
+}
+
+void
+IcsvGui::ShowEvalConfigs(void) {
+  icsv::detector::EvaluationCenter::Get().DisplayEvalGui();
 }
 
 auto smell_sort = [](IcsvEntity* ent1, IcsvEntity* ent2) {

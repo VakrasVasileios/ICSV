@@ -8,10 +8,15 @@ public:
       : icsv::detector::SmellEvaluator(tag), m_tag(tag) {}
   ~RangeBasedEvaluator() override = default;
 
-  auto EvaluateSmell(int curr_lvl)
+  virtual auto EvaluateSmell(int curr_lvl)
+      -> icsv::detector::SmellEvaluator::SmellLevel override;
+
+  virtual auto ReEvaluateSmell(int init_lvl)
       -> icsv::detector::SmellEvaluator::SmellLevel override;
 
   virtual void DeserializeConfig(const Json::Value& doc) override;
+
+  virtual void DisplayGui(void) override;
 
 protected:
   struct Range {
@@ -19,9 +24,9 @@ protected:
     int range() { return max - min; }
   } m_range;
 
-private:
   std::string m_tag;
 
+private:
   // curr_lvl within [min,max)
   bool IsWithinRange(int curr_lvl) {
     return curr_lvl >= m_range.min && curr_lvl < m_range.max;

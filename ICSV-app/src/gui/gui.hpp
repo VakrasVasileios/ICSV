@@ -45,6 +45,7 @@ private:
   void ShowCameraSettings(void);
   void ShowSortingSettings(void);
   void ShowSpecialFX(void);
+  void ShowEvalConfigs(void);
 
   void SortEntityList(const std::string& by_tag);
 };

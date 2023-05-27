@@ -5,7 +5,7 @@
 #include <string>
 #include <unordered_map>
 
-class RegexBasedEval : public RangeBasedEvaluator {
+class RegexBasedEval final : public RangeBasedEvaluator {
 public:
   RegexBasedEval(const std::string& _tag) : RangeBasedEvaluator(_tag) {}
   ~RegexBasedEval() override = default;
@@ -19,14 +19,16 @@ public:
 
   void DeserializeConfig(const Json::Value& doc) override;
 
+  void DisplayGui(void) override;
+
 private:
   using NamingConventions = std::unordered_map<std::string, std::string>;
 
 private:
   NamingConventions m_conventions;
-  std::regex        m_class_names;
-  std::regex        m_method_names;
-  std::regex        m_var_names;
+  std::string       m_class_names;
+  std::string       m_method_names;
+  std::string       m_var_names;
 
   auto EvaluateName(const std::string& _name, std::regex exp)
       -> icsv::detector::SmellEvaluator::SmellLevel;

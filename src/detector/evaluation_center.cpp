@@ -42,6 +42,13 @@ EvaluationCenter::DeseriallizeConfig(const std::string& file_path) {
     (eval.second)->DeserializeConfig(doc);
 }
 
+void
+EvaluationCenter::DisplayEvalGui(void) {
+  for (auto& e : m_eval_reg) {
+    e.second->DisplayGui();
+  }
+}
+
 auto
 EvaluationCenter::EvaluateSmell(const std::string& tag, const int curr_lvl)
     -> SmellEvaluator::SmellLevel {
