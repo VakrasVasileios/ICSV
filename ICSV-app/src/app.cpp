@@ -38,6 +38,7 @@ ICSVapp::setup() {
   m_root   = getRoot();
   m_scnMgr = m_root->createSceneManager();
 
+  // Set custom recourse directory
   auto floc   = std::string(__FILE__);
   auto fstart = floc.find("app.cpp");
   floc.replace(fstart, 11, "../assets");
@@ -49,6 +50,7 @@ ICSVapp::setup() {
   set_scene_manager(m_scnMgr);
   EntityManager::Get().MakeBillboardSet();
   // m_scnMgr->setSkyBox(true, "Examples/CloudyNoonSkyBox", 500, false);
+
   // IMGUI !!!!!!!!!!!!!!!!!!!!!!
 
   auto imguiOverlay = new Ogre::ImGuiOverlay();
@@ -69,6 +71,7 @@ ICSVapp::setup() {
   static float color[] = { 255.f, 255.f, 255.f, 255.f };
   IcsvGui::Get().SetSkyboxColorPtr(color);
 
+  // Add light to the scene
   Ogre::Light*     light = m_scnMgr->createLight("MainLight");
   Ogre::SceneNode* lightNode
       = m_scnMgr->getRootSceneNode()->createChildSceneNode();
@@ -77,11 +80,12 @@ ICSVapp::setup() {
   // lightNode->setPosition(0, 0, 0);
   lightNode->attachObject(light);
 
+  // Set camera stuff
   m_camNode = m_scnMgr->getRootSceneNode()->createChildSceneNode();
   m_camNode->setPosition(0, 10, 15);
   m_camNode->lookAt(Ogre::Vector3(0, 0, -1), Ogre::Node::TS_PARENT);
 
-  m_cam = m_scnMgr->createCamera("myCam");
+  m_cam = m_scnMgr->createCamera("User Camera");
   m_cam->setNearClipDistance(0.1);
   m_cam->setFarClipDistance(10000);
   m_cam->setAutoAspectRatio(true);
@@ -220,11 +224,13 @@ ICSVapp::Raycast(float scrn_x, float scrn_y) {
 
 bool
 SmoothCamMove::frameStarted(const Ogre::FrameEvent& evt) {
+
   m_camNodeRef->setPosition(m_camNodeRef->getPosition()
                             + m_speed * m_dir * evt.timeSinceLastFrame);
   if (m_is_rot) {
-    m_camNodeRef->yaw(
-        Ogre::Radian(-m_mouseRef->x_rel * m_rotSpd * evt.timeSinceLastFrame));
+    m_camNodeRef->yaw(Ogre::Radian(-m_mouseRef->x_rel * m_rotSpd
+                                   * evt.timeSinceLastFrame),
+                      Ogre::Node::TS_PARENT);
     m_camNodeRef->pitch(
         Ogre::Radian(-m_mouseRef->y_rel * m_rotSpd * evt.timeSinceLastFrame));
   }
