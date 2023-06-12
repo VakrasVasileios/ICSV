@@ -1,5 +1,4 @@
 #include "icsv_entity.hpp"
-#include <imgui.h>
 
 namespace ICSVapp {
 
