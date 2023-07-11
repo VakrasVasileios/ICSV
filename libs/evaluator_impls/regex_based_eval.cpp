@@ -1,4 +1,5 @@
 #include "regex_based_eval.hpp"
+#include "icsv/detector/detector_manager.hpp"
 #include <imgui/imgui.h>
 #include <assert.h>
 #include <iostream>
@@ -19,6 +20,13 @@ auto
 RegexBasedEval::EvaluateVarName(const std::string& _name)
     -> icsv::detector::SmellEvaluator::SmellLevel {
   return EvaluateName(_name, std::regex(m_var_names));
+}
+
+auto
+RegexBasedEval::ReEvaluateSmell(int)
+    -> icsv::detector::SmellEvaluator::SmellLevel {
+  icsv::detector::DetectorManager::Get().UseDetectorWithTag(m_tag);
+  return -1;
 }
 
 void
@@ -62,6 +70,10 @@ RegexBasedEval::DisplayGui(void) {
   ImGui::InputText("Class name regex", cname, BUFF);
   ImGui::InputText("Method name regex", mname, BUFF);
   ImGui::InputText("Var name regex", vname, BUFF);
+
+  if (ImGui::Button(std::string("Re-Eval " + m_tag).c_str())) {
+    ReEvaluateSmell(0);
+  }
 
   ImGui::Separator();
 }

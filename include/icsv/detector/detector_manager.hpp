@@ -19,6 +19,7 @@ public:
   void RegisterDetector(const std::string& tag, Detector* det);
 
   void UseDetectors(void);
+  void UseDetectorWithTag(const std::string& tag);
 
 private:
   DetectorManager()                       = default;

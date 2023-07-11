@@ -17,6 +17,9 @@ public:
   auto EvaluateVarName(const std::string& _name)
       -> icsv::detector::SmellEvaluator::SmellLevel;
 
+  auto ReEvaluateSmell(int lvl)
+      -> icsv::detector::SmellEvaluator::SmellLevel override;
+
   void DeserializeConfig(const Json::Value& doc) override;
 
   void DisplayGui(void) override;

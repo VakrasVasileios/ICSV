@@ -1,4 +1,5 @@
 #include "range_based_eval.hpp"
+#include "icsv/detector/report_center.hpp"
 #include <imgui/imgui.h>
 #include <assert.h>
 
@@ -33,5 +34,10 @@ RangeBasedEvaluator::DisplayGui(void) {
   ImGui::Text("%s", m_tag.c_str());
   ImGui::InputInt(std::string("Min " + m_tag).c_str(), &(m_range.min));
   ImGui::InputInt(std::string("Max " + m_tag).c_str(), &(m_range.max));
+
+  if (ImGui::Button(std::string("Re-Eval " + m_tag).c_str())) {
+    for (auto* rep : icsv::detector::ReportCenter::Get().GetReportsByTag(m_tag))
+      ReEvaluateSmell(rep->init_level);
+  }
   ImGui::Separator();
 }
