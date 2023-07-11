@@ -32,4 +32,11 @@ DetectorManager::UseDetectors(void) {
   }
 }
 
+void
+DetectorManager::UseDetectorWithTag(const std::string& tag) {
+  if (m_detectors.contains(tag))
+    m_detectors[tag]->DetectSmell(
+        arch::ArchitectureHolder::Get().GetArchitecture());
+}
+
 }  // namespace icsv::detector
