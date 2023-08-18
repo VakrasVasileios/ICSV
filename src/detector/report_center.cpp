@@ -43,8 +43,12 @@ ReportCenter::GetReportList(void) const -> const std::list<Report*>& {
 
 void
 ReportCenter::ClearReports(void) {
-  for (auto* log : m_report_log)
-    delete log;
+  for (auto* log : m_report_log) {
+    if (log != nullptr) {
+      delete log;
+      log = nullptr;
+    }
+  }
   m_report_log.clear();
 }
 
