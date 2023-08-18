@@ -21,7 +21,6 @@ IcsvGui::Display(void) {
   ImGui::Begin("Menu");
   if (ImGui::CollapsingHeader("Smell Configuration")) {
     ShowConfigSelect();
-    ShowSmellButton();
     ImGui::Separator();
   }
   if (ImGui::CollapsingHeader("Camera Settings")) {
@@ -55,6 +54,7 @@ IcsvGui::ShowConfigSelect(void) {
   static std::string graph_conf_file = "";
   static char        graph_buf[BUFFSIZE];
   static char        det_buf[BUFFSIZE];
+  static bool        changed = false;
 
   ImGui::Text("Dectector Config File");
   ImGui::InputText("Config", det_buf, BUFFSIZE);
@@ -64,8 +64,11 @@ IcsvGui::ShowConfigSelect(void) {
   }
   if (m_conf_brwsr.HasSelected()) {
     std::strncpy(det_buf, det_conf_file.c_str(), det_conf_file.size());
-    det_conf_file = m_conf_brwsr.GetSelected();
-    icsv::detector::deserialize_det_conf(m_conf_brwsr.GetSelected());
+    if (m_conf_brwsr.GetSelected().c_str() != det_conf_file) {
+      det_conf_file = m_conf_brwsr.GetSelected();
+      icsv::detector::deserialize_det_conf(m_conf_brwsr.GetSelected());
+      changed = true;
+    }
   }
 
   ImGui::Separator();
@@ -78,11 +81,16 @@ IcsvGui::ShowConfigSelect(void) {
   }
   if (m_graph_brwsr.HasSelected()) {
     std::strncpy(graph_buf, graph_conf_file.c_str(), graph_conf_file.size());
-    graph_conf_file = m_graph_brwsr.GetSelected();
-    icsv::detector::arch::deserialize_arch_conf(m_graph_brwsr.GetSelected());
+    if (m_graph_brwsr.GetSelected().c_str() != graph_conf_file) {
+      graph_conf_file = m_graph_brwsr.GetSelected();
+      icsv::detector::arch::deserialize_arch_conf(m_graph_brwsr.GetSelected());
+      changed = true;
+    }
   }
   m_conf_brwsr.Display();
   m_graph_brwsr.Display();
+
+  ShowSmellButton(changed);
 }
 
 void
@@ -132,27 +140,31 @@ IcsvGui::ShowDetectorReport(void) {
 }
 
 void
-IcsvGui::ShowSmellButton(void) {
+IcsvGui::ShowSmellButton(bool& changed) {
   if (ImGui::Button("Evaluate Code", ImVec2(250, 50))) {
-    icsv::detector::clear_reports();
-    icsv::detector::use_smell_detectors();
-    const auto& replst = icsv::detector::ReportCenter::Get().GetReportList();
+    if (changed) {
+      icsv::detector::clear_reports();
+      clear_entities();
+      icsv::detector::use_smell_detectors();
+      const auto& replst = icsv::detector::ReportCenter::Get().GetReportList();
 
-    double x = 0, z = 0;
-    auto   tag = replst.front()->smell_tag;
-    for (auto* rep : replst) {
-      if (tag != rep->smell_tag) {
-        x++;
-        z   = 0;
-        tag = rep->smell_tag;
+      double x = 0, z = 0;
+      auto   tag = replst.front()->smell_tag;
+      for (auto* rep : replst) {
+        if (tag != rep->smell_tag) {
+          x++;
+          z   = 0;
+          tag = rep->smell_tag;
+        }
+        if (rep->level > 0) {
+          double y = 0.2 * rep->level / 2;
+          create_icsv_entity(rep,
+                             Ogre::Vector3f(x, y / 2, z),
+                             Ogre::Vector3f(0.2, y, 0.2));
+          z++;
+        }
       }
-      if (rep->level > 0) {
-        double y = 0.2 * rep->level / 2;
-        create_icsv_entity(rep,
-                           Ogre::Vector3f(x, y / 2, z),
-                           Ogre::Vector3f(0.2, y, 0.2));
-        z++;
-      }
+      changed = false;
     }
   }
 }
@@ -274,6 +286,24 @@ IcsvGui::ShowSpecialFX(void) {
 void
 IcsvGui::ShowEvalConfigs(void) {
   icsv::detector::EvaluationCenter::Get().DisplayEvalGui();
+  if (ImGui::Button("Re-Render Evaluation")) {
+    SortEntityList("Smell Tag");
+    std::string tag = "";
+    int         x   = -1;
+    for (auto& e : ICSVapp::EntityManager::Get().GetEntityList()) {
+      if (e->GetDetectorReport()->level > 0) {
+        if (tag != e->GetDetectorReport()->smell_tag) {
+          x++;
+          tag = e->GetDetectorReport()->smell_tag;
+        }
+        double y = 0.2 * e->GetDetectorReport()->level / 2;
+        e->SetPosition(x, y / 2, 0);
+        e->SetScale(0.2, y, 0.2);
+      }
+    }
+    SortEntityList("Level");
+    ICSVapp::EntityManager::Get().RepositionEnttsOnAxisZ();
+  }
 }
 
 auto smell_sort = [](IcsvEntity* ent1, IcsvEntity* ent2) {

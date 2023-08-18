@@ -40,7 +40,7 @@ private:
 
   void ShowConfigSelect(void);
   void ShowDetectorReport(void);
-  void ShowSmellButton(void);
+  void ShowSmellButton(bool& changed);
   void ShowSkyboxSettings(void);
   void ShowCameraSettings(void);
   void ShowSortingSettings(void);
