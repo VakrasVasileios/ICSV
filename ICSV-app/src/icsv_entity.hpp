@@ -10,7 +10,7 @@ using DetectorReport = icsv::detector::DetectorReport;
 
 class IcsvEntity {
 public:
-  ~IcsvEntity() = default;
+  ~IcsvEntity();
 
   void AdjustScaleBy(double x, double y, double z);
 

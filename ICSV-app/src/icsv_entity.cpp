@@ -1,6 +1,15 @@
 #include "icsv_entity.hpp"
+#include "entity_manager.hpp"
 
 namespace ICSVapp {
+
+IcsvEntity::~IcsvEntity() {
+  destroy_entity(m_ent);
+  destroy_particle_system(m_sfx);
+  destroy_node(m_node);
+  destroy_node(m_sfx_node);
+  m_report = nullptr;
+}
 
 void
 IcsvEntity::AdjustScaleBy(double x, double y, double z) {
