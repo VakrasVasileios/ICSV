@@ -23,6 +23,9 @@ public:
   auto CreateIcsvEntity(DetectorReport*       rep,
                         const Ogre::Vector3f& pos,
                         const Ogre::Vector3f& scale) -> IcsvEntity*;
+
+  void DestroyEntity(Ogre::Entity* e) { m_scnMan->destroyEntity(e); }
+  void DestroyNode(Ogre::SceneNode* n) { m_scnMan->destroySceneNode(n); }
   auto FindEntityIf(const Pred& pred) const -> IcsvEntity*;
 
   auto GetEntityList(void) const -> const std::list<IcsvEntity*>&;
@@ -58,6 +61,16 @@ create_icsv_entity(DetectorReport*       rep,
                    const Ogre::Vector3f& pos,
                    const Ogre::Vector3f& scale) -> IcsvEntity* {
   return EntityManager::Get().CreateIcsvEntity(rep, pos, scale);
+}
+
+inline void
+destroy_entity(Ogre::Entity* e) {
+  EntityManager::Get().DestroyEntity(e);
+}
+
+inline void
+destroy_node(Ogre::SceneNode* n) {
+  EntityManager::Get().DestroyNode(n);
 }
 
 inline auto
