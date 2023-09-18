@@ -7,6 +7,8 @@ set(FILES
   icsv_entity.cpp
   icsv_entity.hpp
   main.cpp
+  movable_text.cpp
+  movable_text.h
 )
 set(SUBDIRECTORIES
   gui
