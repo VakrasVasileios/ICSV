@@ -49,7 +49,7 @@ private:
   EntityManager();
   EntityManager(const EntityManager&) = delete;
   EntityManager(EntityManager&&)      = delete;
-  ~EntityManager()                    = default;
+  ~EntityManager();
 
   auto RequestChildNode(void) -> Ogre::SceneNode*;
 

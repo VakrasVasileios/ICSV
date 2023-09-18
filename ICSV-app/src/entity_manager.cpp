@@ -7,6 +7,11 @@ EntityManager::EntityManager() {
                                                        "ICSV_RESOURCES");
 }
 
+EntityManager::~EntityManager() {
+  clear_entities();
+  m_scnMan->clearScene();
+}
+
 auto
 EntityManager::Get(void) -> EntityManager& {
   static EntityManager singleton;
@@ -77,6 +82,7 @@ void
 EntityManager::ClearEntities(void) {
   for (auto* ent : m_entt_list) {
     delete ent;
+    ent = nullptr;
   }
   m_entt_list.clear();
 }

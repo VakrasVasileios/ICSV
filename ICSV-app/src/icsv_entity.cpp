@@ -4,11 +4,15 @@
 namespace ICSVapp {
 
 IcsvEntity::~IcsvEntity() {
+  m_sfx->setEmitting(false);
+  m_node->showBoundingBox(false);
+  m_report = nullptr;
+  m_node->detachAllObjects();
+  m_sfx_node->detachAllObjects();
   destroy_entity(m_ent);
   destroy_particle_system(m_sfx);
   destroy_node(m_node);
   destroy_node(m_sfx_node);
-  m_report = nullptr;
 }
 
 void
