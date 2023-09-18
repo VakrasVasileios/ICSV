@@ -73,6 +73,14 @@ EntityManager::CreateIcsvEntity(DetectorReport*       rep,
   return icsv_ent;
 }
 
+void
+EntityManager::ClearEntities(void) {
+  for (auto* ent : m_entt_list) {
+    delete ent;
+  }
+  m_entt_list.clear();
+}
+
 auto
 EntityManager::FindEntityIf(const Pred& pred) const -> IcsvEntity* {
   for (auto ref : m_entt_list)

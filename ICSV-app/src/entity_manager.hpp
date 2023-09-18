@@ -24,8 +24,14 @@ public:
                         const Ogre::Vector3f& pos,
                         const Ogre::Vector3f& scale) -> IcsvEntity*;
 
+  void ClearEntities(void);
+
   void DestroyEntity(Ogre::Entity* e) { m_scnMan->destroyEntity(e); }
   void DestroyNode(Ogre::SceneNode* n) { m_scnMan->destroySceneNode(n); }
+  void DestroyParticleSystem(Ogre::ParticleSystem* ps) {
+    m_scnMan->destroyParticleSystem(ps);
+  }
+
   auto FindEntityIf(const Pred& pred) const -> IcsvEntity*;
 
   auto GetEntityList(void) const -> const std::list<IcsvEntity*>&;
@@ -64,6 +70,11 @@ create_icsv_entity(DetectorReport*       rep,
 }
 
 inline void
+clear_entities(void) {
+  EntityManager::Get().ClearEntities();
+}
+
+inline void
 destroy_entity(Ogre::Entity* e) {
   EntityManager::Get().DestroyEntity(e);
 }
@@ -71,6 +82,11 @@ destroy_entity(Ogre::Entity* e) {
 inline void
 destroy_node(Ogre::SceneNode* n) {
   EntityManager::Get().DestroyNode(n);
+}
+
+inline void
+destroy_particle_system(Ogre::ParticleSystem* ps) {
+  EntityManager::Get().DestroyParticleSystem(ps);
 }
 
 inline auto
