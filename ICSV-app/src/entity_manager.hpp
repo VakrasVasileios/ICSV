@@ -23,6 +23,7 @@ public:
   auto CreateIcsvEntity(DetectorReport*       rep,
                         const Ogre::Vector3f& pos,
                         const Ogre::Vector3f& scale) -> IcsvEntity*;
+  void CreateGrid(Ogre::SceneNode* attach_point);
 
   void ClearEntities(void);
 
@@ -51,15 +52,20 @@ private:
   EntityManager(EntityManager&&)      = delete;
   ~EntityManager();
 
+  void CreateGridLine(Ogre::SceneNode*     attach_point,
+                      const Ogre::Vector3& pos1,
+                      const Ogre::Vector3& pos2);
   auto RequestChildNode(void) -> Ogre::SceneNode*;
-
-  Ogre::ManualObject* CreateCubeMesh(const Ogre::Vector3f& pos,
-                                     const Ogre::Vector3f& scale);
 };
 
 inline void
 set_scene_manager(Ogre::SceneManager* scnMan) {
   EntityManager::Get().SetSceneManager(scnMan);
+}
+
+inline void
+create_grid(Ogre::SceneNode* attach_point) {
+  EntityManager::Get().CreateGrid(attach_point);
 }
 
 inline auto

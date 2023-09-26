@@ -42,7 +42,7 @@ protected:
   struct Camera {
     Ogre::SceneNode* m_node{ nullptr };
     Ogre::Camera*    m_cam{ nullptr };
-    Ogre::SceneNode* m_grid{ nullptr };
+    Ogre::SceneNode* m_gridNode{ nullptr };
   };
 
 private:

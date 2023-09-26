@@ -81,7 +81,8 @@ ICSVapp::setup() {
   lightNode->attachObject(light);
 
   // Set camera stuff
-  m_camera.m_node = m_scnMgr->getRootSceneNode()->createChildSceneNode();
+  m_camera.m_node     = m_scnMgr->getRootSceneNode()->createChildSceneNode();
+  m_camera.m_gridNode = m_scnMgr->getRootSceneNode()->createChildSceneNode();
   m_camera.m_node->setPosition(0, 10, 15);
   m_camera.m_node->lookAt(Ogre::Vector3(0, 0, -1), Ogre::Node::TS_PARENT);
 
@@ -91,6 +92,8 @@ ICSVapp::setup() {
   m_camera.m_cam->setAutoAspectRatio(true);
   m_camera.m_node->attachObject(m_camera.m_cam);
   getRenderWindow()->addViewport(m_camera.m_cam);
+
+  create_grid(m_camera.m_gridNode);
 
   m_camMotor = new SmoothCamMove(m_camera.m_node);
   m_root->addFrameListener(m_camMotor);
