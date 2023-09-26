@@ -2,12 +2,11 @@
 
 #include <json/json.h>
 #include <string>
+#include <functional>
 
 namespace icsv::detector {
 
-class SmellEvaluatorVisitor;
-class RangeEvalVisitor;
-class RegexEvalVisitor;
+using GuiFunc = std::function<void(void)>;
 
 class SmellEvaluator {
 public:
@@ -22,7 +21,12 @@ public:
   virtual auto EvaluateSmell(int curr_lvl) -> SmellLevel   = 0;
   virtual auto ReEvaluateSmell(int init_lvl) -> SmellLevel = 0;
 
-  virtual void DisplayGui(void) = 0;
+  void SetDisplayGuiFunc(const GuiFunc& f) { m_displayGui = f; }
+
+  void DisplayGui(void);
+
+private:
+  GuiFunc m_displayGui;
 };
 
 }  // namespace icsv::detector
