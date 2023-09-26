@@ -66,6 +66,7 @@ EntityManager::CreateIcsvEntity(DetectorReport*       rep,
   // FIXME: bounding box starts to expand when particles emit
   icsv_ent->m_sfx_node = icsv_ent->m_node->createChildSceneNode();
   icsv_ent->m_sfx_node->setPosition(pos);
+  icsv_ent->m_sfx_node->setScale(scale);
   icsv_ent->m_sfx
       = m_scnMan->createParticleSystem("ps" + std::to_string(ps_c++),
                                        "Examples/PurpleFountain");
