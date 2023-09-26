@@ -81,18 +81,18 @@ ICSVapp::setup() {
   lightNode->attachObject(light);
 
   // Set camera stuff
-  m_camNode = m_scnMgr->getRootSceneNode()->createChildSceneNode();
-  m_camNode->setPosition(0, 10, 15);
-  m_camNode->lookAt(Ogre::Vector3(0, 0, -1), Ogre::Node::TS_PARENT);
+  m_camera.m_node = m_scnMgr->getRootSceneNode()->createChildSceneNode();
+  m_camera.m_node->setPosition(0, 10, 15);
+  m_camera.m_node->lookAt(Ogre::Vector3(0, 0, -1), Ogre::Node::TS_PARENT);
 
-  m_cam = m_scnMgr->createCamera("User Camera");
-  m_cam->setNearClipDistance(0.1);
-  m_cam->setFarClipDistance(10000);
-  m_cam->setAutoAspectRatio(true);
-  m_camNode->attachObject(m_cam);
-  getRenderWindow()->addViewport(m_cam);
+  m_camera.m_cam = m_scnMgr->createCamera("User Camera");
+  m_camera.m_cam->setNearClipDistance(0.1);
+  m_camera.m_cam->setFarClipDistance(10000);
+  m_camera.m_cam->setAutoAspectRatio(true);
+  m_camera.m_node->attachObject(m_camera.m_cam);
+  getRenderWindow()->addViewport(m_camera.m_cam);
 
-  m_camMotor = new SmoothCamMove(m_camNode);
+  m_camMotor = new SmoothCamMove(m_camera.m_node);
   m_root->addFrameListener(m_camMotor);
   m_camMotor->SetMouseRef(&m_mouse);
 
@@ -196,14 +196,15 @@ void
 ICSVapp::Raycast(float scrn_x, float scrn_y) {
   static Ogre::Ray   ray;
   static IcsvEntity* chosen = nullptr;
-  ray.setOrigin(m_camNode->getPosition());
-  ray.setDirection(m_cam->getCameraToViewportRay(scrn_x
-                                                     / m_cam->getViewport()
-                                                           ->getActualWidth(),
-                                                 scrn_y
-                                                     / m_cam->getViewport()
-                                                           ->getActualHeight())
-                   * m_cam->getFarClipDistance());
+  ray.setOrigin(m_camera.m_node->getPosition());
+  ray.setDirection(
+      m_camera.m_cam->getCameraToViewportRay(scrn_x
+                                                 / m_camera.m_cam->getViewport()
+                                                       ->getActualWidth(),
+                                             scrn_y
+                                                 / m_camera.m_cam->getViewport()
+                                                       ->getActualHeight())
+      * m_camera.m_cam->getFarClipDistance());
   float       dist = -1;
   const auto& entl = get_entity_list();
 

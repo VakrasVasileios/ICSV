@@ -38,11 +38,17 @@ public:
 
   friend class SmoothCamMove;
 
+protected:
+  struct Camera {
+    Ogre::SceneNode* m_node{ nullptr };
+    Ogre::Camera*    m_cam{ nullptr };
+    Ogre::SceneNode* m_grid{ nullptr };
+  };
+
 private:
   Ogre::Root*         m_root{ nullptr };
   Ogre::SceneManager* m_scnMgr{ nullptr };
-  Ogre::SceneNode*    m_camNode{ nullptr };
-  Ogre::Camera*       m_cam{ nullptr };
+  Camera              m_camera;
   SmoothCamMove*      m_camMotor{ nullptr };
 
   bool  m_LMouseDown{ false }, m_RMouseDown{ false };
