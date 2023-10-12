@@ -11,6 +11,11 @@
  *http://www.ogre3d.org/tikiwiki/tiki-editpage.php?page=MovableText
  */
 
+#include <OGRE/Ogre.h>
+#include <OGRE/Overlay/OgreOverlay.h>
+#include <OGRE/Overlay/OgreFontManager.h>
+#include <OGRE/Overlay/OgreFont.h>
+
 #ifndef __include_MovableText_H__
 #define __include_MovableText_H__
 
@@ -24,10 +29,9 @@ public:
   enum VerticalAlignment { V_BELOW, V_ABOVE, V_CENTER };
 
 protected:
-  String              mFontName;
   String              mType;
-  String              mName;
   String              mCaption;
+  String              mFontName;
   HorizontalAlignment mHorizontalAlignment;
   VerticalAlignment   mVerticalAlignment;
 
@@ -62,7 +66,8 @@ public:
               const String&      caption,
               const String&      fontName   = "BlueHighway-8",
               Real               charHeight = 1.0,
-              const ColourValue& color      = ColourValue::White);
+              const ColourValue& color      = ColourValue::White,
+              const String&      groupName  = RGN_DEFAULT);
   virtual ~MovableText();
 
   // Add to build on Shoggoth:
@@ -70,7 +75,8 @@ public:
                                 bool debugRenderables = false);
 
   // Set settings
-  void setFontName(const String& fontName);
+  void setFontName(const String& fontName,
+                   const String& groupName = RGN_DEFAULT);
   void setCaption(const String& caption);
   void setColor(const ColourValue& color);
   void setCharacterHeight(Real height);
@@ -101,13 +107,12 @@ protected:
   void _updateColors();
 
   // from MovableObject
-  void              getWorldTransforms(Matrix4* xform) const;
-  Real              getBoundingRadius(void) const { return mRadius; };
-  Real              getSquaredViewDepth(const Camera* cam) const { return 0; };
-  const Quaternion& getWorldOrientation(void) const;
-  const Vector3&    getWorldPosition(void) const;
+  void                  getWorldTransforms(Matrix4* xform) const;
+  Real                  getBoundingRadius(void) const { return mRadius; };
+  Real                  getSquaredViewDepth(const Camera*) const { return 0; };
+  const Quaternion&     getWorldOrientation(void) const;
+  const Vector3&        getWorldPosition(void) const;
   const AxisAlignedBox& getBoundingBox(void) const { return mAABB; };
-  const String&         getName(void) const { return mName; };
   const String&         getMovableType(void) const {
     static Ogre::String movType = "MovableText";
     return movType;
@@ -119,7 +124,7 @@ protected:
   // from renderable
   void               getRenderOperation(RenderOperation& op);
   const MaterialPtr& getMaterial(void) const {
-    assert(!mpMaterial.isNull());
+    assert(mpMaterial);
     return mpMaterial;
   };
   const LightList& getLights(void) const { return mLList; };
