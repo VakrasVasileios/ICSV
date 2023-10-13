@@ -281,6 +281,12 @@ IcsvGui::ShowSpecialFX(void) {
       else
         i->Emission(false);
   }
+  ImGui::SameLine(0, 10);
+  if (ImGui::Button("Stop Emission")) {
+    auto lst = ICSVapp::EntityManager::Get().GetEntityList();
+    for (auto i : lst)
+      i->Emission(false);
+  }
 }
 
 void
