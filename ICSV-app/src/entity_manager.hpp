@@ -5,9 +5,12 @@
 #include <OgreBillboardSet.h>
 #include <OgreManualObject.h>
 #include <OgreFontManager.h>
+#include <memory>
 #include "movable_text.hpp"
 
 namespace ICSVapp {
+
+using MovableTextPtr = std::unique_ptr<Ogre::MovableText>;
 
 class EntityManager final {
 public:
@@ -18,9 +21,6 @@ public:
   static auto Get(void) -> EntityManager&;
 
   void SetSceneManager(Ogre::SceneManager* scnMan);
-  void MakeBillboardSet(void);
-  void ClearBillboardSet(void);
-  void CreateBillboard(Ogre::Vector3 pos, const std::string& msg);
   auto CreateIcsvEntity(DetectorReport*       rep,
                         const Ogre::Vector3f& pos,
                         const Ogre::Vector3f& scale) -> IcsvEntity*;
@@ -50,11 +50,10 @@ public:
   void RepositionEnttsOnAxisZ(void);
 
 private:
-  Ogre::SceneManager*          m_scnMan{ nullptr };
-  Ogre::BillboardSet*          m_billbset{ nullptr };
-  std::list<IcsvEntity*>       m_entt_list;
-  std::list<Ogre::MovableText> m_graph_tags;
-  Ogre::FontPtr                m_font;
+  Ogre::SceneManager*       m_scnMan{ nullptr };
+  std::list<IcsvEntity*>    m_entt_list;
+  std::list<MovableTextPtr> m_graph_tags;
+  Ogre::FontPtr             m_font;
 
   EntityManager();
   EntityManager(const EntityManager&) = delete;

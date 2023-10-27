@@ -21,29 +21,6 @@ EntityManager::SetSceneManager(Ogre::SceneManager* scnMan) {
   m_scnMan = scnMan;
 }
 
-void
-EntityManager::MakeBillboardSet(void) {
-  m_billbset = m_scnMan->createBillboardSet();
-  m_billbset->setMaterialName("BillboardMat", "ICSV_RESOURCES");
-}
-
-void
-EntityManager::ClearBillboardSet(void) {
-  auto size = m_billbset->getNumBillboards();
-  for (int i = 0; i < size; i++) {
-    auto* ptr = m_billbset->getBillboard(i);
-    if (ptr != nullptr)
-      delete ptr;
-  }
-  m_billbset->clear();
-}
-
-void
-EntityManager::CreateBillboard(Ogre::Vector3 pos, const std::string& msg) {
-  m_billbset->createBillboard(pos);
-  m_font->putText(m_billbset, msg, 10.f);
-}
-
 auto
 EntityManager::CreateIcsvEntity(DetectorReport*       rep,
                                 const Ogre::Vector3f& pos,
@@ -81,19 +58,20 @@ EntityManager::CreateMovableText(const std::string& caption,
                                  Ogre::SceneNode*   attach_point) {
   static std::uint64_t count = 0;
 
-  auto name  = Ogre::String("MvTxt" + std::to_string(count));
-  auto mvtag = Ogre::MovableText(name,
-                                 caption,
-                                 "Arial",
-                                 5,
-                                 Ogre::ColourValue::White,
-                                 "ICSV_RESOURCES");
-  mvtag.setSpaceWidth(0);
-  mvtag.showOnTop(true);
-  mvtag.setVisibilityFlags(0x0008);
-  mvtag.setRenderQueueGroup(Ogre::RenderQueueGroupID::RENDER_QUEUE_6);
-  m_graph_tags.push_back(mvtag);
-  attach_point->attachObject(&mvtag);
+  auto name = Ogre::String("MvTxt" + std::to_string(count));
+  m_graph_tags.emplace_front(
+      std::make_unique<Ogre::MovableText>(name,
+                                          caption,
+                                          "Arial",
+                                          5,
+                                          Ogre::ColourValue::White,
+                                          "ICSV_RESOURCES"));
+  m_graph_tags.front()->setSpaceWidth(0);
+  m_graph_tags.front()->showOnTop(true);
+  m_graph_tags.front()->setRenderQueueGroup(
+      Ogre::RenderQueueGroupID::RENDER_QUEUE_6);
+  m_graph_tags.front()->setVisibilityFlags(0x0002);
+  attach_point->attachObject(m_graph_tags.front().get());
 }
 
 void
@@ -149,7 +127,7 @@ EntityManager::RepositionEnttsOnAxisZ(void) {
 }
 
 void
-EntityManager::CreateGrid(Ogre::SceneNode* attach_point) {
+EntityManager::CreateGrid(Ogre::SceneNode*) {
 #if (0)
   for (int i = -5000; i < 5001; i++) {
     CreateGridLine(attach_point, { -5000, 0, i }, { 5000, 0, i });
