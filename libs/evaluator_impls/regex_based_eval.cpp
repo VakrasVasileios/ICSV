@@ -1,30 +1,32 @@
 #include "regex_based_eval.hpp"
 #include "icsv/detector/detector_manager.hpp"
-#include <imgui/imgui.h>
 #include <assert.h>
 #include <iostream>
+#ifndef UNIT_TESTS
+#include <imgui/imgui.h>
+#endif
 
 auto
 RegexBasedEval::EvaluateClassName(const std::string& _name)
-    -> icsv::detector::SmellEvaluator::SmellLevel {
+    -> icsv::detector::ISmellEvaluator::SmellLevel {
   return EvaluateName(_name, std::regex(m_class_names));
 }
 
 auto
 RegexBasedEval::EvaluateMethodName(const std::string& _name)
-    -> icsv::detector::SmellEvaluator::SmellLevel {
+    -> icsv::detector::ISmellEvaluator::SmellLevel {
   return EvaluateName(_name, std::regex(m_method_names));
 }
 
 auto
 RegexBasedEval::EvaluateVarName(const std::string& _name)
-    -> icsv::detector::SmellEvaluator::SmellLevel {
+    -> icsv::detector::ISmellEvaluator::SmellLevel {
   return EvaluateName(_name, std::regex(m_var_names));
 }
 
 auto
 RegexBasedEval::ReEvaluateSmell(int)
-    -> icsv::detector::SmellEvaluator::SmellLevel {
+    -> icsv::detector::ISmellEvaluator::SmellLevel {
   icsv::detector::DetectorManager::Get().UseDetectorWithTag(m_tag);
   return -1;
 }
@@ -33,7 +35,8 @@ void
 RegexBasedEval::DeserializeConfig(const Json::Value& doc) {
   assert(doc.isObject());
 
-  auto convs = doc["Naming conventions"];
+  auto convs    = doc["Naming conventions"];
+  m_description = convs["description"].asString();
   for (auto iter = convs["conventions"].begin();
        iter != convs["conventions"].end();
        iter++) {
@@ -52,6 +55,7 @@ RegexBasedEval::DeserializeConfig(const Json::Value& doc) {
 
 void
 RegexBasedEval::DisplayGui(void) {
+#ifndef UNIT_TESTS
   static char cname[BUFF];
   static char mname[BUFF];
   static char vname[BUFF];
@@ -65,6 +69,7 @@ RegexBasedEval::DisplayGui(void) {
   }
 
   ImGui::Text("%s", m_tag.c_str());
+  ImGui::Text("%s%s", "Description: ", m_description.c_str());
   ImGui::InputInt(std::string("Min " + m_tag).c_str(), &(m_range.min));
   ImGui::InputInt(std::string("Max " + m_tag).c_str(), &(m_range.max));
   ImGui::InputText("Class name regex", cname, BUFF);
@@ -76,11 +81,12 @@ RegexBasedEval::DisplayGui(void) {
   }
 
   ImGui::Separator();
+#endif
 }
 
 auto
 RegexBasedEval::EvaluateName(const std::string& _name, std::regex exp)
-    -> icsv::detector::SmellEvaluator::SmellLevel {
+    -> icsv::detector::ISmellEvaluator::SmellLevel {
   int         non_matching_chars = _name.size();
   std::smatch base_match;
   if (std::regex_match(_name, base_match, exp)) {

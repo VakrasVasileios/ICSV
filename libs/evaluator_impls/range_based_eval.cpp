@@ -1,7 +1,9 @@
 #include "range_based_eval.hpp"
 #include "icsv/detector/report_center.hpp"
-#include <imgui/imgui.h>
 #include <assert.h>
+#ifndef UNIT_TESTS
+#include <imgui/imgui.h>
+#endif
 
 /*
   Returns 0 if curr_lvl < minimum range
@@ -10,7 +12,7 @@
 */
 auto
 RangeBasedEvaluator::EvaluateSmell(int curr_lvl)
-    -> icsv::detector::SmellEvaluator::SmellLevel {
+    -> icsv::detector::ISmellEvaluator::SmellLevel {
   return (curr_lvl < m_range.min) * 0 + (curr_lvl >= m_range.max) * 10
       + IsWithinRange(curr_lvl)
       * (((double) (curr_lvl - m_range.min) / m_range.range()) * 10);
@@ -18,7 +20,7 @@ RangeBasedEvaluator::EvaluateSmell(int curr_lvl)
 
 auto
 RangeBasedEvaluator::ReEvaluateSmell(int init_lvl)
-    -> icsv::detector::SmellEvaluator::SmellLevel {
+    -> icsv::detector::ISmellEvaluator::SmellLevel {
   return EvaluateSmell(init_lvl);
 }
 
@@ -31,7 +33,9 @@ RangeBasedEvaluator::DeserializeConfig(const Json::Value& doc) {
 
 void
 RangeBasedEvaluator::DisplayGui(void) {
+#ifndef UNIT_TESTS
   ImGui::Text("%s", m_tag.c_str());
+  ImGui::Text("%s%s", "Description: ", m_description.c_str());
   ImGui::InputInt(std::string("Min " + m_tag).c_str(), &(m_range.min));
   ImGui::InputInt(std::string("Max " + m_tag).c_str(), &(m_range.max));
 
@@ -40,4 +44,5 @@ RangeBasedEvaluator::DisplayGui(void) {
       ReEvaluateSmell(rep->init_level);
   }
   ImGui::Separator();
+#endif
 }

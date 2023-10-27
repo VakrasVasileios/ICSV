@@ -11,14 +11,18 @@ public:
   ~RegexBasedEval() override = default;
 
   auto EvaluateClassName(const std::string& _name)
-      -> icsv::detector::SmellEvaluator::SmellLevel;
+      -> icsv::detector::ISmellEvaluator::SmellLevel;
   auto EvaluateMethodName(const std::string& _name)
-      -> icsv::detector::SmellEvaluator::SmellLevel;
+      -> icsv::detector::ISmellEvaluator::SmellLevel;
   auto EvaluateVarName(const std::string& _name)
-      -> icsv::detector::SmellEvaluator::SmellLevel;
+      -> icsv::detector::ISmellEvaluator::SmellLevel;
+
+  auto EvaluateSmell(int) -> icsv::detector::ISmellEvaluator::SmellLevel {
+    return -1;
+  }
 
   auto ReEvaluateSmell(int lvl)
-      -> icsv::detector::SmellEvaluator::SmellLevel override;
+      -> icsv::detector::ISmellEvaluator::SmellLevel override;
 
   void DeserializeConfig(const Json::Value& doc) override;
 
@@ -34,7 +38,7 @@ private:
   std::string       m_var_names;
 
   auto EvaluateName(const std::string& _name, std::regex exp)
-      -> icsv::detector::SmellEvaluator::SmellLevel;
+      -> icsv::detector::ISmellEvaluator::SmellLevel;
 };
 
 inline auto

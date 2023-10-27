@@ -21,7 +21,7 @@ EvaluationCenter::Get() -> EvaluationCenter& {
 
 void
 EvaluationCenter::RegisterEvaluator(const std::string& tag,
-                                    SmellEvaluator*    ev) {
+                                    ISmellEvaluator*    ev) {
   if (m_eval_reg.find(tag) != m_eval_reg.end())
     std::cout << "Newly registered evaluator with tag \"" << tag
               << "\" overwrites existing one!\n";
@@ -51,7 +51,7 @@ EvaluationCenter::DisplayEvalGui(void) {
 
 auto
 EvaluationCenter::EvaluateSmell(const std::string& tag, const int curr_lvl)
-    -> SmellEvaluator::SmellLevel {
+    -> ISmellEvaluator::SmellLevel {
   if (m_eval_reg.find(tag) == m_eval_reg.end()) {
     std::cout << "Could not find evaluator with tag \"" << tag
               << "\", returning current level.";

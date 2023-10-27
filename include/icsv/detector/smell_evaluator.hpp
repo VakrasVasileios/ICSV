@@ -8,13 +8,13 @@ namespace icsv::detector {
 
 using GuiFunc = std::function<void(void)>;
 
-class SmellEvaluator {
+class ISmellEvaluator {
 public:
   using SmellLevel = int;
 
 public:
-  SmellEvaluator(const std::string& tag);
-  virtual ~SmellEvaluator() = default;
+  ISmellEvaluator(const std::string& tag);
+  virtual ~ISmellEvaluator() = default;
 
   virtual void DeserializeConfig(const Json::Value& doc) = 0;
 
@@ -23,14 +23,19 @@ public:
 
   void SetDisplayGuiFunc(const GuiFunc& f);
   void SetDescription(const std::string& dsc);
+  void SetTag(const std::string& t);
 
   auto GetDescription(void) const -> const std::string&;
+  auto GetTag(void) const -> const std::string&;
 
   virtual void DisplayGui(void) = 0;
 
-private:
-  GuiFunc     m_displayGui;
+protected:
+  std::string m_tag         = "";
   std::string m_description = "";
+
+private:
+  GuiFunc m_displayGui;
 };
 
 }  // namespace icsv::detector

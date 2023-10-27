@@ -3,26 +3,38 @@
 
 namespace icsv::detector {
 
-SmellEvaluator::SmellEvaluator(const std::string& tag) {
+ISmellEvaluator::ISmellEvaluator(const std::string& tag) {
+  m_tag = tag;
   register_evaluator(tag, this);
 }
 
 void
-SmellEvaluator::SetDisplayGuiFunc(const GuiFunc& f) {
+ISmellEvaluator::SetDisplayGuiFunc(const GuiFunc& f) {
   m_displayGui = f;
 }
+
 void
-SmellEvaluator::SetDescription(const std::string& dsc) {
+ISmellEvaluator::SetDescription(const std::string& dsc) {
   m_description = dsc;
 }
 
+void
+ISmellEvaluator::SetTag(const std::string& t) {
+  m_tag = t;
+}
+
 auto
-SmellEvaluator::GetDescription(void) const -> const std::string& {
+ISmellEvaluator::GetDescription(void) const -> const std::string& {
   return m_description;
 }
 
+auto
+ISmellEvaluator::GetTag(void) const -> const std::string& {
+  return m_tag;
+}
+
 void
-SmellEvaluator::DisplayGui(void) {
+ISmellEvaluator::DisplayGui(void) {
   if (!m_displayGui)
     m_displayGui();
 }

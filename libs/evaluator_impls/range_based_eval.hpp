@@ -2,17 +2,17 @@
 
 #include "icsv/detector/smell_evaluator.hpp"
 
-class RangeBasedEvaluator : public icsv::detector::SmellEvaluator {
+class RangeBasedEvaluator : public icsv::detector::ISmellEvaluator {
 public:
   RangeBasedEvaluator(const std::string& tag)
-      : icsv::detector::SmellEvaluator(tag), m_tag(tag) {}
+      : icsv::detector::ISmellEvaluator(tag) {}
   ~RangeBasedEvaluator() override = default;
 
   virtual auto EvaluateSmell(int curr_lvl)
-      -> icsv::detector::SmellEvaluator::SmellLevel override;
+      -> icsv::detector::ISmellEvaluator::SmellLevel override;
 
   virtual auto ReEvaluateSmell(int init_lvl)
-      -> icsv::detector::SmellEvaluator::SmellLevel override;
+      -> icsv::detector::ISmellEvaluator::SmellLevel override;
 
   virtual void DeserializeConfig(const Json::Value& doc) override;
 
@@ -23,8 +23,6 @@ protected:
     int min, max;
     int range() { return max - min; }
   } m_range;
-
-  std::string m_tag;
 
 private:
   // curr_lvl within [min,max)
