@@ -48,8 +48,8 @@ ICSVapp::setup() {
       "ICSV_RESOURCES");
 
   set_scene_manager(m_scnMgr);
-  EntityManager::Get().MakeBillboardSet();
-  // m_scnMgr->setSkyBox(true, "Examples/CloudyNoonSkyBox", 500, false);
+  // EntityManager::Get().MakeBillboardSet();
+  m_scnMgr->setSkyBox(true, "Examples/CloudyNoonSkyBox", 5000);
 
   // IMGUI !!!!!!!!!!!!!!!!!!!!!!
 
@@ -102,7 +102,9 @@ ICSVapp::setup() {
   IcsvGui::Get().SetCameraData(m_camMotor->GetSpeedRef(),
                                m_camMotor->GetRotSpeedRef());
 
-  EntityManager::Get().CreateBillboard({ 0, 0, 0 }, "MOCK");
+  static auto node = *m_scnMgr->getRootSceneNode()->createChildSceneNode();
+  node.setPosition({ 0, 0, 0 });
+  EntityManager::Get().CreateMovableText("Mock", &node);
 }
 
 inline auto
@@ -197,8 +199,7 @@ ICSVapp::mouseMoved(const OgreBites::MouseMotionEvent& evnt) {
 
 void
 ICSVapp::Raycast(float scrn_x, float scrn_y) {
-  static Ogre::Ray   ray;
-  static IcsvEntity* chosen = nullptr;
+  static Ogre::Ray ray;
   ray.setOrigin(m_camera.m_node->getPosition());
   ray.setDirection(
       m_camera.m_cam->getCameraToViewportRay(scrn_x
@@ -211,16 +212,14 @@ ICSVapp::Raycast(float scrn_x, float scrn_y) {
   float       dist = -1;
   const auto& entl = get_entity_list();
 
-  for (auto* ref : entl) {
+  for (auto& ref : entl) {
     auto res = ray.intersects(ref->GetBoundingBox());
+    ref->ShowBoundingBox(false);
     if (res.first) {
       if (dist < 0 || res.second > dist) {
         dist = res.second;
         IcsvGui::Get().SetReportToDisplay(ref->GetDetectorReport());
-        if (chosen != nullptr)
-          chosen->ShowBoundingBox(false);
-        chosen = ref;
-        chosen->ShowBoundingBox(true);
+        ref->ShowBoundingBox(true);
       }
     }
   }
