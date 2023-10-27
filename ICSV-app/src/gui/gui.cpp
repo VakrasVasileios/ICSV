@@ -143,6 +143,7 @@ void
 IcsvGui::ShowSmellButton(bool& changed) {
   if (ImGui::Button("Evaluate Code", ImVec2(250, 50))) {
     if (changed) {
+      m_rep_dspld = nullptr;
       icsv::detector::clear_reports();
       clear_entities();
       icsv::detector::use_smell_detectors();
@@ -157,10 +158,11 @@ IcsvGui::ShowSmellButton(bool& changed) {
           tag = rep->smell_tag;
         }
         if (rep->level > 0) {
-          double y = 0.2 * rep->level / 2;
+          auto   unif_scale = 0.2;
+          double y          = unif_scale * rep->level / 2;
           create_icsv_entity(rep,
                              Ogre::Vector3f(x, y / 2, z),
-                             Ogre::Vector3f(0.2, y, 0.2));
+                             Ogre::Vector3f(unif_scale, y, unif_scale));
           z++;
         }
       }
