@@ -21,12 +21,16 @@ public:
   virtual auto EvaluateSmell(int curr_lvl) -> SmellLevel   = 0;
   virtual auto ReEvaluateSmell(int init_lvl) -> SmellLevel = 0;
 
-  void SetDisplayGuiFunc(const GuiFunc& f) { m_displayGui = f; }
+  void SetDisplayGuiFunc(const GuiFunc& f);
+  void SetDescription(const std::string& dsc);
 
-  void DisplayGui(void);
+  auto GetDescription(void) const -> const std::string&;
+
+  virtual void DisplayGui(void) = 0;
 
 private:
-  GuiFunc m_displayGui;
+  GuiFunc     m_displayGui;
+  std::string m_description = "";
 };
 
 }  // namespace icsv::detector

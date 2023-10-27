@@ -8,6 +8,20 @@ SmellEvaluator::SmellEvaluator(const std::string& tag) {
 }
 
 void
+SmellEvaluator::SetDisplayGuiFunc(const GuiFunc& f) {
+  m_displayGui = f;
+}
+void
+SmellEvaluator::SetDescription(const std::string& dsc) {
+  m_description = dsc;
+}
+
+auto
+SmellEvaluator::GetDescription(void) const -> const std::string& {
+  return m_description;
+}
+
+void
 SmellEvaluator::DisplayGui(void) {
   if (!m_displayGui)
     m_displayGui();
