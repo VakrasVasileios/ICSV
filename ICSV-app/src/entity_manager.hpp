@@ -5,6 +5,7 @@
 #include <OgreBillboardSet.h>
 #include <OgreManualObject.h>
 #include <OgreFontManager.h>
+#include "movable_text.hpp"
 
 namespace ICSVapp {
 
@@ -23,11 +24,18 @@ public:
   auto CreateIcsvEntity(DetectorReport*       rep,
                         const Ogre::Vector3f& pos,
                         const Ogre::Vector3f& scale) -> IcsvEntity*;
+  void CreateMovableText(const std::string& caption,
+                         Ogre::SceneNode*   attach_point);
   void CreateGrid(Ogre::SceneNode* attach_point);
 
   void ClearEntities(void);
+  void ClearGraphTags(void) { m_graph_tags.clear(); }
+  void ClearScene(void) { m_scnMan->clearScene(); }
 
   void DestroyEntity(Ogre::Entity* e) { m_scnMan->destroyEntity(e); }
+  void DestroyMovableTxt(Ogre::MovableText* mt) {
+    m_scnMan->destroyMovableObject(mt);
+  }
   void DestroyNode(Ogre::SceneNode* n) { m_scnMan->destroySceneNode(n); }
   void DestroyParticleSystem(Ogre::ParticleSystem* ps) {
     m_scnMan->destroyParticleSystem(ps);
@@ -42,10 +50,11 @@ public:
   void RepositionEnttsOnAxisZ(void);
 
 private:
-  Ogre::SceneManager*    m_scnMan{ nullptr };
-  Ogre::BillboardSet*    m_billbset{ nullptr };
-  std::list<IcsvEntity*> m_entt_list;
-  Ogre::FontPtr          m_font;
+  Ogre::SceneManager*          m_scnMan{ nullptr };
+  Ogre::BillboardSet*          m_billbset{ nullptr };
+  std::list<IcsvEntity*>       m_entt_list;
+  std::list<Ogre::MovableText> m_graph_tags;
+  Ogre::FontPtr                m_font;
 
   EntityManager();
   EntityManager(const EntityManager&) = delete;
@@ -81,8 +90,23 @@ clear_entities(void) {
 }
 
 inline void
+clear_graph_tags(void) {
+  EntityManager::Get().ClearGraphTags();
+}
+
+inline void
+clear_scene(void) {
+  EntityManager::Get().ClearScene();
+}
+
+inline void
 destroy_entity(Ogre::Entity* e) {
   EntityManager::Get().DestroyEntity(e);
+}
+
+inline void
+destroy_movable_txt(Ogre::MovableText* mt) {
+  EntityManager::Get().DestroyMovableTxt(mt);
 }
 
 inline void

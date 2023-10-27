@@ -7,10 +7,7 @@ EntityManager::EntityManager() {
                                                        "ICSV_RESOURCES");
 }
 
-EntityManager::~EntityManager() {
-  clear_entities();
-  m_scnMan->clearScene();
-}
+EntityManager::~EntityManager() {}
 
 auto
 EntityManager::Get(void) -> EntityManager& {
@@ -80,8 +77,30 @@ EntityManager::CreateIcsvEntity(DetectorReport*       rep,
 }
 
 void
+EntityManager::CreateMovableText(const std::string& caption,
+                                 Ogre::SceneNode*   attach_point) {
+  static std::uint64_t count = 0;
+
+  auto name  = Ogre::String("MvTxt" + std::to_string(count));
+  auto mvtag = Ogre::MovableText(name,
+                                 caption,
+                                 "Arial",
+                                 5,
+                                 Ogre::ColourValue::White,
+                                 "ICSV_RESOURCES");
+  mvtag.setSpaceWidth(0);
+  mvtag.showOnTop(true);
+  mvtag.setVisibilityFlags(0x0008);
+  mvtag.setRenderQueueGroup(Ogre::RenderQueueGroupID::RENDER_QUEUE_6);
+  m_graph_tags.push_back(mvtag);
+  attach_point->attachObject(&mvtag);
+}
+
+void
 EntityManager::ClearEntities(void) {
   for (auto* ent : m_entt_list) {
+    ent->Emission(false);
+    ent->ShowBoundingBox(false);
     delete ent;
     ent = nullptr;
   }
