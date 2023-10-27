@@ -10,8 +10,9 @@ ICSVapp::frameStarted(const Ogre::FrameEvent& evnt) {
   OgreBites::ApplicationContext::frameStarted(evnt);
 
   Ogre::ImGuiOverlay::NewFrame();
-
+#ifndef NDEBUG
   ImGui::ShowDemoWindow();
+#endif
   IcsvGui::Get().Display();
 
   return true;
@@ -38,7 +39,7 @@ ICSVapp::setup() {
   m_root   = getRoot();
   m_scnMgr = m_root->createSceneManager();
 
-  // Set custom recourse directory
+  // Set custom resourse directory
   auto floc   = std::string(__FILE__);
   auto fstart = floc.find("app.cpp");
   floc.replace(fstart, 11, "../assets");
@@ -47,6 +48,7 @@ ICSVapp::setup() {
   Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup(
       "ICSV_RESOURCES");
 
+  // Set skybox and scene manager
   set_scene_manager(m_scnMgr);
   // EntityManager::Get().MakeBillboardSet();
   m_scnMgr->setSkyBox(true, "Examples/CloudyNoonSkyBox", 5000);
