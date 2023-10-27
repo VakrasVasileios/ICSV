@@ -1,6 +1,7 @@
 {
   "Too many parameters": {
     "description": "Detects methods with an excessive amount of parameters",
+    "type": "range",
     "range": {
       "min": 5,
       "max": 10
@@ -8,6 +9,7 @@
   },
   "Too many function literals": {
     "description": "Detects excessive method literal count",
+    "type": "range",
     "range": {
       "min": 12,
       "max": 30
@@ -15,6 +17,7 @@
   },
   "Too many locals": {
     "description": "Detects excessive method local variable declarations",
+    "type": "range",
     "range": {
       "min": 10,
       "max": 24
@@ -84,6 +87,7 @@
   },
   "Excessively long identifier": {
     "description": "Detects identifiers with too many characters",
+    "type": "range",
     "range": {
       "min": 25,
       "max": 45
@@ -91,6 +95,7 @@
   },
   "Excessively long line of code": {
     "description": "Detects too long lines of un-commented code",
+    "type": "range",
     "range": {
       "min": 120,
       "max": 150
@@ -114,6 +119,7 @@
   },
   "Nested Scopes": {
     "description": "Detects methods that nest scopes too deep",
+    "type": "range",
     "range": {
       "min": 3,
       "max": 7
@@ -121,6 +127,7 @@
   },
   "Circular Dependency": {
     "description": "Detects circlular dependency between structures",
+    "type": "range",
     "range": {
       "min": 2,
       "max": 6
@@ -133,6 +140,7 @@
       {
         "tag": "max_methods",
         "formal_name": "Maximum count of methods",
+        "type": "range",
         "range": [
           8,
           29
@@ -145,6 +153,7 @@
       {
         "tag": "max_fields",
         "formal_name": "Maximum count of fields",
+        "type": "range",
         "range": [
           6,
           17
@@ -153,12 +162,12 @@
           2,
           40
         ]
-      },
-      {}
+      }
     ]
   },
   "Large File": {
     "description": "Detects code files with too many lines",
+    "type": "range",
     "range": {
       "min": 619,
       "max": 1200
@@ -166,6 +175,7 @@
   },
   "Inappropriate Intimacy": {
     "description": "@argument max_member_expr: Max count of member expr from one class to any other class.",
+    "type": "range",
     "range": {
       "min": 50,
       "max": 120
@@ -173,10 +183,11 @@
   },
   "Non virtual base destructor": {
     "description": "Flags destructors of base classes that are not virtual.",
-    "args": []
+    "type": "bool"
   },
   "Redundant protected access": {
     "description": "Detects protected member functions or variables declared in classes that are not inherited from.",
+    "type": "range",
     "range": {
       "min": 1,
       "max": 5
@@ -184,6 +195,7 @@
   },
   "Excessive function overloading": {
     "description": "Detects functions that are overloaded too many times.",
+    "type": "range",
     "range": {
       "min": 8,
       "max": 14
@@ -191,6 +203,7 @@
   },
   "Many Dependencies": {
     "description": "Detects structures that directly depend upon too many other structures. Indirect dependencies are not counted.",
+    "type": "range",
     "range": {
       "min": 8,
       "max": 16
