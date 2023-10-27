@@ -40,12 +40,12 @@ MovableText::MovableText(const String&      name,
 }
 
 MovableText::~MovableText() {
-  if (mRenderOp.vertexData)
-    delete mRenderOp.vertexData;
+  // if (mRenderOp.vertexData)
+  //   delete mRenderOp.vertexData;
   // May cause crashing... check this and comment if it does
-  // if (!mpMaterial.isNull())
-  //     MaterialManager::getSingletonPtr()->remove(mpMaterial->getName(),
-  //     RGN_AUTODETECT);
+  if (!mpMaterial)
+    MaterialManager::getSingletonPtr()->remove(mpMaterial->getName(),
+                                               RGN_AUTODETECT);
 }
 
 void
