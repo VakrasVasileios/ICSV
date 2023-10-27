@@ -217,8 +217,11 @@ IcsvGui::ShowSkyboxSettings(void) {
 
 void
 IcsvGui::ShowCameraSettings(void) {
+  ImGui::Separator();
   ImGui::InputFloat("Camera Speed", m_cam_data.cam_speed);
+  ImGui::Separator();
   ImGui::InputFloat("Camera Rotation Speed", m_cam_data.rot_smooth);
+  ImGui::Separator();
 }
 
 std::list<Selectable*> sort_by
@@ -294,6 +297,7 @@ IcsvGui::ShowSpecialFX(void) {
 void
 IcsvGui::ShowEvalConfigs(void) {
   icsv::detector::EvaluationCenter::Get().DisplayEvalGui();
+  ImGui::Separator();
   if (ImGui::Button("Re-Render Evaluation")) {
     SortEntityList("Smell Tag");
     std::string tag = "";

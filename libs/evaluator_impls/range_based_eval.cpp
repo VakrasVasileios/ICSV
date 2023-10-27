@@ -26,23 +26,32 @@ RangeBasedEvaluator::ReEvaluateSmell(int init_lvl)
 
 void
 RangeBasedEvaluator::DeserializeConfig(const Json::Value& doc) {
-  m_range.min = doc[m_tag]["range"]["min"].asInt();
-  m_range.max = doc[m_tag]["range"]["max"].asInt();
+  m_description = doc[m_tag]["description"].asString();
+  m_range.min   = doc[m_tag]["range"]["min"].asInt();
+  m_range.max   = doc[m_tag]["range"]["max"].asInt();
   assert(m_range.max >= m_range.min);
 }
 
 void
 RangeBasedEvaluator::DisplayGui(void) {
 #ifndef UNIT_TESTS
-  ImGui::Text("%s", m_tag.c_str());
-  ImGui::Text("%s%s", "Description: ", m_description.c_str());
-  ImGui::InputInt(std::string("Min " + m_tag).c_str(), &(m_range.min));
-  ImGui::InputInt(std::string("Max " + m_tag).c_str(), &(m_range.max));
-
-  if (ImGui::Button(std::string("Re-Eval " + m_tag).c_str())) {
-    for (auto* rep : icsv::detector::ReportCenter::Get().GetReportsByTag(m_tag))
-      ReEvaluateSmell(rep->init_level);
-  }
   ImGui::Separator();
+  if (ImGui::TreeNode(m_tag.c_str())) {
+    ImGui::Separator();
+    ImGui::Text("%s%s", "Description: ", m_description.c_str());
+    ImGui::Separator();
+    ImGui::Text("%s", "Range: ");
+    ImGui::InputInt(std::string("Min " + m_tag).c_str(), &(m_range.min));
+    ImGui::InputInt(std::string("Max " + m_tag).c_str(), &(m_range.max));
+    ImGui::Separator();
+
+    if (ImGui::Button(std::string("Re-Eval " + m_tag).c_str())) {
+      for (auto* rep :
+           icsv::detector::ReportCenter::Get().GetReportsByTag(m_tag))
+        ReEvaluateSmell(rep->init_level);
+    }
+    ImGui::TreePop();
+    ImGui::Separator();
+  }
 #endif
 }

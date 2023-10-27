@@ -68,19 +68,28 @@ RegexBasedEval::DisplayGui(void) {
     init = true;
   }
 
-  ImGui::Text("%s", m_tag.c_str());
-  ImGui::Text("%s%s", "Description: ", m_description.c_str());
-  ImGui::InputInt(std::string("Min " + m_tag).c_str(), &(m_range.min));
-  ImGui::InputInt(std::string("Max " + m_tag).c_str(), &(m_range.max));
-  ImGui::InputText("Class name regex", cname, BUFF);
-  ImGui::InputText("Method name regex", mname, BUFF);
-  ImGui::InputText("Var name regex", vname, BUFF);
-
-  if (ImGui::Button(std::string("Re-Eval " + m_tag).c_str())) {
-    ReEvaluateSmell(0);
-  }
-
   ImGui::Separator();
+  if (ImGui::TreeNode(m_tag.c_str())) {
+    ImGui::Separator();
+    ImGui::Text("%s%s", "Description: ", m_description.c_str());
+    ImGui::Separator();
+    ImGui::Text("%s", "Range: ");
+    ImGui::InputInt(std::string("Min " + m_tag).c_str(), &(m_range.min));
+    ImGui::InputInt(std::string("Max " + m_tag).c_str(), &(m_range.max));
+    ImGui::Separator();
+    ImGui::InputText("Class name regex", cname, BUFF);
+    ImGui::Separator();
+    ImGui::InputText("Method name regex", mname, BUFF);
+    ImGui::Separator();
+    ImGui::InputText("Var name regex", vname, BUFF);
+    ImGui::Separator();
+
+    if (ImGui::Button(std::string("Re-Eval " + m_tag).c_str())) {
+      ReEvaluateSmell(0);
+    }
+    ImGui::TreePop();
+    ImGui::Separator();
+  }
 #endif
 }
 
