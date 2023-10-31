@@ -14,7 +14,6 @@ public:
 };
 
 static RedundantProtectedDet* rpd = new RedundantProtectedDet();
-CREATE_RANGE_BASED_EVAL(TAG);
 
 void
 RedundantProtectedDet::DetectSmell(const ArchData& arch) {
