@@ -2,87 +2,75 @@
 #include "icsv/detector/detector_manager.hpp"
 #include <assert.h>
 #include <iostream>
+#include <list>
 #ifndef UNIT_TESTS
 #include <imgui/imgui.h>
 #endif
 
-auto
-RegexBasedEval::EvaluateClassName(const std::string& _name)
-    -> icsv::detector::ISmellEvaluator::SmellLevel {
-  return EvaluateName(_name, std::regex(m_class_names));
+RegexEvaluator::RegexEvaluator(const std::string& _tag, std::size_t _buff_size)
+    : RangeEvaluator(_tag), m_buff_size(_buff_size) {
+  assert(m_buff_size == _buff_size);
+  assert(m_buff_size != 0);
+}
+
+void
+RegexEvaluator::AddField(const std::string& _tag) {
+  m_field_map[_tag] = new char[m_buff_size];
+  assert(m_field_map.contains(_tag));
+}
+
+void
+RegexEvaluator::AddRegex(const std::string& _tag, const std::string& _regex) {
+  m_regex_map[_tag] = _regex;
+  assert(m_regex_map.contains(_tag));
+  assert(m_regex_map.at(_tag) == _regex);
+}
+
+void
+RegexEvaluator::AssignRegexToField(const std::string& field_tag,
+                                   const std::string& regex_tag) {
+  assert(m_field_map.contains(field_tag));
+  assert(m_regex_map.contains(regex_tag));
+
+  auto field = m_field_map.at(field_tag);
+  auto regex = m_regex_map.at(regex_tag);
+  std::strcpy(field, regex.c_str());
+
+  assert(m_field_map.at(field_tag) == m_regex_map.at(regex_tag));
 }
 
 auto
-RegexBasedEval::EvaluateMethodName(const std::string& _name)
-    -> icsv::detector::ISmellEvaluator::SmellLevel {
-  return EvaluateName(_name, std::regex(m_method_names));
+RegexEvaluator::EvaluateField(const std::string& _field,
+                              const std::string& _name) -> NonMatchingChars {
+  return EvaluateName(_name, std::regex(m_field_map[_field]));
 }
 
 auto
-RegexBasedEval::EvaluateVarName(const std::string& _name)
-    -> icsv::detector::ISmellEvaluator::SmellLevel {
-  return EvaluateName(_name, std::regex(m_var_names));
-}
-
-auto
-RegexBasedEval::ReEvaluateSmell(int)
+RegexEvaluator::ReEvaluateSmell(int)
     -> icsv::detector::ISmellEvaluator::SmellLevel {
   icsv::detector::DetectorManager::Get().UseDetectorWithTag(m_tag);
   return -1;
 }
 
 void
-RegexBasedEval::DeserializeConfig(const Json::Value& doc) {
-  assert(doc.isObject());
-
-  auto convs    = doc["Naming conventions"];
-  m_description = convs["description"].asString();
-  for (auto iter = convs["conventions"].begin();
-       iter != convs["conventions"].end();
-       iter++) {
-    m_conventions[iter.name()] = (*iter).asString();
-  }
-
-  m_class_names  = m_conventions[convs["class_names"].asString()];
-  m_method_names = m_conventions[convs["method_names"].asString()];
-  m_var_names    = m_conventions[convs["var_names"].asString()];
-
-  m_range.min = convs["max_chars_ignored"]["min"].asInt();
-  m_range.max = convs["max_chars_ignored"]["max"].asInt();
-}
-
-#define BUFF 100
-
-void
-RegexBasedEval::DisplayGui(void) {
+RegexEvaluator::DisplayGui(void) {
 #ifndef UNIT_TESTS
-  static char cname[BUFF];
-  static char mname[BUFF];
-  static char vname[BUFF];
-  static bool init = false;
-
-  if (!init) {
-    std::strcpy(cname, m_class_names.c_str());
-    std::strcpy(mname, m_method_names.c_str());
-    std::strcpy(vname, m_var_names.c_str());
-    init = true;
-  }
-
+  static int min = 0, max = 0;
   ImGui::Separator();
   if (ImGui::TreeNode(m_tag.c_str())) {
     ImGui::Separator();
     ImGui::Text("%s%s", "Description: ", m_description.c_str());
     ImGui::Separator();
-    ImGui::Text("%s", "Range: ");
-    ImGui::InputInt(std::string("Min " + m_tag).c_str(), &(m_range.min));
-    ImGui::InputInt(std::string("Max " + m_tag).c_str(), &(m_range.max));
-    ImGui::Separator();
-    ImGui::InputText("Class name regex", cname, BUFF);
-    ImGui::Separator();
-    ImGui::InputText("Method name regex", mname, BUFF);
-    ImGui::Separator();
-    ImGui::InputText("Var name regex", vname, BUFF);
-    ImGui::Separator();
+    ImGui::Text("%s", "Chars Ignored: ");
+    ImGui::InputInt(std::string("Min " + m_tag).c_str(), &min);
+    AlwaysGEzero(min);
+    ImGui::InputInt(std::string("Max " + m_tag).c_str(), &max);
+    AlwaysGEzero(max);
+    for (auto f : m_field_map) {
+      ImGui::Separator();
+      ImGui::InputText(f.first.c_str(), f.second, m_buff_size);
+      ImGui::Separator();
+    }
 
     if (ImGui::Button(std::string("Re-Eval " + m_tag).c_str())) {
       ReEvaluateSmell(0);
@@ -94,8 +82,20 @@ RegexBasedEval::DisplayGui(void) {
 }
 
 auto
-RegexBasedEval::EvaluateName(const std::string& _name, std::regex exp)
-    -> icsv::detector::ISmellEvaluator::SmellLevel {
+RegexEvaluator::GetRegex(const std::string& _tag) const -> const std::string& {
+  assert(m_regex_map.contains(_tag));
+  return m_regex_map.at(_tag);
+}
+
+auto
+RegexEvaluator::GetRegex(const std::string& _tag) -> std::string& {
+  assert(m_regex_map.contains(_tag));
+  return m_regex_map.at(_tag);
+}
+
+auto
+RegexEvaluator::EvaluateName(const std::string& _name, std::regex exp)
+    -> RegexEvaluator::NonMatchingChars {
   int         non_matching_chars = _name.size();
   std::smatch base_match;
   if (std::regex_match(_name, base_match, exp)) {

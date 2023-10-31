@@ -2,27 +2,31 @@
 
 #include "icsv/detector/smell_evaluator.hpp"
 
-class RangeBasedEvaluator : public icsv::detector::ISmellEvaluator {
+class RangeEvaluator : public icsv::detector::ISmellEvaluator {
 public:
-  RangeBasedEvaluator(const std::string& tag)
-      : icsv::detector::ISmellEvaluator(tag) {}
-  ~RangeBasedEvaluator() override = default;
+  RangeEvaluator(const std::string& _tag, int _min = 1, int _max = 10);
+  ~RangeEvaluator() override = default;
 
   virtual auto EvaluateSmell(int curr_lvl)
       -> icsv::detector::ISmellEvaluator::SmellLevel override;
 
+  void SetRange(int min, int max);
+
   virtual auto ReEvaluateSmell(int init_lvl)
       -> icsv::detector::ISmellEvaluator::SmellLevel override;
-
-  virtual void DeserializeConfig(const Json::Value& doc) override;
 
   virtual void DisplayGui(void) override;
 
 protected:
   struct Range {
     int min, max;
-    int range() { return max - min; }
+
+    auto range() -> int { return max - min; }
+
+    Range(int _min = 0, int _max = 0) : min(_min), max(_max) {}
   } m_range;
+
+  void AlwaysGEzero(int& num) { num = num * (num >= 0); }
 
 private:
   // curr_lvl within [min,max)
@@ -30,13 +34,3 @@ private:
     return curr_lvl >= m_range.min && curr_lvl < m_range.max;
   }
 };
-
-inline auto
-CreateRangeBasedEval(const std::string& name) -> RangeBasedEvaluator* {
-  return new RangeBasedEvaluator{ name };
-}
-
-#define CREATE_RANGE_BASED_EVAL(tag)                   \
-  namespace {                                          \
-  static const auto* eval = CreateRangeBasedEval(tag); \
-  }
