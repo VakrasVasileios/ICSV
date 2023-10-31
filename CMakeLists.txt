@@ -27,7 +27,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   ${IMGUI_LIBS}
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC include ${IMGUI_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC include libs/evaluator_impls ${IMGUI_INCLUDE_DIR})
 
 set(SUBDIRECTORIES 
   ICSV-app
