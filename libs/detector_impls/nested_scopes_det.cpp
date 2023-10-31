@@ -13,7 +13,6 @@ public:
 };
 
 static NestedScopesDet* nsd = new NestedScopesDet();
-CREATE_RANGE_BASED_EVAL(TAG);
 
 void
 NestedScopesDet::DetectSmell(const ArchData& arch) {

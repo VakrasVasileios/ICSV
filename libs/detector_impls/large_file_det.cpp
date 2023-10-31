@@ -18,7 +18,6 @@ private:
 };
 
 static LargeFileDet* lgd = new LargeFileDet();
-CREATE_RANGE_BASED_EVAL(TAG)
 
 unsigned
 LargeFileDet::FileLineCount(const std::string& path) {

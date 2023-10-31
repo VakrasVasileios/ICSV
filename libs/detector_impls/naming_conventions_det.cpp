@@ -13,13 +13,14 @@ public:
 };
 
 static NamingConventionsDet* ncd = new NamingConventionsDet();
-CREATE_REGEX_BASED_EVAL(TAG);
 
 void
 NamingConventionsDet::DetectSmell(const ArchData& arch) {
+  auto* eval = static_cast<RegexEvaluator*>(
+      icsv::detector::EvaluationCenter::Get().GetEvaluator(TAG));
   for (auto& strct : arch.structures) {
     DetectorReport strct_rep;
-    strct_rep.init_level = eval->EvaluateClassName(strct.name);
+    strct_rep.init_level = eval->EvaluateField("class_names", strct.name);
     strct_rep.level = icsv::detector::evaluate_smell(TAG, strct_rep.init_level);
     strct_rep.message = "Structure \"" + strct.signature
         + "\" has an id deviating from standard naming convention by "
@@ -33,7 +34,7 @@ NamingConventionsDet::DetectSmell(const ArchData& arch) {
     for (auto& meth : strct.methods) {
       if (!icsv::utils::is_standard_class_func(meth.name, strct.name)) {
         DetectorReport meth_rep;
-        meth_rep.init_level = eval->EvaluateMethodName(meth.name);
+        meth_rep.init_level = eval->EvaluateField("method_names", meth.name);
         meth_rep.level
             = icsv::detector::evaluate_smell(TAG, meth_rep.init_level);
         meth_rep.message = "Method \"" + meth.name
@@ -49,7 +50,7 @@ NamingConventionsDet::DetectSmell(const ArchData& arch) {
 
       for (auto& arg : meth.args) {
         DetectorReport arg_rep;
-        arg_rep.init_level = eval->EvaluateVarName(arg.name);
+        arg_rep.init_level = eval->EvaluateField("var_names", arg.name);
         arg_rep.level = icsv::detector::evaluate_smell(TAG, arg_rep.init_level);
         arg_rep.message = "Argument \"" + arg.name
             + " has an id deviating from standard naming conventions by "
@@ -63,7 +64,7 @@ NamingConventionsDet::DetectSmell(const ArchData& arch) {
 
       for (auto& def : meth.definitions) {
         DetectorReport def_rep;
-        def_rep.init_level = eval->EvaluateVarName(def.name);
+        def_rep.init_level = eval->EvaluateField("var_names", def.name);
         def_rep.level = icsv::detector::evaluate_smell(TAG, def_rep.init_level);
         def_rep.message = "Definition \"" + def.name
             + "\" has an id deviating from standard naming convention by "
@@ -79,7 +80,8 @@ NamingConventionsDet::DetectSmell(const ArchData& arch) {
 
     for (auto& fld : strct.fields) {
       DetectorReport fld_rep;
-      fld_rep.init_level = eval->EvaluateVarName(fld.definition.name);
+      fld_rep.init_level
+          = eval->EvaluateField("var_names", fld.definition.name);
       fld_rep.level   = icsv::detector::evaluate_smell(TAG, fld_rep.init_level);
       fld_rep.message = "Field \"" + fld.signature
           + "\" has an id deviating from standard naming convention by "

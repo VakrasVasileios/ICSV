@@ -15,7 +15,6 @@ public:
 };
 
 static FuncOverloadDet* fod = new FuncOverloadDet();
-CREATE_RANGE_BASED_EVAL(TAG);
 
 void
 FuncOverloadDet::DetectSmell(const ArchData& arch) {

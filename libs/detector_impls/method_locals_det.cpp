@@ -12,7 +12,6 @@ public:
 };
 
 static MethodLocalsDet* mlcd = new MethodLocalsDet();
-CREATE_RANGE_BASED_EVAL(TAG);
 
 void
 MethodLocalsDet::DetectSmell(const ArchData& arch) {

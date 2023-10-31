@@ -77,7 +77,6 @@ private:
 };  // CircularDependencyDet
 
 static CircularDependencyDet* cdd = new CircularDependencyDet();
-CREATE_RANGE_BASED_EVAL(TAG);
 
 void
 CircularDependencyDet::DetectSmell(const ArchData& arch) {

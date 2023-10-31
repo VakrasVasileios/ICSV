@@ -12,7 +12,6 @@ public:
 };
 
 static MethodArgsDet* mad = new MethodArgsDet();
-CREATE_RANGE_BASED_EVAL(TAG);
 
 void
 MethodArgsDet::DetectSmell(const ArchData& arch) {

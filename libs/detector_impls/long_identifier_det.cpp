@@ -14,7 +14,6 @@ public:
 };
 
 static LongIdentifierDet* l_id = new LongIdentifierDet();
-CREATE_RANGE_BASED_EVAL(TAG)
 
 void
 LongIdentifierDet::DetectSmell(const ArchData& arch) {

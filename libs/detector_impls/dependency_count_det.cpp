@@ -15,7 +15,6 @@ public:
 };
 
 static DependencyCountDet* dcd = new DependencyCountDet();
-CREATE_RANGE_BASED_EVAL(TAG);
 
 void
 DependencyCountDet::DetectSmell(const ArchData& arch) {

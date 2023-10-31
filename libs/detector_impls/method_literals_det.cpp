@@ -12,7 +12,6 @@ public:
 };
 
 static MethodLiteralsDet* mltd = new MethodLiteralsDet();
-CREATE_RANGE_BASED_EVAL(TAG);
 
 void
 MethodLiteralsDet::DetectSmell(const ArchData& arch) {
