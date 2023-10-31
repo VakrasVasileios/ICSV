@@ -66,7 +66,7 @@ IcsvGui::ShowConfigSelect(void) {
     std::strncpy(det_buf, det_conf_file.c_str(), det_conf_file.size());
     if (m_conf_brwsr.GetSelected().c_str() != det_conf_file) {
       det_conf_file = m_conf_brwsr.GetSelected();
-      icsv::detector::deserialize_det_conf(m_conf_brwsr.GetSelected());
+      icsv::detector::deserialize_detector_config(m_conf_brwsr.GetSelected());
       changed = true;
     }
   }
