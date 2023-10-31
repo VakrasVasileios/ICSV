@@ -3,6 +3,9 @@
 #include <string>
 #include <unordered_map>
 
+class RegexEvaluator;
+class RangeEvaluator;
+
 namespace icsv::detector {
 
 class ISmellEvaluator;
@@ -22,20 +25,27 @@ public:
 
   void DisplayEvalGui(void);
 
+  auto GetEvaluator(const std::string& tag) -> ISmellEvaluator*;
+
 private:
   using Evaluators = std::unordered_map<std::string, ISmellEvaluator*>;
 
 private:
-  Evaluators m_eval_reg;
+  Evaluators  m_eval_reg;
+  Json::Value m_config_doc;
 
   EvaluationCenter()                        = default;
   EvaluationCenter(const EvaluationCenter&) = delete;
   EvaluationCenter(EvaluationCenter&&)      = delete;
   ~EvaluationCenter();
+
+  auto MakeRegexEval(Json::Value smell) -> RegexEvaluator*;
+  auto MakeRangeEval(Json::Value smell) -> RangeEvaluator*;
+  auto MakeBoolEval(Json::Value smell) -> RangeEvaluator*;
 };
 
 inline void
-deserialize_det_conf(const std::string& path) {
+deserialize_detector_config(const std::string& path) {
   EvaluationCenter::Get().DeseriallizeConfig(path);
 }
 

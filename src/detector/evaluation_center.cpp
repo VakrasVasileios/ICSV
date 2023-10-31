@@ -1,13 +1,16 @@
-#include "icsv/detector/evaluation_center.hpp"
-#include "icsv/detector/smell_evaluator.hpp"
 #include <assert.h>
-#include <fstream>
 #include <iostream>
+#include <fstream>
 #include <json/json.h>
+#include "range_based_eval.hpp"
+#include "regex_based_eval.hpp"
+#include "icsv/detector/smell_evaluator.hpp"
+#include "icsv/detector/evaluation_center.hpp"
 
 namespace icsv::detector {
 
 EvaluationCenter::~EvaluationCenter() {
+  // TODO: Evaluator serialization
   for (auto& ev : m_eval_reg)
     delete ev.second;
   m_eval_reg.clear();
@@ -19,9 +22,18 @@ EvaluationCenter::Get() -> EvaluationCenter& {
   return singleton;
 }
 
+auto
+EvaluationCenter::GetEvaluator(const std::string& tag) -> ISmellEvaluator* {
+  assert(m_eval_reg.contains(tag));
+  if (!m_eval_reg.contains(tag))
+    return nullptr;
+
+  return m_eval_reg.at(tag);
+}
+
 void
 EvaluationCenter::RegisterEvaluator(const std::string& tag,
-                                    ISmellEvaluator*    ev) {
+                                    ISmellEvaluator*   ev) {
   if (m_eval_reg.find(tag) != m_eval_reg.end())
     std::cout << "Newly registered evaluator with tag \"" << tag
               << "\" overwrites existing one!\n";
@@ -31,15 +43,30 @@ EvaluationCenter::RegisterEvaluator(const std::string& tag,
 
 void
 EvaluationCenter::DeseriallizeConfig(const std::string& file_path) {
-  Json::Value   doc;
   std::ifstream file(file_path);
   assert(file.is_open());
-  file >> doc;
-  assert(doc.isObject());
+  file >> m_config_doc;
+  assert(m_config_doc.isObject());
   file.close();
 
-  for (auto& eval : m_eval_reg)
-    (eval.second)->DeserializeConfig(doc);
+  assert(m_config_doc["smells"].isArray());
+
+  for (auto smell : m_config_doc["smells"]) {
+    if (smell["type"] == "bool") {
+      MakeBoolEval(smell);
+    }
+    if (smell["type"] == "range") {
+      MakeRangeEval(smell);
+    }
+    if (smell["type"] == "regex") {
+      MakeRegexEval(smell);
+    }
+#if (0)
+    if (smell["type"] == "args") {
+      // TODO: Create and Register Evaluator that holds multiple evaluators
+    }
+#endif
+  }
 }
 
 void
@@ -47,6 +74,44 @@ EvaluationCenter::DisplayEvalGui(void) {
   for (auto& e : m_eval_reg) {
     e.second->DisplayGui();
   }
+}
+
+auto
+EvaluationCenter::MakeRegexEval(Json::Value smell) -> RegexEvaluator* {
+  auto* eval = new RegexEvaluator(smell["tag"].asString());
+  eval->SetDescription(smell["description"].asString());
+
+  eval->SetRange(smell["max_chars_ignored"]["min"].asInt(),
+                 smell["max_chars_ignored"]["max"].asInt());
+
+  for (auto reg : smell["regex_array"])
+    eval->AddRegex(reg["tag"].asString(), reg["regex"].asString());
+
+  for (auto fld : smell["fields"]) {
+    auto fld_tag = fld["tag"].asString();
+    eval->AddField(fld_tag);
+    eval->AssignRegexToField(fld_tag, fld["assigned_regex"].asString());
+  }
+
+  return eval;
+}
+
+auto
+EvaluationCenter::MakeRangeEval(Json::Value smell) -> RangeEvaluator* {
+  auto* eval = new RangeEvaluator(smell["tag"].asString(),
+                                  smell["range"]["min"].asInt(),
+                                  smell["range"]["max"].asInt());
+  eval->SetDescription(smell["description"].asString());
+
+  return eval;
+}
+
+auto
+EvaluationCenter::MakeBoolEval(Json::Value smell) -> RangeEvaluator* {
+  auto* eval = new RangeEvaluator(smell["tag"].asString(), 0, 1);
+  eval->SetDescription(smell["description"].asString());
+
+  return eval;
 }
 
 auto
