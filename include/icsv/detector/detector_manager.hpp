@@ -3,7 +3,8 @@
 #include <functional>
 #include <json/json.h>
 #include <string>
-#include <unordered_map>
+#include <map>
+#include <list>
 
 #define REGISTER_DETECTOR(tag, det) \
   icsv::detector::DetectorManager::Get().RegisterDetector(tag, det)
@@ -16,6 +17,8 @@ class DetectorManager final {
 public:
   static auto Get() -> DetectorManager&;
 
+  auto GetAllDetectorTags(void) -> std::list<std::string>;
+
   void RegisterDetector(const std::string& tag, Detector* det);
 
   void UseDetectors(void);
@@ -27,7 +30,7 @@ private:
   DetectorManager(DetectorManager&&)      = delete;
   ~DetectorManager();
 
-  std::unordered_map<std::string, Detector*> m_detectors;
+  std::map<std::string, Detector*> m_detectors;
 };
 
 inline void

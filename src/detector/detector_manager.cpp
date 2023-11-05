@@ -16,6 +16,16 @@ DetectorManager::Get() -> DetectorManager& {
   return singleton;
 }
 
+auto
+DetectorManager::GetAllDetectorTags(void) -> std::list<std::string> {
+  auto ret = std::list<std::string>();
+
+  for (auto& d : m_detectors)
+    ret.push_back(d.first);
+
+  return ret;
+}
+
 void
 DetectorManager::RegisterDetector(const std::string& tag, Detector* det) {
   if (m_detectors.find(tag) != m_detectors.end())
