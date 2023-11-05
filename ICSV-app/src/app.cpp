@@ -77,9 +77,9 @@ ICSVapp::setup() {
   Ogre::Light*     light = m_scnMgr->createLight("MainLight");
   Ogre::SceneNode* lightNode
       = m_scnMgr->getRootSceneNode()->createChildSceneNode();
-  light->setType(Ogre::Light::LT_DIRECTIONAL);
-  lightNode->setDirection(1, -1, -1);
-  // lightNode->setPosition(0, 0, 0);
+  light->setType(Ogre::Light::LT_POINT);
+  // lightNode->setDirection(1, -1, -1);
+  lightNode->setPosition(0, 25, 0);
   lightNode->attachObject(light);
 
   // Set camera stuff
