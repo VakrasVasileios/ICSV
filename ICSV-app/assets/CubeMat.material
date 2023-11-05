@@ -2,6 +2,7 @@ material CubeMat
 {
 	technique
 	{
+  receive_shadows on
 		pass
 		{
 			ambient 1 0.4 0.4
