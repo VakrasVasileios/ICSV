@@ -4,15 +4,11 @@
 namespace ICSVapp {
 
 IcsvEntity::~IcsvEntity() {
-  m_sfx->setEmitting(false);
   m_node->showBoundingBox(false);
   m_report = nullptr;
-  m_node->detachAllObjects();
-  m_sfx_node->detachAllObjects();
+  m_node->detachObject(m_ent);
   destroy_entity(m_ent);
-  destroy_particle_system(m_sfx);
   destroy_node(m_node);
-  destroy_node(m_sfx_node);
 }
 
 void
@@ -23,7 +19,6 @@ IcsvEntity::AdjustScaleBy(double x, double y, double z) {
 void
 IcsvEntity::SetPosition(double x, double y, double z) {
   m_node->setPosition(x, y, z);
-  m_sfx_node->setPosition(x, y, z);
 }
 
 auto
