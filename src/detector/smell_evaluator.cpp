@@ -11,6 +11,33 @@ ISmellEvaluator::ISmellEvaluator(const std::string& tag) {
   assert(m_tag != "");
 }
 
+auto
+ISmellEvaluator::Seriallize(void) -> std::string {
+  std::string ser{ "" };
+  ser += "\"tag\":\"" + m_tag + "\"";
+  ser += ",\n\"description\":\"" + m_description + "\"";
+  switch (m_type) {
+    case RANGE:
+      ser += ",\n\"type\":\"range\"";
+      break;
+    case REGEX:
+      ser += ",\n\"type\":\"regex\"";
+      break;
+    case BOOL:
+      ser += ",\n\"type\":\"bool\"";
+      break;
+    case ARGS:
+      ser += ",\n\"type\":\"args\"";
+      break;
+    case NONE:
+    default:
+      assert(false);
+      break;
+  }
+
+  return ser;
+}
+
 void
 ISmellEvaluator::SetDescription(const std::string& dsc) {
   m_description = dsc;

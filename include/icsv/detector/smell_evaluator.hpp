@@ -6,6 +6,8 @@
 
 namespace icsv::detector {
 
+enum EvalType { NONE, RANGE, REGEX, BOOL, ARGS };
+
 class ISmellEvaluator {
 public:
   using SmellLevel = int;
@@ -25,9 +27,12 @@ public:
 
   virtual void DisplayGui(void) = 0;
 
+  virtual auto Seriallize(void) -> std::string;
+
 protected:
   std::string m_tag         = "";
   std::string m_description = "";
+  EvalType    m_type        = NONE;
 };
 
 }  // namespace icsv::detector
