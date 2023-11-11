@@ -2,13 +2,12 @@
 
 #include <string>
 #include <unordered_map>
+#include "smell_evaluator.hpp"
 
 class RegexEvaluator;
 class RangeEvaluator;
 
 namespace icsv::detector {
-
-class ISmellEvaluator;
 
 class EvaluationCenter final {
 public:
@@ -32,7 +31,7 @@ private:
 
 private:
   Evaluators  m_eval_reg;
-  Json::Value m_config_doc;
+  std::string m_config_file{ "" };
 
   EvaluationCenter()                        = default;
   EvaluationCenter(const EvaluationCenter&) = delete;

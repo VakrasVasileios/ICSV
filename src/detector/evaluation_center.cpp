@@ -10,7 +10,33 @@
 namespace icsv::detector {
 
 EvaluationCenter::~EvaluationCenter() {
-  // TODO: Evaluator serialization
+#ifndef UNIT_TESTS
+  std::ofstream file;
+  m_config_file.replace(m_config_file.find(".json"), 6, "_edited.json");
+  file.open(m_config_file);
+
+  if (file.is_open()) {
+    file << "{\n\"smells\":[\n";
+    bool init = false;
+
+    for (auto& e : m_eval_reg) {
+      if (init)
+        file << ",\n";
+      file << "{\n";
+      file << e.second->Seriallize();
+      file << "}";
+      init = true;
+    }
+    file << "]\n}";
+
+    file.close();
+  } else {
+    std::cout
+        << "Could not seriallize evaluation configurations to given file: "
+        << m_config_file << std::endl;
+  }
+#endif
+
   for (auto& ev : m_eval_reg)
     delete ev.second;
   m_eval_reg.clear();
@@ -43,15 +69,17 @@ EvaluationCenter::RegisterEvaluator(const std::string& tag,
 
 void
 EvaluationCenter::DeseriallizeConfig(const std::string& file_path) {
+  m_config_file = file_path;
   std::ifstream file(file_path);
   assert(file.is_open());
-  file >> m_config_doc;
-  assert(m_config_doc.isObject());
+  Json::Value config_doc;
+  file >> config_doc;
+  assert(config_doc.isObject());
   file.close();
 
-  assert(m_config_doc["smells"].isArray());
+  assert(config_doc["smells"].isArray());
 
-  for (auto smell : m_config_doc["smells"]) {
+  for (auto smell : config_doc["smells"]) {
     if (smell["type"] == "bool") {
       MakeBoolEval(smell);
     }
@@ -81,8 +109,7 @@ EvaluationCenter::MakeRegexEval(Json::Value smell) -> RegexEvaluator* {
   auto* eval = new RegexEvaluator(smell["tag"].asString());
   eval->SetDescription(smell["description"].asString());
 
-  eval->SetRange(smell["max_chars_ignored"]["min"].asInt(),
-                 smell["max_chars_ignored"]["max"].asInt());
+  eval->SetRange(smell["range"]["min"].asInt(), smell["range"]["max"].asInt());
 
   for (auto reg : smell["regex_array"])
     eval->AddRegex(reg["tag"].asString(), reg["regex"].asString());
