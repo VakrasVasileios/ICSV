@@ -29,9 +29,7 @@ ReportCenter::GetReportsByTag(const std::string& tag) const
   if (ret.empty()) {
     std::cout << "Given tag \"" << tag << "\" not found in reports."
               << std::endl;
-    throw NoRegisteredReports();
   }
-  assert(!ret.empty());
 
   return ret;
 }
