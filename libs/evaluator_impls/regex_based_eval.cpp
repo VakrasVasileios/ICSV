@@ -11,6 +11,7 @@ RegexEvaluator::RegexEvaluator(const std::string& _tag, std::size_t _buff_size)
     : RangeEvaluator(_tag), m_buff_size(_buff_size) {
   assert(m_buff_size == _buff_size);
   assert(m_buff_size != 0);
+  m_type = icsv::detector::EvalType::REGEX;
 }
 
 void
@@ -50,6 +51,34 @@ RegexEvaluator::ReEvaluateSmell(int)
     -> icsv::detector::ISmellEvaluator::SmellLevel {
   icsv::detector::DetectorManager::Get().UseDetectorWithTag(m_tag);
   return -1;
+}
+
+auto
+RegexEvaluator::Seriallize(void) -> std::string {
+  auto ser = RangeEvaluator::Seriallize();
+  ser += ",\n\"regex_array\":[\n";
+  bool init = false;
+  for (auto& reg : m_regex_map) {
+    if (init)
+      ser += ",\n";
+    ser += "{\"tag\":\"" + reg.first + "\"";
+    ser += ",\n\"regex\":\"" + reg.second + "\"}";
+    init = true;
+  }
+  init = false;
+
+  ser += ']';
+  ser += ",\"fields\":[\n";
+  for (auto& f : m_field_map) {
+    if (init)
+      ser += ",\n";
+    ser += "{\"tag\":\"" + f.first + "\"";
+    ser += ",\n\"assigned_regex\":\"" + std::string(f.second) + "\"}";
+    init = true;
+  }
+  ser += ']';
+
+  return ser;
 }
 
 void

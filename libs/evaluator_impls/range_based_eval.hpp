@@ -17,6 +17,8 @@ public:
 
   virtual void DisplayGui(void) override;
 
+  virtual auto Seriallize(void) -> std::string;
+
 protected:
   struct Range {
     int min, max;

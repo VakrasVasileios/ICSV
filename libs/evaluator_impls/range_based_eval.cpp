@@ -6,7 +6,9 @@
 #endif
 
 RangeEvaluator::RangeEvaluator(const std::string& _tag, int _min, int _max)
-    : icsv::detector::ISmellEvaluator(_tag), m_range(_min, _max) {}
+    : icsv::detector::ISmellEvaluator(_tag), m_range(_min, _max) {
+  m_type = icsv::detector::EvalType::RANGE;
+}
 
 /*
   Returns 0 if curr_lvl < minimum range
@@ -32,6 +34,15 @@ RangeEvaluator::SetRange(int min, int max) {
   assert(min < max);
   m_range.min = min;
   m_range.max = max;
+}
+
+auto
+RangeEvaluator::Seriallize(void) -> std::string {
+  auto ser = ISmellEvaluator::Seriallize();
+  ser += ",\n\"range\":{\"min\":" + std::to_string(m_range.min)
+      + ",\"max\":" + std::to_string(m_range.max) + "}";
+
+  return ser;
 }
 
 void

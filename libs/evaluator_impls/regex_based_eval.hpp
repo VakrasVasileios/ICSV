@@ -26,6 +26,8 @@ public:
 
   void DisplayGui(void) override;
 
+  auto Seriallize(void) -> std::string;
+
   auto GetRegex(const std::string& _tag) const -> const std::string&;
   auto GetRegex(const std::string& _tag) -> std::string&;
 
