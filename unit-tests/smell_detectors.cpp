@@ -8,16 +8,15 @@
 #include <string>
 #include <tuple>
 
-#define ASSERT_REPORTS(tag)                                               \
-  try {                                                                   \
-    auto reps = icsv::detector::ReportCenter::Get().GetReportsByTag(tag); \
-    for (auto* r : reps) {                                                \
-      GTEST_ASSERT_GE(r->level, 0);                                       \
-      GTEST_ASSERT_LE(r->level, 10);                                      \
-    }                                                                     \
-  } catch (icsv::detector::NoRegisteredReports & e) {                     \
-    std::cout << e.what() << std::endl;                                   \
-    GTEST_ASSERT_TRUE(true);                                              \
+#define ASSERT_REPORTS(tag)                                             \
+  auto reps = icsv::detector::ReportCenter::Get().GetReportsByTag(tag); \
+  if (!reps.empty()) {                                                  \
+    for (auto* r : reps) {                                              \
+      GTEST_ASSERT_GE(r->level, 0);                                     \
+      GTEST_ASSERT_LE(r->level, 10);                                    \
+    }                                                                   \
+  } else {                                                              \
+    GTEST_ASSERT_TRUE(true);                                            \
   }
 
 namespace icsv::unit_tests {
