@@ -35,8 +35,8 @@ IcsvGui::Display(void) {
     ShowSortingSettings();
     ImGui::Separator();
   }
-  if (ImGui::CollapsingHeader("Special Effects")) {
-    ShowSpecialFX();
+  if (ImGui::CollapsingHeader("Smell Color Pallet")) {
+    ShowSmellColorPallet();
     ImGui::Separator();
   }
   if (ImGui::CollapsingHeader("Smell Eval Configs")) {
@@ -224,7 +224,7 @@ IcsvGui::ShowCameraSettings(void) {
   ImGui::Separator();
 }
 
-std::list<Selectable*> sort_by
+std::list<Selectable*> sort_method_list
     = { new Selectable("Smell Tag"), new Selectable("Message"),
         new Selectable("Level"),     new Selectable("File"),
         new Selectable("Structure"), new Selectable("Method") };
@@ -236,8 +236,8 @@ void
 IcsvGui::ShowSortingSettings(void) {
   static Selectable *x = nullptr, *z = nullptr;
   static std::string x_label = X_LABEL;
-  ImGui::BeginListBox(x_label.c_str(), ImVec2(100, 125));
-  for (auto* i : sort_by) {
+  ImGui::BeginListBox(x_label.c_str());
+  for (auto* i : sort_method_list) {
     if (!i->m_sel) {
       ImGui::Selectable(i->m_tag.c_str(), &(i->m_sel));
       if (i->m_sel) {
@@ -250,8 +250,8 @@ IcsvGui::ShowSortingSettings(void) {
   }
   ImGui::EndListBox();
   static std::string z_label = Z_LABEL;
-  ImGui::BeginListBox(z_label.c_str(), ImVec2(100, 125));
-  for (auto* i : sort_by) {
+  ImGui::BeginListBox(z_label.c_str());
+  for (auto* i : sort_method_list) {
     if (!i->m_sel) {
       ImGui::Selectable(i->m_tag.c_str(), &(i->m_sel));
       if (i->m_sel) {
@@ -273,24 +273,41 @@ IcsvGui::ShowSortingSettings(void) {
 }
 
 void
-IcsvGui::ShowSpecialFX(void) {
-  static int lvl = 0;
+IcsvGui::ShowSmellColorPallet(void) {
+  static ImGuiColorEditFlags flags
+      = ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_DisplayRGB;
 
-  ImGui::SliderInt("If Level above: ", &lvl, 0, 10);
+  ImGui::Separator();
 
-  if (ImGui::Button("Emit")) {
-    auto lst = ICSVapp::EntityManager::Get().GetEntityList();
-    for (auto i : lst)
-      if (i->GetDetectorReport()->level > lvl)
-        i->Emission(true);
-      else
-        i->Emission(false);
+  static auto tags
+      = icsv::detector::DetectorManager::Get().GetAllDetectorTags();
+
+  static float color[4];
+
+  std::string smell_slctd = "";
+
+  if (!tags.empty()) {
+    ImGui::BeginListBox("Smells");
+
+    // bool sel = false;
+
+    // for (auto t : tags) {
+    //   ImGui::Selectable(t.c_str(), sel);
+    //   if (sel) {
+    //     smell_slctd = t;
+    //     mat         = EntityManager::Get().FindEntityIf(
+    //         [t](auto& e) { return e.GetDetectorReport()->smell_tag == t;
+    //         })->;
+    //     sel = false;
+    //   }
+    // }
+
+    ImGui::EndListBox();
   }
-  ImGui::SameLine(0, 10);
-  if (ImGui::Button("Stop Emission")) {
-    auto lst = ICSVapp::EntityManager::Get().GetEntityList();
-    for (auto i : lst)
-      i->Emission(false);
+
+  ImGui::ColorPicker4(smell_slctd.c_str(), color, flags);
+
+  if (ImGui::Button("Apply Color")) {
   }
 }
 
