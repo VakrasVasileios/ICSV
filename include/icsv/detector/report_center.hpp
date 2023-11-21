@@ -19,6 +19,8 @@ public:
 
   void ClearReports(void);
 
+  void SeriallizeToFile(const std::string& file_name);
+
 private:
   std::list<Report*> m_report_log;
 
