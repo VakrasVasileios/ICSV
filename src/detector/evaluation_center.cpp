@@ -11,30 +11,8 @@ namespace icsv::detector {
 
 EvaluationCenter::~EvaluationCenter() {
 #ifndef UNIT_TESTS
-  std::ofstream file;
   m_config_file.replace(m_config_file.find(".json"), 6, "_edited.json");
-  file.open(m_config_file);
-
-  if (file.is_open()) {
-    file << "{\n\"smells\":[\n";
-    bool init = false;
-
-    for (auto& e : m_eval_reg) {
-      if (init)
-        file << ",\n";
-      file << "{\n";
-      file << e.second->Seriallize();
-      file << "}";
-      init = true;
-    }
-    file << "]\n}";
-
-    file.close();
-  } else {
-    std::cout
-        << "Could not seriallize evaluation configurations to given file: "
-        << m_config_file << std::endl;
-  }
+  SeriallizeToFile(m_config_file);
 #endif
 
   for (auto& ev : m_eval_reg)
@@ -150,6 +128,33 @@ EvaluationCenter::EvaluateSmell(const std::string& tag, const int curr_lvl)
     return curr_lvl;
   } else
     return m_eval_reg[tag]->EvaluateSmell(curr_lvl);
+}
+
+void
+EvaluationCenter::SeriallizeToFile(const std::string& file_name) {
+  std::ofstream file;
+  file.open(file_name);
+
+  if (file.is_open()) {
+    file << "{\n\"smells\":[\n";
+    bool init = false;
+
+    for (auto& e : m_eval_reg) {
+      if (init)
+        file << ",\n";
+      file << "{\n";
+      file << e.second->Seriallize();
+      file << "}";
+      init = true;
+    }
+    file << "]\n}";
+
+    file.close();
+  } else {
+    std::cout
+        << "Could not seriallize evaluation configurations to given file: "
+        << file_name << std::endl;
+  }
 }
 
 }  // namespace icsv::detector

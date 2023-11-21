@@ -26,6 +26,8 @@ public:
 
   auto GetEvaluator(const std::string& tag) -> ISmellEvaluator*;
 
+  void SeriallizeToFile(const std::string& file_name);
+
 private:
   using Evaluators = std::unordered_map<std::string, ISmellEvaluator*>;
 
