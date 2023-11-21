@@ -23,7 +23,7 @@ private:
 };
 
 inline void
-deserialize_arch_conf(const std::string& path) {
+deseriallize_arch_conf(const std::string& path) {
   icsv::detector::arch::ArchitectureHolder::Get().DeserializeArchitecture(path);
 }
 

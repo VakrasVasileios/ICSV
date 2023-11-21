@@ -46,7 +46,7 @@ private:
 };
 
 inline void
-deserialize_detector_config(const std::string& path) {
+deseriallize_detector_config(const std::string& path) {
   EvaluationCenter::Get().DeseriallizeConfig(path);
 }
 
