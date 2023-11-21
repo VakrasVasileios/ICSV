@@ -23,6 +23,10 @@ IcsvGui::Display(void) {
     ShowConfigSelect();
     ImGui::Separator();
   }
+  if (ImGui::CollapsingHeader("Export")) {
+    ShowExportTab();
+    ImGui::Separator();
+  }
   if (ImGui::CollapsingHeader("Camera Settings")) {
     ShowCameraSettings();
     ImGui::Separator();
@@ -137,6 +141,36 @@ IcsvGui::ShowDetectorReport(void) {
     ImGui::Text("%s", m_rep_dspld->src_info.method.c_str());
   }
   ImGui::End();
+}
+
+void
+IcsvGui::ShowExportTab(void) {
+  static char evals[BUFFSIZE];
+  static char reps[BUFFSIZE];
+  static int  lvl_min = 0, lvl_max = 10;
+
+  ImGui::InputText("File", evals, BUFFSIZE);
+  if (ImGui::Button("Export Evaluator Configs")) {
+    icsv::detector::EvaluationCenter::Get().SeriallizeToFile(evals);
+  }
+
+  ImGui::Separator();
+
+  ImGui::InputText("File##2", reps, BUFFSIZE);
+  ImGui::DragIntRange2("Smell Level Range",
+                       &lvl_min,
+                       &lvl_max,
+                       1,
+                       0,
+                       10,
+                       "%d",
+                       NULL,
+                       ImGuiSliderFlags_AlwaysClamp);
+  if (ImGui::Button("Export Reports")) {
+    icsv::detector::ReportCenter::Get().SeriallizeToFile(reps,
+                                                         lvl_min,
+                                                         lvl_max);
+  }
 }
 
 void
@@ -272,7 +306,7 @@ IcsvGui::ShowSortingSettings(void) {
   }
 }
 
-void
+void  // TODO
 IcsvGui::ShowSmellColorPallet(void) {
   static ImGuiColorEditFlags flags
       = ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_DisplayRGB;

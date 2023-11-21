@@ -46,6 +46,7 @@ private:
   void ShowSortingSettings(void);
   void ShowSmellColorPallet(void);
   void ShowEvalConfigs(void);
+  void ShowExportTab(void);
 
   void SortEntityList(const std::string& by_tag);
 };
