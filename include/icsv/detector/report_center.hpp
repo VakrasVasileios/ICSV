@@ -7,16 +7,6 @@
 
 namespace icsv::detector {
 
-class NoRegisteredReports : public std::exception {
-public:
-  NoRegisteredReports()           = default;
-  ~NoRegisteredReports() override = default;
-
-  virtual const char* what() const _GLIBCXX_TXN_SAFE_DYN _GLIBCXX_NOTHROW {
-    return "There are no reports under the given tag.";
-  }
-};
-
 class ReportCenter final {
 public:
   static auto Get() -> ReportCenter&;
