@@ -52,7 +52,9 @@ ReportCenter::ClearReports(void) {
 }
 
 void
-ReportCenter::SeriallizeToFile(const std::string& file_name) {
+ReportCenter::SeriallizeToFile(const std::string& file_name,
+                               int                lvl_min,
+                               int                lvl_max) {
   std::ofstream file;
   file.open(file_name);
 
@@ -61,19 +63,21 @@ ReportCenter::SeriallizeToFile(const std::string& file_name) {
     bool init = false;
 
     for (auto* rep : m_report_log) {
-      if (init)
-        file << ",\n";
-      file << "{\n";
-      file << "\"smell_tag\":\"" << rep->smell_tag << "\",\n";
-      file << "\"message\":\"" << rep->message << "\",\n";
-      file << "\"level\":" << rep->level << ",\n";
-      file << "\"file\":\"" << rep->src_info.file << "\",\n";
-      file << "\"line\":" << rep->src_info.line << ",\n";
-      file << "\"column\":" << rep->src_info.col << ",\n";
-      file << "\"structure\":\"" << rep->src_info.strct << "\",\n";
-      file << "\"method\":\"" << rep->src_info.method << "\"\n";
-      file << "}";
-      init = true;
+      if (lvl_min <= rep->level && rep->level <= lvl_max) {
+        if (init)
+          file << ",\n";
+        file << "{\n";
+        file << "\"smell_tag\":\"" << rep->smell_tag << "\",\n";
+        file << "\"message\":\"" << rep->message << "\",\n";
+        file << "\"level\":" << rep->level << ",\n";
+        file << "\"file\":\"" << rep->src_info.file << "\",\n";
+        file << "\"line\":" << rep->src_info.line << ",\n";
+        file << "\"column\":" << rep->src_info.col << ",\n";
+        file << "\"structure\":\"" << rep->src_info.strct << "\",\n";
+        file << "\"method\":\"" << rep->src_info.method << "\"\n";
+        file << "}";
+        init = true;
+      }
     }
 
     file << "\n]\n}";

@@ -19,7 +19,9 @@ public:
 
   void ClearReports(void);
 
-  void SeriallizeToFile(const std::string& file_name);
+  void SeriallizeToFile(const std::string& file_name,
+                        int                lvl_min = 0,
+                        int                lvl_max = 10);
 
 private:
   std::list<Report*> m_report_log;
