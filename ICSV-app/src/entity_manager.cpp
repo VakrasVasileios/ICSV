@@ -1,4 +1,5 @@
 #include "entity_manager.hpp"
+#include "material_factory.hpp"
 
 namespace ICSVapp {
 
@@ -32,11 +33,9 @@ EntityManager::CreateIcsvEntity(DetectorReport*       rep,
   icsv_ent->m_ent  = m_scnMan->createEntity("ent" + std::to_string(ent_c++),
                                            "Cube.mesh",
                                            "ICSV_RESOURCES");
-  auto mat         = Ogre::MaterialManager::getSingleton().getByName("CubeMat",
-                                                             "ICSV_RESOURCES");
+
+  auto mat = MaterialFactory::Get().GetMaterialFor(rep->smell_tag);
   assert(mat != nullptr);
-  mat->setShininess(rep->level);
-  mat->setReceiveShadows(true);
   icsv_ent->m_ent->setMaterial(mat);
 
   icsv_ent->m_node->attachObject(icsv_ent->m_ent);
