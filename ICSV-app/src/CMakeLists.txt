@@ -7,6 +7,8 @@ set(FILES
   icsv_entity.cpp
   icsv_entity.hpp
   main.cpp
+  material_factory.cpp
+  material_factory.hpp
   movable_text.cpp
   movable_text.hpp
 )
