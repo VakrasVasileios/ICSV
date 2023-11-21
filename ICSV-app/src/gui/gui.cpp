@@ -4,7 +4,7 @@
 #include "icsv/detector/evaluation_center.hpp"
 #include "icsv/detector/report_center.hpp"
 #include "../entity_manager.hpp"
-#include "iostream"
+#include "../material_factory.hpp"
 
 namespace ICSVapp {
 
@@ -70,7 +70,8 @@ IcsvGui::ShowConfigSelect(void) {
     std::strncpy(det_buf, det_conf_file.c_str(), det_conf_file.size());
     if (m_conf_brwsr.GetSelected().c_str() != det_conf_file) {
       det_conf_file = m_conf_brwsr.GetSelected();
-      icsv::detector::deserialize_detector_config(m_conf_brwsr.GetSelected());
+      icsv::detector::deseriallize_detector_config(m_conf_brwsr.GetSelected());
+      MaterialFactory::Get().DeseriallizeConfig(m_conf_brwsr.GetSelected());
       changed = true;
     }
   }
@@ -87,7 +88,7 @@ IcsvGui::ShowConfigSelect(void) {
     std::strncpy(graph_buf, graph_conf_file.c_str(), graph_conf_file.size());
     if (m_graph_brwsr.GetSelected().c_str() != graph_conf_file) {
       graph_conf_file = m_graph_brwsr.GetSelected();
-      icsv::detector::arch::deserialize_arch_conf(m_graph_brwsr.GetSelected());
+      icsv::detector::arch::deseriallize_arch_conf(m_graph_brwsr.GetSelected());
       changed = true;
     }
   }
