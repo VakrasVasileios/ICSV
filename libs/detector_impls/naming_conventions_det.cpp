@@ -22,8 +22,8 @@ NamingConventionsDet::DetectSmell(const ArchData& arch) {
     DetectorReport strct_rep;
     strct_rep.init_level = eval->EvaluateField("class_names", strct.name);
     strct_rep.level = icsv::detector::evaluate_smell(TAG, strct_rep.init_level);
-    strct_rep.message = "Structure \"" + strct.signature
-        + "\" has an id deviating from standard naming convention by "
+    strct_rep.message = "Structure `" + strct.signature
+        + "` has an id deviating from standard naming convention by "
         + std::to_string(strct_rep.init_level) + " characters.";
     strct_rep.src_info = SourceInfo(strct.src_info.file,
                                     strct.src_info.line,
@@ -37,8 +37,8 @@ NamingConventionsDet::DetectSmell(const ArchData& arch) {
         meth_rep.init_level = eval->EvaluateField("method_names", meth.name);
         meth_rep.level
             = icsv::detector::evaluate_smell(TAG, meth_rep.init_level);
-        meth_rep.message = "Method \"" + meth.name
-            + "\" has an id deviating from standard naming convention by "
+        meth_rep.message = "Method `" + meth.name
+            + "` has an id deviating from standard naming convention by "
             + std::to_string(meth_rep.init_level) + " characters.";
         meth_rep.src_info = SourceInfo(meth.src_info.file,
                                        meth.src_info.line,
@@ -52,8 +52,8 @@ NamingConventionsDet::DetectSmell(const ArchData& arch) {
         DetectorReport arg_rep;
         arg_rep.init_level = eval->EvaluateField("var_names", arg.name);
         arg_rep.level = icsv::detector::evaluate_smell(TAG, arg_rep.init_level);
-        arg_rep.message = "Argument \"" + arg.name
-            + " has an id deviating from standard naming conventions by "
+        arg_rep.message = "Argument `" + arg.name
+            + "` has an id deviating from standard naming conventions by "
             + std::to_string(arg_rep.init_level) + " characters.";
         arg_rep.src_info = SourceInfo(meth.src_info.file,
                                       meth.src_info.line,
@@ -66,8 +66,8 @@ NamingConventionsDet::DetectSmell(const ArchData& arch) {
         DetectorReport def_rep;
         def_rep.init_level = eval->EvaluateField("var_names", def.name);
         def_rep.level = icsv::detector::evaluate_smell(TAG, def_rep.init_level);
-        def_rep.message = "Definition \"" + def.name
-            + "\" has an id deviating from standard naming convention by "
+        def_rep.message = "Definition `" + def.name
+            + "` has an id deviating from standard naming convention by "
             + std::to_string(def_rep.init_level) + " characters.";
         def_rep.src_info = SourceInfo(def.src_info.file,
                                       def.src_info.line,
@@ -83,8 +83,8 @@ NamingConventionsDet::DetectSmell(const ArchData& arch) {
       fld_rep.init_level
           = eval->EvaluateField("var_names", fld.definition.name);
       fld_rep.level   = icsv::detector::evaluate_smell(TAG, fld_rep.init_level);
-      fld_rep.message = "Field \"" + fld.signature
-          + "\" has an id deviating from standard naming convention by "
+      fld_rep.message = "Field `" + fld.signature
+          + "` has an id deviating from standard naming convention by "
           + std::to_string(fld_rep.init_level) + " characters.";
       fld_rep.src_info = SourceInfo(fld.definition.src_info.file,
                                     fld.definition.src_info.line,

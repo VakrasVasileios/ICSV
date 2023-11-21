@@ -21,7 +21,7 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
 
     auto           id_size = strct.name.size();
     DetectorReport strct_rep;
-    strct_rep.message = "Structure \"" + strct.signature + "\" has an id of "
+    strct_rep.message = "Structure `" + strct.signature + "` has an id of "
         + std::to_string(id_size) + " characters";
     strct_rep.init_level = id_size;
     strct_rep.level      = icsv::detector::evaluate_smell(TAG, id_size);
@@ -35,7 +35,7 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
 
       id_size = meth.name.size();
       DetectorReport meth_rep;
-      meth_rep.message = "Method \"" + meth.signature + "\" has an id of "
+      meth_rep.message = "Method `" + meth.signature + "` has an id of "
           + std::to_string(id_size) + " characters";
       meth_rep.init_level = id_size;
       meth_rep.level      = id_size;
@@ -50,8 +50,8 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
 
         id_size = arg.name.size();
         DetectorReport arg_rep;
-        arg_rep.message = "Argument \"" + arg.name + "\" of method \""
-            + meth.signature + "\" has an id of " + std::to_string(id_size)
+        arg_rep.message = "Argument `" + arg.name + "` of method `"
+            + meth.signature + "` has an id of " + std::to_string(id_size)
             + " characters";
         arg_rep.init_level = id_size;
         arg_rep.level      = icsv::detector::evaluate_smell(TAG, id_size);
@@ -67,8 +67,8 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
 
         id_size = def.name.size();
         DetectorReport def_rep;
-        def_rep.message = "Definition \"" + def.name + "\" in method \""
-            + meth.signature + "\" has an id of " + std::to_string(id_size)
+        def_rep.message = "Definition `" + def.name + "` in method `"
+            + meth.signature + "` has an id of " + std::to_string(id_size)
             + " characters";
         def_rep.init_level = id_size;
         def_rep.level      = icsv::detector::evaluate_smell(TAG, id_size);
@@ -84,8 +84,8 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
 
       id_size = field.definition.name.size();
       DetectorReport fld_rep;
-      fld_rep.message = "Field \"" + field.signature + "\" of structure \""
-          + strct.signature + "\" has an id of " + std::to_string(id_size)
+      fld_rep.message = "Field `" + field.signature + "` of structure `"
+          + strct.signature + "` has an id of " + std::to_string(id_size)
           + " characters";
       fld_rep.init_level = id_size;
       fld_rep.level      = icsv::detector::evaluate_smell(TAG, id_size);

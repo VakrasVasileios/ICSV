@@ -40,7 +40,7 @@ DependencyCountDet::DetectSmell(const ArchData& arch) {
                        [dep_str](const auto& m) {
                          return (m.signature == dep_str.first) ? true : false;
                        });
-    rep.message = "Structure \"" + dep_str.first + "\" directly depends upon "
+    rep.message = "Structure `" + dep_str.first + "` directly depends upon "
         + std::to_string(dep_str.second.size())
         + " other classes. These are: " + dep_names;
     rep.src_info = SourceInfo(strct->src_info.file,

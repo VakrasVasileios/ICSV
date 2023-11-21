@@ -99,14 +99,14 @@ CircularDependencyDet::DetectSmell(const ArchData& arch) {
                          [&crc](auto& strc) {
                            return std::string(crc.front()) == strc.signature;
                          });
-      rep.message
-          = "Structure: " + crc.front() + " is part of this dependency cycle: ";
+      rep.message = "Structure: `" + crc.front()
+          + "` is part of this dependency cycle: ";
 
       for (auto c : crc) {
         if (c != crc.back())
-          rep.message += c + " -> ";
+          rep.message += "`" + c + "` -> ";
       }
-      rep.message += crc.back() + "\n";
+      rep.message += "`" + crc.back() + "`\n";
       rep.src_info.file  = strct->src_info.file;
       rep.src_info.col   = strct->src_info.col;
       rep.src_info.line  = strct->src_info.line;

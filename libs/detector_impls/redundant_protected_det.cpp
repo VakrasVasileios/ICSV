@@ -41,9 +41,8 @@ RedundantProtectedDet::DetectSmell(const ArchData& arch) {
     DetectorReport rep;
     rep.init_level = protected_members;
     rep.level      = icsv::detector::evaluate_smell(TAG, protected_members);
-    rep.message    = "Class \"" + strct.signature
-        + "\" is not inherited from and has "
-        + std::to_string(protected_members)
+    rep.message    = "Class `" + strct.signature
+        + "` is not inherited from and has " + std::to_string(protected_members)
         + " protected variables or methods.";
     rep.src_info = SourceInfo(strct.src_info.file,
                               strct.src_info.line,

@@ -56,8 +56,8 @@ VirtualDectructorDet::DetectSmell(const ArchData& arch) {
       DetectorReport rep;
       rep.init_level = 10;
       rep.level      = 10;
-      rep.message += "Destructor of base class \"" + m_strct_iter->name
-          + "\" is not virtual.";
+      rep.message += "Destructor of base class `" + m_strct_iter->name
+          + "` is not virtual.";
       rep.src_info = SourceInfo(m_meth_iter->src_info.file,
                                 m_meth_iter->src_info.line,
                                 m_meth_iter->src_info.col,

@@ -21,7 +21,7 @@ NestedScopesDet::DetectSmell(const ArchData& arch) {
       DetectorReport rep;
       rep.init_level = meth.max_scope;
       rep.level      = icsv::detector::evaluate_smell(TAG, meth.max_scope);
-      rep.message    = "Method \"" + meth.signature + "\" has "
+      rep.message    = "Method `" + meth.signature + "` has "
           + std::to_string(rep.level) + " nested scopes.";
       rep.src_info = SourceInfo(meth.src_info.file,
                                 meth.src_info.line,

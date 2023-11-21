@@ -21,7 +21,7 @@ MethodLocalsDet::DetectSmell(const ArchData& arch) {
       DetectorReport rep;
       rep.init_level = defs;
       rep.level      = icsv::detector::evaluate_smell(TAG, defs);
-      rep.message    = "Method \"" + meth.signature + "\" has "
+      rep.message    = "Method `" + meth.signature + "` has "
           + std::to_string(defs) + " definitions";
       rep.src_info = SourceInfo(meth.src_info.file,
                                 meth.src_info.line,
