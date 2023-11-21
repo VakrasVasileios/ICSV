@@ -73,6 +73,7 @@ ReportCenter::SeriallizeToFile(const std::string& file_name) {
       file << "\"structure\":\"" << rep->src_info.strct << "\",\n";
       file << "\"method\":\"" << rep->src_info.method << "\"\n";
       file << "}";
+      init = true;
     }
 
     file << "\n]\n}";
