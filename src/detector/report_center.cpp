@@ -64,13 +64,13 @@ ReportCenter::SeriallizeToFile(const std::string& file_name) {
       if (init)
         file << ",\n";
       file << "{\n";
-      file << "\"smell_tag\":\"" << rep->smell_tag << "\"\n";
-      file << "\"message\":\"" << rep->message << "\"\n";
-      file << "\"level\":" << rep->level << "\n";
-      file << "\"file\":\"" << rep->src_info.file << "\"\n";
-      file << "\"line\":" << rep->src_info.line << "\n";
-      file << "\"column\":" << rep->src_info.col << "\n";
-      file << "\"structure\":\"" << rep->src_info.strct << "\"\n";
+      file << "\"smell_tag\":\"" << rep->smell_tag << "\",\n";
+      file << "\"message\":\"" << rep->message << "\",\n";
+      file << "\"level\":" << rep->level << ",\n";
+      file << "\"file\":\"" << rep->src_info.file << "\",\n";
+      file << "\"line\":" << rep->src_info.line << ",\n";
+      file << "\"column\":" << rep->src_info.col << ",\n";
+      file << "\"structure\":\"" << rep->src_info.strct << "\",\n";
       file << "\"method\":\"" << rep->src_info.method << "\"\n";
       file << "}";
     }
