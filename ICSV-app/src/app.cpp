@@ -97,7 +97,7 @@ ICSVapp::setup() {
 
   create_grid(m_camera.m_gridNode);
 
-  m_camMotor = new SmoothCamMove(m_camera.m_node);
+  m_camMotor = new SmoothCamMove(&m_camera);
   m_root->addFrameListener(m_camMotor);
   m_camMotor->SetMouseRef(&m_mouse);
 
@@ -229,14 +229,16 @@ ICSVapp::Raycast(float scrn_x, float scrn_y) {
 
 bool
 SmoothCamMove::frameStarted(const Ogre::FrameEvent& evt) {
-
-  m_camNodeRef->setPosition(m_camNodeRef->getPosition()
-                            + m_speed * m_dir * evt.timeSinceLastFrame);
+  auto camRot        = m_camRef->m_node->getOrientation();
+  auto moveDirection = camRot * m_dir;
+  m_camRef->m_node->setPosition(m_camRef->m_node->getPosition()
+                                + m_speed * moveDirection
+                                    * evt.timeSinceLastFrame);
   if (m_is_rot) {
-    m_camNodeRef->yaw(Ogre::Radian(-m_mouseRef->x_rel * m_rotSpd
-                                   * evt.timeSinceLastFrame),
-                      Ogre::Node::TS_PARENT);
-    m_camNodeRef->pitch(
+    m_camRef->m_node->yaw(Ogre::Radian(-m_mouseRef->x_rel * m_rotSpd
+                                       * evt.timeSinceLastFrame),
+                          Ogre::Node::TS_PARENT);
+    m_camRef->m_node->pitch(
         Ogre::Radian(-m_mouseRef->y_rel * m_rotSpd * evt.timeSinceLastFrame));
   }
 

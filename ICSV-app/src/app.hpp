@@ -19,6 +19,12 @@ struct Mouse {
   Mouse() = default;
 };
 
+struct Camera {
+  Ogre::SceneNode* m_node{ nullptr };
+  Ogre::Camera*    m_cam{ nullptr };
+  Ogre::SceneNode* m_gridNode{ nullptr };
+};
+
 class ICSVapp : public OgreBites::ApplicationContext,
                 public OgreBites::InputListener {
 public:
@@ -38,13 +44,6 @@ public:
 
   friend class SmoothCamMove;
 
-protected:
-  struct Camera {
-    Ogre::SceneNode* m_node{ nullptr };
-    Ogre::Camera*    m_cam{ nullptr };
-    Ogre::SceneNode* m_gridNode{ nullptr };
-  };
-
 private:
   Ogre::Root*         m_root{ nullptr };
   Ogre::SceneManager* m_scnMgr{ nullptr };
@@ -59,7 +58,7 @@ private:
 
 class SmoothCamMove : public Ogre::FrameListener {
 public:
-  SmoothCamMove(Ogre::SceneNode* camNode) : m_camNodeRef(camNode) {}
+  SmoothCamMove(Camera* cam) : m_camRef(cam) {}
   ~SmoothCamMove() override = default;
 
   void Forward() { m_dir.z = -1; }
@@ -82,12 +81,12 @@ public:
   bool frameStarted(const Ogre::FrameEvent& evt) override;
 
 private:
-  float            m_speed  = 2.f;
-  float            m_rotSpd = 0.1f;
-  bool             m_is_rot = false;
-  Mouse*           m_mouseRef;
-  Ogre::Vector3    m_dir{ 0, 0, 0 };
-  Ogre::SceneNode* m_camNodeRef;
+  float         m_speed  = 2.f;
+  float         m_rotSpd = 0.1f;
+  bool          m_is_rot = false;
+  Mouse*        m_mouseRef;
+  Ogre::Vector3 m_dir{ 0, 0, 0 };
+  Camera*       m_camRef;
 };
 
 }  // namespace ICSVapp
