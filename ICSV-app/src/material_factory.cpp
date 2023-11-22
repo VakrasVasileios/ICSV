@@ -19,8 +19,7 @@ MaterialFactory::GetMaterialFor(const std::string& smell_name)
                                                                smell_name),
                                                            "ICSV_RESOURCES");
   } else
-    return Ogre::MaterialManager::getSingleton().getByName("CubeMat",
-                                                           "ICSV_RESOURCES");
+    return Ogre::MaterialPtr();
 }
 
 void
@@ -61,26 +60,30 @@ MaterialFactory::DeseriallizeConfig(const std::string& path) {
                       ambient[1].asFloat(),
                       ambient[2].asFloat());
 
-      assert(color.isMember("diffuse"));
-      auto diffuse = color["diffuse"];
-      assert(diffuse.isArray() && diffuse.size() == 4);
+      if (color.isMember("diffuse")) {
+        auto diffuse = color["diffuse"];
+        assert(diffuse.isArray() && diffuse.size() == 4);
 
-      mat->setDiffuse(diffuse[0].asFloat(),
-                      diffuse[1].asFloat(),
-                      diffuse[2].asFloat(),
-                      diffuse[3].asFloat());
+        mat->setDiffuse(diffuse[0].asFloat(),
+                        diffuse[1].asFloat(),
+                        diffuse[2].asFloat(),
+                        diffuse[3].asFloat());
+      }
 
-      assert(color.isMember("specular"));
-      auto specular = color["specular"];
-      assert(specular.isArray() && specular.size() == 4);
+      if (color.isMember("specular")) {
+        auto specular = color["specular"];
+        assert(specular.isArray() && specular.size() == 4);
 
-      mat->setSpecular(specular[0].asFloat(),
-                       specular[1].asFloat(),
-                       specular[2].asFloat(),
-                       specular[3].asFloat());
+        mat->setSpecular(specular[0].asFloat(),
+                         specular[1].asFloat(),
+                         specular[2].asFloat(),
+                         specular[3].asFloat());
+      }
 
     } else {
-      m_smell_materials[smell["tag"].asString()] = "CubeMat";
+      auto mat_name = std::string(smell["tag"].asString()) + "_Mat";
+      Ogre::MaterialManager::getSingleton().create(mat_name, "ICSV_RESOURCES");
+      m_smell_materials[smell["tag"].asString()] = mat_name;
     }
   }
 }
