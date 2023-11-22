@@ -70,8 +70,8 @@ IcsvGui::ShowConfigSelect(void) {
     std::strncpy(det_buf, det_conf_file.c_str(), det_conf_file.size());
     if (m_conf_brwsr.GetSelected().c_str() != det_conf_file) {
       det_conf_file = m_conf_brwsr.GetSelected();
-      icsv::detector::deseriallize_detector_config(m_conf_brwsr.GetSelected());
       MaterialFactory::Get().DeseriallizeConfig(m_conf_brwsr.GetSelected());
+      icsv::detector::deseriallize_detector_config(m_conf_brwsr.GetSelected());
       changed = true;
     }
   }
@@ -80,7 +80,7 @@ IcsvGui::ShowConfigSelect(void) {
 
   ImGui::Text("Architecture Graph File");
   ImGui::InputText("Graph", graph_buf, BUFFSIZE);
-  if (ImGui::Button("Select ", ImVec2(100, 20))) {
+  if (ImGui::Button("Select##2", ImVec2(100, 20))) {
     m_graph_brwsr.SetTitle("Select Architecture Graph");
     m_graph_brwsr.Open();
   }
@@ -307,7 +307,9 @@ IcsvGui::ShowSortingSettings(void) {
   }
 }
 
-void  // TODO
+enum ColorRadioBtn : int { AMBIENT = 0, DIFFUSE, SPECULAR };
+
+void
 IcsvGui::ShowSmellColorPallet(void) {
   static ImGuiColorEditFlags flags
       = ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_DisplayRGB;
@@ -319,37 +321,64 @@ IcsvGui::ShowSmellColorPallet(void) {
 
   static float color[4];
 
-  std::string smell_slctd = "";
+  static std::string smell_slctd = "";
+
+  static Ogre::MaterialPtr mat;
 
   if (!tags.empty()) {
     ImGui::BeginListBox("Smells");
 
-    // bool sel = false;
+    static bool sel = false;
 
-    // for (auto t : tags) {
-    //   ImGui::Selectable(t.c_str(), sel);
-    //   if (sel) {
-    //     smell_slctd = t;
-    //     mat         = EntityManager::Get().FindEntityIf(
-    //         [t](auto& e) { return e.GetDetectorReport()->smell_tag == t;
-    //         })->;
-    //     sel = false;
-    //   }
-    // }
+    for (auto t : tags) {
+      ImGui::Selectable(t.c_str(), &sel);
+      if (sel) {
+        sel         = false;
+        smell_slctd = t;
+        mat         = MaterialFactory::Get().GetMaterialFor(smell_slctd);
+      }
+    }
 
     ImGui::EndListBox();
   }
+  ImGui::Text("%s%s", "Chosen Smell: ", smell_slctd.c_str());
 
-  ImGui::ColorPicker4(smell_slctd.c_str(), color, flags);
+  static int chosen = AMBIENT;
+
+  if (mat.operator bool()) {  // chosen material is not null
+    ImGui::RadioButton("Ambient", &chosen, AMBIENT);
+    ImGui::SameLine();
+    ImGui::RadioButton("Diffuse", &chosen, DIFFUSE);
+    ImGui::SameLine();
+    ImGui::RadioButton("Specular", &chosen, SPECULAR);
+
+    ImGui::ColorPicker4(smell_slctd.c_str(), color, flags);
+  }
 
   if (ImGui::Button("Apply Color")) {
+    switch (chosen) {
+      case AMBIENT:
+        mat->setAmbient(color[0], color[1], color[2]);
+        break;
+      case DIFFUSE:
+        mat->setDiffuse(color[0], color[1], color[2], color[3]);
+        break;
+      case SPECULAR:
+        mat->setSpecular(color[0], color[1], color[2], color[3]);
+        break;
+      default:
+        assert(false);
+        break;
+    }
   }
 }
 
 void
 IcsvGui::ShowEvalConfigs(void) {
   icsv::detector::EvaluationCenter::Get().DisplayEvalGui();
+
   ImGui::Separator();
+
   if (ImGui::Button("Re-Render Evaluation")) {
     SortEntityList("Smell Tag");
     std::string tag = "";
