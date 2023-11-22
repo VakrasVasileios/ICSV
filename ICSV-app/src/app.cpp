@@ -50,7 +50,6 @@ ICSVapp::setup() {
 
   // Set skybox and scene manager
   set_scene_manager(m_scnMgr);
-  // EntityManager::Get().MakeBillboardSet();
   m_scnMgr->setSkyBox(true, "Examples/CloudyNoonSkyBox", 5000);
 
   // IMGUI !!!!!!!!!!!!!!!!!!!!!!
