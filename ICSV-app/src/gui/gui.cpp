@@ -319,14 +319,15 @@ IcsvGui::ShowSmellColorPallet(void) {
   static auto tags
       = icsv::detector::DetectorManager::Get().GetAllDetectorTags();
 
-  static float color[4];
+  static float color[3][4];
 
   static std::string smell_slctd = "";
 
   static Ogre::MaterialPtr mat;
 
   if (!tags.empty()) {
-    ImGui::BeginListBox("Smells");
+    ImGui::LabelText("##S.M.", "%s", "Smell Materials");
+    ImGui::BeginListBox("##SmellMat");
 
     static bool sel = false;
 
@@ -352,24 +353,22 @@ IcsvGui::ShowSmellColorPallet(void) {
     ImGui::SameLine();
     ImGui::RadioButton("Specular", &chosen, SPECULAR);
 
-    ImGui::ColorPicker4(smell_slctd.c_str(), color, flags);
+    ImGui::ColorPicker4(smell_slctd.c_str(), color[chosen], flags);
   }
 
   if (ImGui::Button("Apply Color")) {
-    switch (chosen) {
-      case AMBIENT:
-        mat->setAmbient(color[0], color[1], color[2]);
-        break;
-      case DIFFUSE:
-        mat->setDiffuse(color[0], color[1], color[2], color[3]);
-        break;
-      case SPECULAR:
-        mat->setSpecular(color[0], color[1], color[2], color[3]);
-        break;
-      default:
-        assert(false);
-        break;
-    }
+
+    mat->setAmbient(color[AMBIENT][0], color[AMBIENT][1], color[AMBIENT][2]);
+
+    mat->setDiffuse(color[DIFFUSE][0],
+                    color[DIFFUSE][1],
+                    color[DIFFUSE][2],
+                    color[DIFFUSE][3]);
+
+    mat->setSpecular(color[SPECULAR][0],
+                     color[SPECULAR][1],
+                     color[SPECULAR][2],
+                     color[SPECULAR][3]);
   }
 }
 
