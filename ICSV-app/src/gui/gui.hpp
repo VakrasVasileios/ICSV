@@ -48,7 +48,7 @@ private:
   void ShowEvalConfigs(void);
   void ShowExportTab(void);
 
-  void SortEntityList(const std::string& by_tag);
+  void SortEntityList(const std::string& x_axis, const std::string& z_axis);
 };
 
 struct Selectable {

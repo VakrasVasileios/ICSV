@@ -193,11 +193,11 @@ IcsvGui::ShowSmellButton(bool& changed) {
           tag = rep->smell_tag;
         }
         if (rep->level > 0) {
-          auto   unif_scale = 0.2;
-          double y          = unif_scale * rep->level / 2;
+          auto   unit_scale = 0.2;
+          double y          = unit_scale * rep->level / 2;
           create_icsv_entity(rep,
                              Ogre::Vector3f(x, y / 2, z),
-                             Ogre::Vector3f(unif_scale, y, unif_scale));
+                             Ogre::Vector3f(unit_scale, y, unit_scale));
           z++;
         }
       }
@@ -300,10 +300,7 @@ IcsvGui::ShowSortingSettings(void) {
   ImGui::EndListBox();
 
   if (ImGui::Button("Sort", ImVec2(100, 20))) {
-    SortEntityList(x->m_tag);
-    ICSVapp::EntityManager::Get().RepositionEnttsOnAxisX();
-    SortEntityList(z->m_tag);
-    ICSVapp::EntityManager::Get().RepositionEnttsOnAxisZ();
+    SortEntityList(x->m_tag, z->m_tag);
   }
 }
 
@@ -379,22 +376,26 @@ IcsvGui::ShowEvalConfigs(void) {
   ImGui::Separator();
 
   if (ImGui::Button("Re-Render Evaluation")) {
-    SortEntityList("Smell Tag");
+    SortEntityList("Smell Tag", "Level");
     std::string tag = "";
-    int         x   = -1;
+    int         lvl = 0;
+    int         x = -1, z = -1;
+
     for (auto& e : ICSVapp::EntityManager::Get().GetEntityList()) {
       if (e->GetDetectorReport()->level > 0) {
         if (tag != e->GetDetectorReport()->smell_tag) {
           x++;
           tag = e->GetDetectorReport()->smell_tag;
         }
+        if (lvl != e->GetDetectorReport()->level) {
+          z++;
+          lvl = e->GetDetectorReport()->level;
+        }
         double y = 0.2 * e->GetDetectorReport()->level / 2;
-        e->SetPosition(x, y / 2, 0);
+        e->SetPosition(x, y / 2, z);
         e->SetScale(0.2, y, 0.2);
       }
     }
-    SortEntityList("Level");
-    ICSVapp::EntityManager::Get().RepositionEnttsOnAxisZ();
   }
 }
 
@@ -427,21 +428,23 @@ auto file_sort = [](IcsvEntity* ent1, IcsvEntity* ent2) {
       < ent2->GetDetectorReport()->src_info.file;
 };
 
+std::map<std::string, EntityManager::SortFunc> sort_funcs
+    = { { "Smell Tag", smell_sort }, { "Message", msg_sort },
+        { "Level", lvl_sort },       { "Structure", strct_sort },
+        { "Method", methd_sort },    { "File", file_sort } };
+
 void
-IcsvGui::SortEntityList(const std::string& by_tag) {
-  if (by_tag == "Smell Tag") {
-    EntityManager::Get().SortEnttsWith(smell_sort);
-  } else if (by_tag == "Message") {
-    EntityManager::Get().SortEnttsWith(msg_sort);
-  } else if (by_tag == "Level") {
-    EntityManager::Get().SortEnttsWith(lvl_sort);
-  } else if (by_tag == "Structure") {
-    EntityManager::Get().SortEnttsWith(strct_sort);
-  } else if (by_tag == "Method") {
-    EntityManager::Get().SortEnttsWith(methd_sort);
-  } else if (by_tag == "File") {
-    EntityManager::Get().SortEnttsWith(file_sort);
-  }
+IcsvGui::SortEntityList(const std::string& x_axis, const std::string& z_axis) {
+  static EntityManager::SortFunc x_sort, z_sort;
+
+  x_sort = sort_funcs.at(x_axis);
+  z_sort = sort_funcs.at(z_axis);
+
+  static auto _sort = [&](IcsvEntity* e1, IcsvEntity* e2) {
+    return x_sort(e1, e2) & z_sort(e1, e2);
+  };
+
+  EntityManager::Get().SortEnttsWith(_sort);
 }
 
 }  // namespace ICSVapp
