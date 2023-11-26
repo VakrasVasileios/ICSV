@@ -1,0 +1,7 @@
+font Sans
+{
+    type         truetype
+    source       OpenSans-BoldItalic.ttf
+    size         200
+    resolution   96
+}

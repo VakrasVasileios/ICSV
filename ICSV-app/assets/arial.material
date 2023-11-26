@@ -1,7 +1,0 @@
-font Arial
-{
-    type         truetype
-    source       ARIALBD.TTF
-    size         16
-    resolution   72
-}
