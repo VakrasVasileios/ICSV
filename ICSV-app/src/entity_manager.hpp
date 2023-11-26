@@ -50,10 +50,12 @@ public:
   void RepositionEnttsOnAxisZ(void);
 
 private:
-  Ogre::SceneManager*       m_scnMan{ nullptr };
-  std::list<IcsvEntity*>    m_entt_list;
+  Ogre::SceneManager*    m_scnMan{ nullptr };
+  std::list<IcsvEntity*> m_entt_list;
+
   std::list<MovableTextPtr> m_graph_tags;
   Ogre::FontPtr             m_font;
+  int                       m_font_size = 2;
 
   EntityManager();
   EntityManager(const EntityManager&) = delete;

@@ -58,15 +58,17 @@ EntityManager::CreateMovableText(const std::string& caption,
   m_graph_tags.emplace_front(
       std::make_unique<Ogre::MovableText>(name,
                                           caption,
-                                          "Arial",
-                                          5,
+                                          "Sans",
+                                          m_font_size,
                                           Ogre::ColourValue::White,
                                           "ICSV_RESOURCES"));
   m_graph_tags.front()->setSpaceWidth(0);
   m_graph_tags.front()->showOnTop(true);
   m_graph_tags.front()->setRenderQueueGroup(
-      Ogre::RenderQueueGroupID::RENDER_QUEUE_6);
+      Ogre::RenderQueueGroupID::RENDER_QUEUE_4);
   m_graph_tags.front()->setVisibilityFlags(0x0002);
+  m_graph_tags.front()->setTextAlignment(Ogre::MovableText::H_CENTER,
+                                         Ogre::MovableText::V_CENTER);
   attach_point->attachObject(m_graph_tags.front().get());
 }
 
