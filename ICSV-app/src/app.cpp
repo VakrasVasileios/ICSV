@@ -103,9 +103,9 @@ ICSVapp::setup() {
   IcsvGui::Get().SetCameraData(m_camMotor->GetSpeedRef(),
                                m_camMotor->GetRotSpeedRef());
 
-  static auto node = *m_scnMgr->getRootSceneNode()->createChildSceneNode();
-  node.setPosition({ 0, 0, 0 });
-  EntityManager::Get().CreateMovableText("Mock", &node);
+  static auto* node = m_scnMgr->getRootSceneNode()->createChildSceneNode();
+  node->setPosition({ 0, 0, 0 });
+  EntityManager::Get().CreateMovableText("Mock", node);
 }
 
 inline auto
