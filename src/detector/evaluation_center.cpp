@@ -10,7 +10,7 @@
 namespace icsv::detector {
 
 EvaluationCenter::~EvaluationCenter() {
-#ifndef UNIT_TESTS
+#if 0
   m_config_file.replace(m_config_file.find(".json"), 6, "_edited.json");
   SeriallizeToFile(m_config_file);
 #endif
