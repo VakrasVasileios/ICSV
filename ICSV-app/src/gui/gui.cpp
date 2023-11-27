@@ -382,16 +382,16 @@ IcsvGui::ShowEvalConfigs(void) {
     int         x = -1, z = -1;
 
     for (auto& e : ICSVapp::EntityManager::Get().GetEntityList()) {
-      if (e->GetDetectorReport()->level > 0) {
-        if (tag != e->GetDetectorReport()->smell_tag) {
+      if (e->GetDetectorReport().level > 0) {
+        if (tag != e->GetDetectorReport().smell_tag) {
           x++;
-          tag = e->GetDetectorReport()->smell_tag;
+          tag = e->GetDetectorReport().smell_tag;
         }
-        if (lvl != e->GetDetectorReport()->level) {
+        if (lvl != e->GetDetectorReport().level) {
           z++;
-          lvl = e->GetDetectorReport()->level;
+          lvl = e->GetDetectorReport().level;
         }
-        double y = 0.2 * e->GetDetectorReport()->level / 2;
+        double y = 0.2 * e->GetDetectorReport().level / 2;
         e->SetPosition(x, y / 2, z);
         e->SetScale(0.2, y, 0.2);
       }
@@ -400,32 +400,31 @@ IcsvGui::ShowEvalConfigs(void) {
 }
 
 auto smell_sort = [](IcsvEntity* ent1, IcsvEntity* ent2) {
-  return ent1->GetDetectorReport()->smell_tag
-      < ent2->GetDetectorReport()->smell_tag;
+  return ent1->GetDetectorReport().smell_tag
+      < ent2->GetDetectorReport().smell_tag;
 };
 
 auto lvl_sort = [](IcsvEntity* ent1, IcsvEntity* ent2) {
-  return ent1->GetDetectorReport()->level < ent2->GetDetectorReport()->level;
+  return ent1->GetDetectorReport().level < ent2->GetDetectorReport().level;
 };
 
 auto msg_sort = [](IcsvEntity* ent1, IcsvEntity* ent2) {
-  return ent1->GetDetectorReport()->message
-      < ent2->GetDetectorReport()->message;
+  return ent1->GetDetectorReport().message < ent2->GetDetectorReport().message;
 };
 
 auto strct_sort = [](IcsvEntity* ent1, IcsvEntity* ent2) {
-  return ent1->GetDetectorReport()->src_info.strct
-      < ent2->GetDetectorReport()->src_info.strct;
+  return ent1->GetDetectorReport().src_info.strct
+      < ent2->GetDetectorReport().src_info.strct;
 };
 
 auto methd_sort = [](IcsvEntity* ent1, IcsvEntity* ent2) {
-  return ent1->GetDetectorReport()->src_info.method
-      < ent2->GetDetectorReport()->src_info.method;
+  return ent1->GetDetectorReport().src_info.method
+      < ent2->GetDetectorReport().src_info.method;
 };
 
 auto file_sort = [](IcsvEntity* ent1, IcsvEntity* ent2) {
-  return ent1->GetDetectorReport()->src_info.file
-      < ent2->GetDetectorReport()->src_info.file;
+  return ent1->GetDetectorReport().src_info.file
+      < ent2->GetDetectorReport().src_info.file;
 };
 
 std::map<std::string, EntityManager::SortFunc> sort_funcs

@@ -219,7 +219,7 @@ ICSVapp::Raycast(float scrn_x, float scrn_y) {
     if (res.first) {
       if (dist < 0 || res.second > dist) {
         dist = res.second;
-        IcsvGui::Get().SetReportToDisplay(ref->GetDetectorReport());
+        IcsvGui::Get().SetReportToDisplay(&ref->GetDetectorReport());
         ref->ShowBoundingBox(true);
       }
     }

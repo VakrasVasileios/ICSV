@@ -14,7 +14,10 @@ public:
 
   void AdjustScaleBy(double x, double y, double z);
 
-  auto GetDetectorReport(void) const -> DetectorReport* { return m_report; }
+  auto GetDetectorReport(void) -> DetectorReport& { return *m_report; }
+  auto GetDetectorReport(void) const -> const DetectorReport& {
+    return *m_report;
+  }
   void SetDetectorReport(DetectorReport* rep) { m_report = rep; }
 
   auto GetBoundingBox(void) -> const Ogre::AxisAlignedBox& {
