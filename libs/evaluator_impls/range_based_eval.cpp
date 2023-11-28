@@ -48,17 +48,16 @@ RangeEvaluator::Seriallize(void) -> std::string {
 void
 RangeEvaluator::DisplayGui(void) {
 #ifndef UNIT_TESTS
-  static int min = 0, max = 0;
   ImGui::Separator();
   if (ImGui::TreeNode(m_tag.c_str())) {
     ImGui::Separator();
     ImGui::Text("%s%s", "Description: ", m_description.c_str());
     ImGui::Separator();
     ImGui::Text("%s", "Range: ");
-    ImGui::InputInt(std::string("Min " + m_tag).c_str(), &min);
-    AlwaysGEzero(min);
-    ImGui::InputInt(std::string("Max " + m_tag).c_str(), &max);
-    AlwaysGEzero(max);
+    ImGui::InputInt(std::string("Min " + m_tag).c_str(), &m_range.min);
+    AlwaysGEzero(m_range.min);
+    ImGui::InputInt(std::string("Max " + m_tag).c_str(), &m_range.max);
+    AlwaysGEzero(m_range.max);
     ImGui::Separator();
 
     if (ImGui::Button(std::string("Re-Eval " + m_tag).c_str())) {
