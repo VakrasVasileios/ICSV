@@ -63,7 +63,7 @@ RangeEvaluator::DisplayGui(void) {
     if (ImGui::Button(std::string("Re-Eval " + m_tag).c_str())) {
       for (auto* rep :
            icsv::detector::ReportCenter::Get().GetReportsByTag(m_tag))
-        ReEvaluateSmell(rep->init_level);
+        rep->level = ReEvaluateSmell(rep->init_level);
     }
     ImGui::TreePop();
     ImGui::Separator();
