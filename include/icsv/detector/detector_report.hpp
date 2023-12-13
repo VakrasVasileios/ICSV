@@ -1,9 +1,23 @@
 #pragma once
 
 #include <iostream>
+#include <assert.h>
 #include <string>
 
 namespace icsv::detector {
+
+enum ReportMembers {
+  m_EMPTY,
+  SMELL_TAG_m,
+  MESSAGE_m,
+  LEVEL_m,
+  INIT_LEVEL_m,
+  FILE_m,
+  LINE_m,
+  COLUMN_m,
+  STRUCTURE_m,
+  METHOD_m
+};
 
 struct SourceInfo {
   std::string file;
@@ -35,11 +49,38 @@ typedef struct DetectorReport {
   SourceInfo  src_info;
   int         level      = -1;
   int         init_level = -1;
+
+  auto operator()(ReportMembers memb) -> std::string {
+    switch (memb) {
+      case SMELL_TAG_m:
+        return smell_tag;
+      case MESSAGE_m:
+        return message;
+      case LEVEL_m:
+        return std::to_string(level);
+      case INIT_LEVEL_m:
+        return std::to_string(init_level);
+      case FILE_m:
+        return src_info.file;
+      case LINE_m:
+        return std::to_string(src_info.line);
+      case COLUMN_m:
+        return std::to_string(src_info.col);
+      case STRUCTURE_m:
+        return src_info.strct;
+      case METHOD_m:
+        return src_info.method;
+      case m_EMPTY:
+      default:
+        return "-69";
+    }
+  }
 } Report;
 
 inline auto
 operator<<(std::ostream& os, const Report& rep) -> std::ostream& {
-  return os << "Message: " << rep.message << '\n'
+  return os << "Smell tag: " << rep.smell_tag << '\n'
+            << "Message: " << rep.message << '\n'
             << "Source Info:\n"
             << rep.src_info << '\n'
             << "Level: " << rep.level << '\n';
