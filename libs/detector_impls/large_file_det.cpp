@@ -45,4 +45,4 @@ LargeFileDet::DetectSmell(const ArchData& arch) {
 
     icsv::detector::register_report(TAG, rep);
   }
-};
+}
