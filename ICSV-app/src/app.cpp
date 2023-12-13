@@ -102,6 +102,7 @@ ICSVapp::setup() {
 
   IcsvGui::Get().SetCameraData(m_camMotor->GetSpeedRef(),
                                m_camMotor->GetRotSpeedRef());
+  IcsvGui::Get().SetExitCallBack([&]() { getRoot()->queueEndRendering(); });
 
   static auto* node = m_scnMgr->getRootSceneNode()->createChildSceneNode();
   node->setPosition({ 0, 0, 0 });
@@ -151,8 +152,9 @@ ICSVapp::keyPressed(const OgreBites::KeyboardEvent& evnt) {
     m_camMotor->Down();
 
   if (evnt.keysym.sym == SDLK_ESCAPE)  // Quit
-    getRoot()->queueEndRendering();
-
+  {
+    IcsvGui::Get().SetRenderExitPopUp(true);
+  }
   return true;
 }
 
@@ -219,7 +221,7 @@ ICSVapp::Raycast(float scrn_x, float scrn_y) {
     if (res.first) {
       if (dist < 0 || res.second > dist) {
         dist = res.second;
-        IcsvGui::Get().SetReportToDisplay(&ref->GetDetectorReport());
+        IcsvGui::Get().SetReportToDisplay(ref->GetDetectorReport());
         ref->ShowBoundingBox(true);
       }
     }

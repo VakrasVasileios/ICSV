@@ -81,8 +81,8 @@ public:
   bool frameStarted(const Ogre::FrameEvent& evt) override;
 
 private:
-  float         m_speed  = 2.f;
-  float         m_rotSpd = 0.1f;
+  float         m_speed  = 10.f;
+  float         m_rotSpd = 0.15f;
   bool          m_is_rot = false;
   Mouse*        m_mouseRef;
   Ogre::Vector3 m_dir{ 0, 0, 0 };
