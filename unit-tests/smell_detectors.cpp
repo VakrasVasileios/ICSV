@@ -26,7 +26,7 @@ class Correct_level_assignment : public testing::Test {
     static bool init = false;
     if (!init) {
       icsv::detector::arch::ArchitectureHolder::Get().DeserializeArchitecture(
-          "/home/vkrs/Documents/ICSV/unit-tests/graphme2.json");
+          "/home/vkrs/Documents/ICSV/unit-tests/graph.json");
       icsv::detector::EvaluationCenter::Get().DeseriallizeConfig(
           "/home/vkrs/Documents/ICSV/unit-tests/DetectorsConfig.json");
       icsv::detector::DetectorManager::Get().UseDetectors();
@@ -34,6 +34,8 @@ class Correct_level_assignment : public testing::Test {
     }
   }
 };
+
+class Correctly_Sorted_Entt_List : public Correct_level_assignment {};
 
 class Always_Greater_Equal_to_Zero : public testing::Test {};
 
@@ -81,6 +83,32 @@ TEST_F(String_Literal_Template, Checking_string_literal_template) {
       == std::make_tuple('X', std::string("tag"), std::string("regex")));
   GTEST_ASSERT_TRUE(some<BOOL>(std::string("tag"), true)
                     == std::make_tuple('B', std::string("tag"), true));
+}
+
+TEST_F(Correctly_Sorted_Entt_List, Checking_if_entt_list_is_correctly_sorted) {
+  using namespace icsv::detector;
+  auto d_lst = ReportCenter::Get().GetReportList();
+  auto _sort = [&](DetectorReport* e1, DetectorReport* e2) {
+    return std::string(e1->smell_tag + std::to_string(e1->level))
+        < std::string(e2->smell_tag + std::to_string(e2->level));
+  };
+
+  std::stable_sort(d_lst.begin(), d_lst.end(), _sort);
+
+  std::string tag = d_lst.front()->smell_tag;
+  int         lvl = d_lst.front()->level;
+
+  for (auto* r : d_lst)
+    std::cout << *r << '\n';
+
+  for (auto* rep : d_lst) {
+    GTEST_ASSERT_LE(tag, rep->smell_tag);
+    if (rep->smell_tag == tag) {
+      GTEST_ASSERT_LE(lvl, rep->level);
+    }
+    tag = rep->smell_tag;
+    lvl = rep->level;
+  }
 }
 
 TEST_F(Always_Greater_Equal_to_Zero, Checking_always_greater_equal_to_zero) {
