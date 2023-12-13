@@ -49,27 +49,29 @@ EntityManager::CreateIcsvEntity(DetectorReport*       rep,
   return icsv_ent;
 }
 
-void
+auto
 EntityManager::CreateMovableText(const std::string& caption,
-                                 Ogre::SceneNode*   attach_point) {
+                                 Ogre::SceneNode*   attach_point)
+    -> MovableTextPtr {
   static std::uint64_t count = 0;
 
-  auto name = Ogre::String("MvTxt" + std::to_string(count));
-  m_graph_tags.emplace_front(
-      std::make_unique<Ogre::MovableText>(name,
-                                          caption,
-                                          "Sans",
-                                          m_font_size,
-                                          Ogre::ColourValue::White,
-                                          "ICSV_RESOURCES"));
-  m_graph_tags.front()->setSpaceWidth(0);
-  m_graph_tags.front()->showOnTop(true);
-  m_graph_tags.front()->setRenderQueueGroup(
-      Ogre::RenderQueueGroupID::RENDER_QUEUE_4);
-  m_graph_tags.front()->setVisibilityFlags(0x0002);
-  m_graph_tags.front()->setTextAlignment(Ogre::MovableText::H_CENTER,
-                                         Ogre::MovableText::V_CENTER);
-  attach_point->attachObject(m_graph_tags.front().get());
+  auto name   = Ogre::String("MvTxt" + std::to_string(count));
+  auto mv_txt = std::make_shared<Ogre::MovableText>(name,
+                                                    caption,
+                                                    "Sans",
+                                                    m_font_size,
+                                                    Ogre::ColourValue::White,
+                                                    "ICSV_RESOURCES");
+  m_graph_tags.push_back(mv_txt);
+  mv_txt->setSpaceWidth(0);
+  mv_txt->showOnTop(true);
+  mv_txt->setRenderQueueGroup(Ogre::RenderQueueGroupID::RENDER_QUEUE_4);
+  mv_txt->setVisibilityFlags(0x0002);
+  mv_txt->setTextAlignment(Ogre::MovableText::H_CENTER,
+                           Ogre::MovableText::V_CENTER);
+  attach_point->attachObject(mv_txt.get());
+
+  return mv_txt;
 }
 
 void
@@ -91,36 +93,18 @@ EntityManager::FindEntityIf(const Pred& pred) const -> IcsvEntity* {
 }
 
 auto
-EntityManager::GetEntityList(void) const -> const std::list<IcsvEntity*>& {
+EntityManager::GetEntityList(void) const -> const EntityList& {
   return m_entt_list;
 }
 
 void
 EntityManager::SortEnttsWith(const SortFunc& f) {
-  m_entt_list.sort(f);
+  std::stable_sort(m_entt_list.begin(), m_entt_list.end(), f);
 }
 
 auto
 EntityManager::RequestChildNode(void) -> Ogre::SceneNode* {
   return m_scnMan->getRootSceneNode()->createChildSceneNode();
-}
-
-void
-EntityManager::RepositionEnttsOnAxisX(void) {
-  int x = 0;
-  for (auto& i : m_entt_list) {
-    auto pos = i->GetPosition();
-    i->SetPosition(x++, pos.y, pos.z);
-  }
-}
-
-void
-EntityManager::RepositionEnttsOnAxisZ(void) {
-  int z = 0;
-  for (auto& i : m_entt_list) {
-    auto pos = i->GetPosition();
-    i->SetPosition(pos.x, pos.y, z++);
-  }
 }
 
 void

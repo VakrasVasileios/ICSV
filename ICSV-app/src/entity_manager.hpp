@@ -10,12 +10,15 @@
 
 namespace ICSVapp {
 
-using MovableTextPtr = std::unique_ptr<Ogre::MovableText>;
+class Chart;
+
+using MovableTextPtr = std::shared_ptr<Ogre::MovableText>;
 
 class EntityManager final {
 public:
-  using Pred     = std::function<bool(IcsvEntity*)>;
-  using SortFunc = std::function<bool(IcsvEntity*, IcsvEntity*)>;
+  using Pred       = std::function<bool(IcsvEntity*)>;
+  using SortFunc   = std::function<bool(IcsvEntity*, IcsvEntity*)>;
+  using EntityList = std::vector<IcsvEntity*>;
 
 public:
   static auto Get(void) -> EntityManager&;
@@ -24,8 +27,8 @@ public:
   auto CreateIcsvEntity(DetectorReport*       rep,
                         const Ogre::Vector3f& pos,
                         const Ogre::Vector3f& scale) -> IcsvEntity*;
-  void CreateMovableText(const std::string& caption,
-                         Ogre::SceneNode*   attach_point);
+  auto CreateMovableText(const std::string& caption,
+                         Ogre::SceneNode*   attach_point) -> MovableTextPtr;
   void CreateGrid(Ogre::SceneNode* attach_point);
 
   void ClearEntities(void);
@@ -43,15 +46,14 @@ public:
 
   auto FindEntityIf(const Pred& pred) const -> IcsvEntity*;
 
-  auto GetEntityList(void) const -> const std::list<IcsvEntity*>&;
+  auto GetEntityList(void) const -> const EntityList&;
   void SortEnttsWith(const SortFunc& f);
 
-  void RepositionEnttsOnAxisX(void);
-  void RepositionEnttsOnAxisZ(void);
+  friend class Chart;
 
 private:
-  Ogre::SceneManager*    m_scnMan{ nullptr };
-  std::list<IcsvEntity*> m_entt_list;
+  Ogre::SceneManager* m_scnMan{ nullptr };
+  EntityList          m_entt_list;
 
   std::list<MovableTextPtr> m_graph_tags;
   Ogre::FontPtr             m_font;
@@ -126,7 +128,7 @@ find_entt_if(const EntityManager::Pred& pred) -> IcsvEntity* {
 }
 
 inline auto
-get_entity_list(void) -> const std::list<IcsvEntity*>& {
+get_entity_list(void) -> const EntityManager::EntityList& {
   return EntityManager::Get().GetEntityList();
 }
 
