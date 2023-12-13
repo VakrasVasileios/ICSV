@@ -64,9 +64,9 @@ private:
   EntityManager(EntityManager&&)      = delete;
   ~EntityManager();
 
-  void CreateGridLine(Ogre::SceneNode*     attach_point,
+  auto CreateGridLine(Ogre::SceneNode*     attach_point,
                       const Ogre::Vector3& pos1,
-                      const Ogre::Vector3& pos2);
+                      const Ogre::Vector3& pos2)->Ogre::ManualObject*;
   auto RequestChildNode(void) -> Ogre::SceneNode*;
 };
 

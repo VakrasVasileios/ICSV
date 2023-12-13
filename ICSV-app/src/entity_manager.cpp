@@ -117,19 +117,25 @@ EntityManager::CreateGrid(Ogre::SceneNode*) {
 #endif
 }
 
-void
+auto
 EntityManager::CreateGridLine(Ogre::SceneNode*     attach_point,
                               const Ogre::Vector3& pos1,
-                              const Ogre::Vector3& pos2) {
+                              const Ogre::Vector3& pos2)
+    -> Ogre::ManualObject* {
   static std::uint64_t count = 0;
+
   auto name = Ogre::String("GridLine" + std::to_string(count++));
-  std::cout << "GridLine Name: " << name << '\n';
+
   Ogre::ManualObject* line = m_scnMan->createManualObject(name);
+
   line->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_LIST);
   line->position(pos1);
   line->position(pos2);
   line->end();
+
   attach_point->attachObject(line);
+
+  return line;
 }
 
 }  // namespace ICSVapp
