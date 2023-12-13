@@ -2,20 +2,23 @@
 
 #include "detector_report.hpp"
 #include <exception>
-#include <list>
+#include <vector>
 #include <string>
 
 namespace icsv::detector {
 
 class ReportCenter final {
 public:
+  using ReportList = std::vector<Report*>;
+
+public:
   static auto Get() -> ReportCenter&;
 
-  void RegisterReport(const std::string& smell_tag, const Report& rep);
+  void RegisterReportGT_0(const std::string& smell_tag, const Report& rep);
 
-  auto GetReportsByTag(const std::string& tag) const -> std::list<Report*>;
+  auto GetReportsByTag(const std::string& tag) const -> ReportList;
 
-  auto GetReportList(void) const -> const std::list<Report*>&;
+  auto GetReportList(void) const -> const ReportList&;
 
   void ClearReports(void);
 
@@ -24,7 +27,7 @@ public:
                         int                lvl_max = 10);
 
 private:
-  std::list<Report*> m_report_log;
+  ReportList m_report_log;
 
   ReportCenter()                    = default;
   ReportCenter(const ReportCenter&) = delete;
@@ -34,7 +37,7 @@ private:
 
 inline void
 register_report(const std::string& smell_tag, const Report& rep) {
-  ReportCenter::Get().RegisterReport(smell_tag, rep);
+  ReportCenter::Get().RegisterReportGT_0(smell_tag, rep);
 }
 
 inline void

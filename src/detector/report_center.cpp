@@ -12,16 +12,18 @@ ReportCenter::Get() -> ReportCenter& {
 }
 
 void
-ReportCenter::RegisterReport(const std::string& smell_tag, const Report& rep) {
-  auto* in      = new Report(rep);
-  in->smell_tag = smell_tag;
-  m_report_log.push_back(in);
+ReportCenter::RegisterReportGT_0(const std::string& smell_tag,
+                                 const Report&      rep) {
+  if (rep.level > 0) {
+    auto* in      = new Report(rep);
+    in->smell_tag = smell_tag;
+    m_report_log.push_back(in);
+  }
 }
 
 auto
-ReportCenter::GetReportsByTag(const std::string& tag) const
-    -> std::list<Report*> {
-  std::list<Report*> ret;
+ReportCenter::GetReportsByTag(const std::string& tag) const -> ReportList {
+  ReportList ret;
 
   for (auto* rep : m_report_log) {
     if (rep->smell_tag == tag)
@@ -36,7 +38,7 @@ ReportCenter::GetReportsByTag(const std::string& tag) const
 }
 
 auto
-ReportCenter::GetReportList(void) const -> const std::list<Report*>& {
+ReportCenter::GetReportList(void) const -> const ReportList& {
   return m_report_log;
 }
 
