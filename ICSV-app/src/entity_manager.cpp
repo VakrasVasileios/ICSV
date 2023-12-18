@@ -36,7 +36,7 @@ EntityManager::CreateIcsvEntity(DetectorReport*       rep,
 
   auto mat = MaterialFactory::Get().GetMaterialFor(rep->smell_tag);
   assert(mat.operator bool());
-  icsv_ent->m_ent->setMaterial(mat);
+  icsv_ent->m_ent->setMaterial(mat->m_material);
 
   icsv_ent->m_node->attachObject(icsv_ent->m_ent);
   icsv_ent->m_node->setPosition(pos);
