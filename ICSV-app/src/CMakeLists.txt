@@ -2,6 +2,8 @@ set(ICSVAPP ICSVapp)
 set(FILES
   app.cpp
   app.hpp
+  chart.cpp
+  chart.hpp
   entity_manager.cpp
   entity_manager.hpp
   icsv_entity.cpp
