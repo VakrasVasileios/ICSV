@@ -10,7 +10,7 @@ ICSVapp::frameStarted(const Ogre::FrameEvent& evnt) {
   OgreBites::ApplicationContext::frameStarted(evnt);
 
   Ogre::ImGuiOverlay::NewFrame();
-#ifndef NDEBUG
+#ifndef RELEASE
   ImGui::ShowDemoWindow();
 #endif
   IcsvGui::Get().Display();
@@ -94,8 +94,6 @@ ICSVapp::setup() {
   m_camera.m_node->attachObject(m_camera.m_cam);
   getRenderWindow()->addViewport(m_camera.m_cam);
 
-  create_grid(m_camera.m_gridNode);
-
   m_camMotor = new SmoothCamMove(&m_camera);
   m_root->addFrameListener(m_camMotor);
   m_camMotor->SetMouseRef(&m_mouse);
@@ -103,10 +101,6 @@ ICSVapp::setup() {
   IcsvGui::Get().SetCameraData(m_camMotor->GetSpeedRef(),
                                m_camMotor->GetRotSpeedRef());
   IcsvGui::Get().SetExitCallBack([&]() { getRoot()->queueEndRendering(); });
-
-  static auto* node = m_scnMgr->getRootSceneNode()->createChildSceneNode();
-  node->setPosition({ 0, 0, 0 });
-  EntityManager::Get().CreateMovableText("Mock", node);
 }
 
 inline auto
