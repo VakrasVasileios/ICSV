@@ -1,7 +1,0 @@
-font IcsvFont
-{
-    type         truetype
-    source       OpenSans-BoldItalic.ttf
-    size         16
-    resolution   72
-}
