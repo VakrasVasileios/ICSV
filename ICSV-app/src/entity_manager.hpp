@@ -29,10 +29,9 @@ public:
                         const Ogre::Vector3f& scale) -> IcsvEntity*;
   auto CreateMovableText(const std::string& caption,
                          Ogre::SceneNode*   attach_point) -> MovableTextPtr;
-  void CreateGrid(Ogre::SceneNode* attach_point);
 
   void ClearEntities(void);
-  void ClearGraphTags(void) { m_graph_tags.clear(); }
+  void ClearChartTags(void) { m_chart_tags.clear(); }
   void ClearScene(void) { m_scnMan->clearScene(); }
 
   void DestroyEntity(Ogre::Entity* e) { m_scnMan->destroyEntity(e); }
@@ -40,8 +39,8 @@ public:
     m_scnMan->destroyMovableObject(mt);
   }
   void DestroyNode(Ogre::SceneNode* n) { m_scnMan->destroySceneNode(n); }
-  void DestroyParticleSystem(Ogre::ParticleSystem* ps) {
-    m_scnMan->destroyParticleSystem(ps);
+  void DestroyManualObject(Ogre::ManualObject* mobj) {
+    m_scnMan->destroyManualObject(mobj);
   }
 
   auto FindEntityIf(const Pred& pred) const -> IcsvEntity*;
@@ -55,7 +54,7 @@ private:
   Ogre::SceneManager* m_scnMan{ nullptr };
   EntityList          m_entt_list;
 
-  std::list<MovableTextPtr> m_graph_tags;
+  std::list<MovableTextPtr> m_chart_tags;
   Ogre::FontPtr             m_font;
   int                       m_font_size = 2;
 
@@ -66,18 +65,14 @@ private:
 
   auto CreateGridLine(Ogre::SceneNode*     attach_point,
                       const Ogre::Vector3& pos1,
-                      const Ogre::Vector3& pos2)->Ogre::ManualObject*;
+                      const Ogre::Vector3& pos2) -> Ogre::ManualObject*;
+
   auto RequestChildNode(void) -> Ogre::SceneNode*;
 };
 
 inline void
 set_scene_manager(Ogre::SceneManager* scnMan) {
   EntityManager::Get().SetSceneManager(scnMan);
-}
-
-inline void
-create_grid(Ogre::SceneNode* attach_point) {
-  EntityManager::Get().CreateGrid(attach_point);
 }
 
 inline auto
@@ -87,14 +82,20 @@ create_icsv_entity(DetectorReport*       rep,
   return EntityManager::Get().CreateIcsvEntity(rep, pos, scale);
 }
 
+inline auto
+create_chart_tag(const std::string& caption, Ogre::SceneNode* attach_point)
+    -> MovableTextPtr {
+  return EntityManager::Get().CreateMovableText(caption, attach_point);
+}
+
 inline void
 clear_entities(void) {
   EntityManager::Get().ClearEntities();
 }
 
 inline void
-clear_graph_tags(void) {
-  EntityManager::Get().ClearGraphTags();
+clear_chart_tags(void) {
+  EntityManager::Get().ClearChartTags();
 }
 
 inline void
@@ -118,8 +119,8 @@ destroy_node(Ogre::SceneNode* n) {
 }
 
 inline void
-destroy_particle_system(Ogre::ParticleSystem* ps) {
-  EntityManager::Get().DestroyParticleSystem(ps);
+destroy_manual_object(Ogre::ManualObject* mobj) {
+  EntityManager::Get().DestroyManualObject(mobj);
 }
 
 inline auto

@@ -8,7 +8,7 @@ EntityManager::EntityManager() {
                                                        "ICSV_RESOURCES");
 }
 
-EntityManager::~EntityManager() {}
+EntityManager::~EntityManager() { ClearChartTags(); }
 
 auto
 EntityManager::Get(void) -> EntityManager& {
@@ -62,7 +62,8 @@ EntityManager::CreateMovableText(const std::string& caption,
                                                     m_font_size,
                                                     Ogre::ColourValue::White,
                                                     "ICSV_RESOURCES");
-  m_graph_tags.push_back(mv_txt);
+  m_chart_tags.push_back(mv_txt);
+
   mv_txt->setSpaceWidth(0);
   mv_txt->showOnTop(true);
   mv_txt->setRenderQueueGroup(Ogre::RenderQueueGroupID::RENDER_QUEUE_4);
@@ -105,16 +106,6 @@ EntityManager::SortEnttsWith(const SortFunc& f) {
 auto
 EntityManager::RequestChildNode(void) -> Ogre::SceneNode* {
   return m_scnMan->getRootSceneNode()->createChildSceneNode();
-}
-
-void
-EntityManager::CreateGrid(Ogre::SceneNode*) {
-#if (0)
-  for (int i = -5000; i < 5001; i++) {
-    CreateGridLine(attach_point, { -5000, 0, i }, { 5000, 0, i });
-    CreateGridLine(attach_point, { i, 0, -5000 }, { i, 0, 5000 });
-  }
-#endif
 }
 
 auto
