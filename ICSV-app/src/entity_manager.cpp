@@ -55,7 +55,7 @@ EntityManager::CreateMovableText(const std::string& caption,
     -> MovableTextPtr {
   static std::uint64_t count = 0;
 
-  auto name   = Ogre::String("MvTxt" + std::to_string(count));
+  auto name   = Ogre::String("MvTxt" + std::to_string(count++));
   auto mv_txt = std::make_shared<Ogre::MovableText>(name,
                                                     caption,
                                                     "Sans",
