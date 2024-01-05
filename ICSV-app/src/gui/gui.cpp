@@ -250,8 +250,8 @@ IcsvGui::ShowSmellButton(bool& changed) {
 
       auto unit_scale = 0.2;
       for (auto* rep : replst) {
-        if (rep->level > 0) {
-          double y = unit_scale * rep->level / 2;
+        if (rep->level > -1) {
+          double y = unit_scale * (rep->level + 1) / 2;
           create_icsv_entity(rep,
                              Ogre::Vector3f(0, y / 2, 0),
                              Ogre::Vector3f(unit_scale, y, unit_scale));

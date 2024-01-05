@@ -11,16 +11,17 @@ RangeEvaluator::RangeEvaluator(const std::string& _tag, int _min, int _max)
 }
 
 /*
-  Returns 0 if curr_lvl < minimum range
-  Returns 10 if curr_lvl >= maximum range
+  Returns -1 if curr_lvl < minimum range
+  Returns 9 if curr_lvl >= maximum range
   Else if within range calculate and return smell level
 */
 auto
 RangeEvaluator::EvaluateSmell(int curr_lvl)
     -> icsv::detector::ISmellEvaluator::SmellLevel {
-  return (curr_lvl < m_range.min) * 0 + (curr_lvl >= m_range.max) * 10
-      + IsWithinRange(curr_lvl)
-      * (((double) (curr_lvl - m_range.min) / m_range.range()) * 10);
+  return ((curr_lvl < m_range.min) * 0 + (curr_lvl >= m_range.max) * 10
+          + IsWithinRange(curr_lvl)
+              * (((double) (curr_lvl - m_range.min) / m_range.range()) * 10))
+      - 1;
 }
 
 auto
