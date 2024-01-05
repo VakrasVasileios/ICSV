@@ -9,16 +9,6 @@ Chart::Get(void) -> Chart& {
   return singleton;
 }
 
-Chart::Chart() {
-
-  auto lblcomp = [](const Label& l1, const Label& l2) {
-    return l1.first->getName() < l2.first->getName();
-  };
-
-  m_x_labels = std::set<Label, LabelComp>(lblcomp);
-  m_z_labels = std::set<Label, LabelComp>(lblcomp);
-}
-
 Chart::~Chart() {
   for (auto* ln : m_chart_lines) {
     destroy_manual_object(ln);
@@ -26,24 +16,27 @@ Chart::~Chart() {
   m_chart_lines.clear();
 }
 
+/*
+ * Return true on successful insertion
+ */
+bool
+Chart::IsLabelUnique(ChartLabelList& lst, const std::string& caption) {
+  auto iter = std::find_if(lst.begin(), lst.end(), [&caption](const Label& l) {
+    return l.get()->getCaption() == caption;
+  });
+
+  return (iter == lst.end()) ? true : false;
+}
+
 void
 Chart::ClearChart(void) {
-  for (auto lbl : m_x_labels) {
-    if (lbl.second != nullptr) {
-      lbl.second->detachAllObjects();
-      destroy_node(lbl.second);
-      lbl.second = nullptr;
-    }
+  for (auto node : m_node_lst) {
+    node.second->detachAllObjects();
+    destroy_node(node.second);
   }
-  m_x_labels.clear();
+  m_node_lst.clear();
 
-  for (auto lbl : m_z_labels) {
-    if (lbl.second != nullptr) {
-      lbl.second->detachAllObjects();
-      destroy_node(lbl.second);
-      lbl.second = nullptr;
-    }
-  }
+  m_x_labels.clear();
   m_z_labels.clear();
 
   clear_chart_tags();
@@ -79,26 +72,34 @@ void
 Chart::AssignLabelsToAxis(const IcsvEnttIter& begin,
                           const IcsvEnttIter& end,
                           const AxisType      axis) {
-#if (0)
-  ChartLabelSet& lbl_lst  = (axis == m_x_axis) ? m_x_labels : m_z_labels;
-  auto           traveler = begin;
-  auto           lbegin   = begin;
+#if (1)
+  ChartLabelList& lbl_lst  = (axis == m_x_axis) ? m_x_labels : m_z_labels;
+  auto            traveler = begin;
+  auto            lbegin   = begin;
 
-  auto name = (*(*traveler)->GetDetectorReport())(axis);
+  auto caption = (*(*traveler)->GetDetectorReport())(axis);
 
-  auto* node = EntityManager::Get().RequestChildNode();
-  auto  lbl  = create_chart_tag(name, node);
+  if (IsLabelUnique(lbl_lst, caption)) {
+    auto* node = EntityManager::Get().RequestChildNode();
+    auto  lbl  = create_chart_tag(caption, node);
+    lbl_lst.push_back(lbl);
 
-  lbl_lst.insert({ lbl, node });
+    m_node_lst[lbl.get()->getCaption()] = node;
+  }
 
   while (traveler != end) {
     if ((*(*traveler)->GetDetectorReport())(axis)
         != (*(*lbegin)->GetDetectorReport())(axis)) {
 
-      auto* node = EntityManager::Get().RequestChildNode();
-      auto  lbl  = create_chart_tag(name, node);
+      caption = (*(*traveler)->GetDetectorReport())(axis);
 
-      lbl_lst.insert({ lbl, node });
+      if (IsLabelUnique(lbl_lst, caption)) {
+        auto* node = EntityManager::Get().RequestChildNode();
+        auto  lbl  = create_chart_tag(caption, node);
+        lbl_lst.push_back(lbl);
+
+        m_node_lst[lbl.get()->getCaption()] = node;
+      }
 
       lbegin = traveler;
     }
@@ -118,6 +119,10 @@ Chart::DrawChart(void) {
     return s1 < s2;
   };
 
+  static auto lbl_sort = [](const Label& m1, const Label& m2) {
+    return m1.get()->getCaption() < m2.get()->getCaption();
+  };
+
   static auto x_sort = [&](IcsvEntity* e1, IcsvEntity* e2) {
     return (*e1->GetDetectorReport())(m_x_axis)
         < (*e2->GetDetectorReport())(m_x_axis);
@@ -135,19 +140,17 @@ Chart::DrawChart(void) {
 
   /// Sort entity list and get number of neighborhoods on the x axis
   EntityManager::Get().SortEnttsWith(x_sort);
-  const int x_length
-      = FindAxisLength(entt_list.begin(),
-                       entt_list.end(),
-                       [&](auto e1, auto e2) { return XAxisPred(e1, e2); });
   AssignLabelsToAxis(entt_list.begin(), entt_list.end(), m_x_axis);
+  const int x_length = m_x_labels.size();
+
+  std::stable_sort(m_x_labels.begin(), m_x_labels.end(), lbl_sort);
 
   /// Sort entity list and get number of neighborhoods on the z axis
   EntityManager::Get().SortEnttsWith(z_sort);
-  const int z_length
-      = FindAxisLength(entt_list.begin(),
-                       entt_list.end(),
-                       [&](auto e1, auto e2) { return ZAxisPred(e1, e2); });
   AssignLabelsToAxis(entt_list.begin(), entt_list.end(), m_z_axis);
+  const int z_length = m_z_labels.size();
+
+  std::stable_sort(m_z_labels.begin(), m_z_labels.end(), lbl_sort);
 
   /// Sort entity list for both axises and set total neighborhoods
   EntityManager::Get().SortEnttsWith(_sort);
@@ -212,8 +215,10 @@ Chart::DrawChart(void) {
                     static_cast<float>(z * block_size) });
 
     if (zlbl_iter != m_z_labels.end()) {
-      zlbl_iter->second->setPosition(
+      auto* node = m_node_lst[zlbl_iter->get()->getCaption()];
+      node->setPosition(
           { -2.f, 0.f, static_cast<float>(z * block_size) + block_size / 2 });
+
       zlbl_iter++;
     }
   }
@@ -226,8 +231,10 @@ Chart::DrawChart(void) {
                     static_cast<float>(block_size * z_length + 2) });
 
     if (xlbl_iter != m_x_labels.end()) {
-      xlbl_iter->second->setPosition(
+      auto* node = m_node_lst[xlbl_iter->get()->getCaption()];
+      node->setPosition(
           { static_cast<float>(x * block_size) + block_size / 2, 0.f, -2.f });
+
       xlbl_iter++;
     }
   }
@@ -250,60 +257,6 @@ Chart::SetXaxis(const AxisType& fx) {
 void
 Chart::SetZaxis(const AxisType& fz) {
   m_z_axis = fz;
-}
-
-auto
-Chart::FindAxisLength(const IcsvEnttIter& begin,
-                      const IcsvEnttIter& end,
-                      const AxisPred&     pred) -> int {
-  IcsvEnttIter x_begin  = begin;
-  IcsvEnttIter traveler = begin;
-
-  using IterPred
-      = std::function<bool(const IcsvEnttIter&, const IcsvEnttIter&)>;
-
-  auto iter_pred = [&](const IcsvEnttIter& e1, const IcsvEnttIter& e2) {
-    return pred(*e1, *e2);
-  };
-
-  auto x_len_set = std::set<IcsvEnttIter, IterPred>(iter_pred);
-  x_len_set.insert(traveler);
-
-  while (traveler != end) {
-    if (!pred(*traveler, *x_begin)) {
-      x_begin = traveler;
-      x_len_set.insert(traveler);
-    }
-    traveler++;
-  }
-
-  return x_len_set.size();
-}
-
-auto
-Chart::FindNeighborhoodSize(const IcsvEnttIter& begin, const IcsvEnttIter& end)
-    -> int {
-  IcsvEnttIter hood_begin = begin;
-  IcsvEnttIter traveler   = begin;
-
-  int size = 0, cntr = 0;
-
-  while (traveler != end) {
-    if ((*traveler)->GetDetectorReport()->level > 0) {
-      if (AxisToStringPred(*traveler, *hood_begin)) {
-        cntr++;
-      } else {
-        size       = std::max(size, cntr);
-        cntr       = 0;
-        hood_begin = traveler;
-
-        m_total_neighborhoods++;
-      }
-    }
-    traveler++;
-  }
-
-  return size;
 }
 
 }  // namespace ICSVapp
