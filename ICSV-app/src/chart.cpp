@@ -20,12 +20,23 @@ Chart::~Chart() {
  * Return true on successful insertion
  */
 bool
-Chart::IsLabelUnique(ChartLabelList& lst, const std::string& caption) {
+Chart::IsLabelUnique(const ChartLabelList& lst, const std::string& caption) {
   auto iter = std::find_if(lst.begin(), lst.end(), [&caption](const Label& l) {
     return l.get()->getCaption() == caption;
   });
 
   return (iter == lst.end()) ? true : false;
+}
+
+auto
+Chart::IndexOfCaption(const ChartLabelList& lst, const std::string& caption)
+    -> int {
+  for (int i = 0; i < (int) lst.size(); i++) {
+    if (lst[i].get()->getCaption() == caption) {
+      return i;
+    }
+  }
+  return -1;
 }
 
 void
@@ -72,7 +83,6 @@ void
 Chart::AssignLabelsToAxis(const IcsvEnttIter& begin,
                           const IcsvEnttIter& end,
                           const AxisType      axis) {
-#if (1)
   ChartLabelList& lbl_lst  = (axis == m_x_axis) ? m_x_labels : m_z_labels;
   auto            traveler = begin;
   auto            lbegin   = begin;
@@ -105,7 +115,6 @@ Chart::AssignLabelsToAxis(const IcsvEnttIter& begin,
     }
     traveler++;
   }
-#endif
 }
 
 void
@@ -154,11 +163,10 @@ Chart::DrawChart(void) {
 
   /// Sort entity list for both axises and set total neighborhoods
   EntityManager::Get().SortEnttsWith(_sort);
-  int total_neighborhoods = z_length * x_length;
+  // int total_neighborhoods = z_length * x_length;
 
-  int block_size = std::ceil(std::sqrt(total_neighborhoods));
-
-  int chart_x = 0, chart_z = 0;
+  int max_hood_size = FindNeighborhoodSize(entt_list.begin(), entt_list.end());
+  int block_size    = std::ceil(std::sqrt(max_hood_size));
 
   IcsvEnttIter traveler   = entt_list.begin();
   IcsvEnttIter hood_begin = entt_list.begin();
@@ -188,23 +196,26 @@ Chart::DrawChart(void) {
       }
 
       const int    hood_side = std::ceil(std::sqrt(local_size));
-      const double increment = block_size / (hood_side * 2);
+      const double increment = block_size / (hood_side);
 
       for (int i = 0; i < local_size && traveler != hood_end; i++) {
         if ((*traveler)->GetDetectorReport()->level > 0) {
-          chart_z += 1 * (i % hood_side == 0);
+          int x_hood
+              = IndexOfCaption(m_x_labels,
+                               (*(*traveler)->GetDetectorReport())(m_x_axis));
+          int z_hood
+              = IndexOfCaption(m_z_labels,
+                               (*(*traveler)->GetDetectorReport())(m_z_axis));
+          double x = (i % hood_side) + (x_hood * block_size) + increment;
           double y = (*traveler)->GetScale().y / 2;
-          auto   x = i % hood_side;
-          (*traveler)->SetPosition(chart_x + x + increment,
-                                   y,
-                                   chart_z + increment);
+          double z
+              = (double) (i / hood_side) + (z_hood * block_size) + increment;
+          (*traveler)->SetPosition(x, y, z);
         }
         traveler++;
       }
     }
     hood_begin = hood_end;
-    chart_x += block_size;
-    chart_z = 0;
   }
 
   auto zlbl_iter = m_z_labels.begin();
@@ -257,6 +268,33 @@ Chart::SetXaxis(const AxisType& fx) {
 void
 Chart::SetZaxis(const AxisType& fz) {
   m_z_axis = fz;
+}
+
+auto
+Chart::FindNeighborhoodSize(const IcsvEnttIter& begin, const IcsvEnttIter& end)
+    -> int {
+  IcsvEnttIter hood_begin = begin;
+  IcsvEnttIter traveler   = begin;
+
+  int size = 0, cntr = 0;
+
+  while (traveler != end) {
+    if ((*traveler)->GetDetectorReport()->level > -1) {
+      if (AxisToStringPred(*traveler, *hood_begin)) {
+        cntr++;
+      } else {
+        size       = std::max(size, cntr);
+        cntr       = 0;
+        hood_begin = traveler;
+        traveler--;
+
+        m_total_neighborhoods++;
+      }
+    }
+    traveler++;
+  }
+
+  return size;
 }
 
 }  // namespace ICSVapp

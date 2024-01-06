@@ -49,7 +49,7 @@ private:
   Chart(const Chart&) = delete;
   ~Chart();
 
-  bool IsLabelUnique(ChartLabelList& lst, const std::string& caption);
+  bool IsLabelUnique(const ChartLabelList& lst, const std::string& caption);
 
   void DrawChartLine(const Ogre::Vector3& pos1, const Ogre::Vector3& pos2);
 
@@ -61,6 +61,12 @@ private:
   void AssignLabelsToAxis(const IcsvEnttIter& begin,
                           const IcsvEnttIter& end,
                           const AxisType      axis);
+
+  auto FindNeighborhoodSize(const IcsvEnttIter& begin, const IcsvEnttIter& end)
+      -> int;
+
+  auto IndexOfCaption(const ChartLabelList& lst, const std::string& caption)
+      -> int;
 };
 
 }  // namespace ICSVapp

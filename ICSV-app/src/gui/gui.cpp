@@ -251,7 +251,7 @@ IcsvGui::ShowSmellButton(bool& changed) {
       auto unit_scale = 0.2;
       for (auto* rep : replst) {
         if (rep->level > -1) {
-          double y = unit_scale * (rep->level + 1) / 2;
+          double y = unit_scale * (rep->level + 2) / 2;
           create_icsv_entity(rep,
                              Ogre::Vector3f(0, y / 2, 0),
                              Ogre::Vector3f(unit_scale, y, unit_scale));
@@ -449,7 +449,7 @@ IcsvGui::ShowEvalConfigs(void) {
       if (ref->GetDetectorReport()->level == 0)
         ref->SetVisibility(false);
       else
-        ref->SetScale(0.2, ref->GetDetectorReport()->level * 0.1, 0.2);
+        ref->SetScale(0.2, (ref->GetDetectorReport()->level + 2) * 0.1, 0.2);
 
     Chart::Get().SetXaxis(ReportMembers::SMELL_TAG_m);
     Chart::Get().SetZaxis(ReportMembers::LEVEL_m);
