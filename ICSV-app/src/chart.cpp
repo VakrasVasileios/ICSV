@@ -196,7 +196,7 @@ Chart::DrawChart(void) {
       }
 
       const int    hood_side = std::ceil(std::sqrt(local_size));
-      const double increment = block_size / (hood_side);
+      const double increment = (block_size / (hood_side == 1 ? 2 : hood_side));
 
       for (int i = 0; i < local_size && traveler != hood_end; i++) {
         if ((*traveler)->GetDetectorReport()->level > 0) {
