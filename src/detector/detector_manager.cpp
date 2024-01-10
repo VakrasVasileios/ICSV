@@ -28,7 +28,7 @@ DetectorManager::GetAllDetectorTags(void) -> std::list<std::string> {
 
 void
 DetectorManager::RegisterDetector(const std::string& tag, Detector* det) {
-  if (m_detectors.find(tag) != m_detectors.end())
+  if (m_detectors.contains(tag))
     std::cout << "Newly registered detector with tag \"" << tag
               << "\" overwrites existing one!\n";
 
