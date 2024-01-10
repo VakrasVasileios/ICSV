@@ -18,6 +18,8 @@ public:
 
   void RegisterEvaluator(const std::string& tag, ISmellEvaluator* ev);
 
+  bool RemoveEvaluator(const std::string& tag);
+
   void DeseriallizeConfig(const std::string& file_path);
 
   auto EvaluateSmell(const std::string& tag, int curr_lvl) -> SmellLevel;
@@ -59,6 +61,11 @@ evaluate_smell(const std::string& tag, int curr_lvl)
 inline void
 register_evaluator(const std::string& tag, ISmellEvaluator* ev) {
   EvaluationCenter::Get().RegisterEvaluator(tag, ev);
+}
+
+inline bool
+remove_evaluator(const std::string& tag) {
+  return EvaluationCenter::Get().RemoveEvaluator(tag);
 }
 
 }  // namespace icsv::detector

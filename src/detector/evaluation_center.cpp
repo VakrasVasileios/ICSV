@@ -45,6 +45,11 @@ EvaluationCenter::RegisterEvaluator(const std::string& tag,
   m_eval_reg[tag] = ev;
 }
 
+bool
+EvaluationCenter::RemoveEvaluator(const std::string& tag) {
+  return m_eval_reg.erase(tag);
+}
+
 void
 EvaluationCenter::DeseriallizeConfig(const std::string& file_path) {
   m_config_file = file_path;
