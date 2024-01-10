@@ -23,7 +23,9 @@ public:
   void SetTag(const std::string& t);
 
   auto GetDescription(void) const -> const std::string&;
+  auto GetDescription(void) -> std::string { return m_description; }
   auto GetTag(void) const -> const std::string&;
+  auto GetTag(void) -> std::string { return m_tag; }
 
   virtual void DisplayGui(void) = 0;
 
