@@ -1,4 +1,5 @@
 set(FILES # Evaluator Interface Implementations
+  arg_based_eval.hpp
   range_based_eval.cpp
   range_based_eval.hpp
   regex_based_eval.cpp
