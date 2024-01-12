@@ -6,7 +6,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 project(ICSV CXX)
 
-set(CMAKE_CXX_FLAGS_RELEASE_INIT "-DRELEASE")
+set(CMAKE_CXX_FLAGS_RELEASE_INIT "-DNDEBUG")
 
 if (MSVC)
   add_compile_options(/W4 /WX)

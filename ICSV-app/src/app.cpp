@@ -10,7 +10,7 @@ ICSVapp::frameStarted(const Ogre::FrameEvent& evnt) {
   OgreBites::ApplicationContext::frameStarted(evnt);
 
   Ogre::ImGuiOverlay::NewFrame();
-#ifndef RELEASE
+#ifndef NDEBUG
   ImGui::ShowDemoWindow();
 #endif
   IcsvGui::Get().Display();
