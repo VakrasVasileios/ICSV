@@ -6,8 +6,6 @@
 #include "icsv/detector/evaluation_center.hpp"
 #include "report_center.hpp"
 
-// TODO: Add interface documentation
-
 using DetectorReport = icsv::detector::DetectorReport;
 using SourceInfo     = icsv::detector::SourceInfo;
 using ArchData       = icsv::detector::arch::ArchData;

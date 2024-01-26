@@ -35,10 +35,9 @@ void
 LargeFileDet::DetectSmell(const ArchData& arch) {
   for (auto& src : arch.sources) {
     DetectorReport rep;
-    unsigned lines = FileLineCount(src);  // FIXME: This will need the full
-                                          // path, json has only file name
-    rep.init_level = lines;
-    rep.level      = icsv::detector::evaluate_smell(TAG, lines);
+    unsigned       lines = FileLineCount(src);
+    rep.init_level       = lines;
+    rep.level            = icsv::detector::evaluate_smell(TAG, lines);
     rep.message
         = "Source file: " + src + " has " + std::to_string(lines) + " of code.";
     rep.src_info.file = src;
