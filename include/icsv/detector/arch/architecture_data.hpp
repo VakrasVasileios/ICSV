@@ -15,6 +15,7 @@ struct Definition;
 using Structures   = std::list<Structure>;
 using Dependencies = std::list<Dependency>;
 using Sources      = std::list<std::string>;
+using Headers      = std::list<std::string>;
 using Bases        = std::list<std::string>;
 using Fields       = std::list<Field>;
 using Methods      = std::list<Method>;
@@ -46,6 +47,7 @@ struct ArchData {
   Structures   structures;
   Dependencies dependencies;
   Sources      sources;
+  Headers      headers;
 };
 
 struct Structure {

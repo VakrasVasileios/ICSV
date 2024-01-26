@@ -41,6 +41,9 @@ ArchitectureHolder::DeserializeArchitecture(const std::string& path) {
   for (auto src : json["sources"]) {
     m_data.sources.emplace_back(src.asString());
   }
+  for (auto hdr : json["headers"]) {
+    m_data.headers.emplace_back(hdr.asString());
+  }
   for (auto it = json["structures"].begin(); it != json["structures"].end();
        it++) {
     Structure s;
