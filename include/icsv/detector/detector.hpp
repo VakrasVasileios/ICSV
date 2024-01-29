@@ -15,7 +15,7 @@ namespace icsv::detector {
 
 class Detector {
 public:
-  Detector(const std::string& tag = "") {
+  Detector(const std::string& tag = "") : m_tag(tag) {
     assert(tag != "");
     REGISTER_DETECTOR(tag, this);
   }
@@ -23,6 +23,12 @@ public:
   virtual ~Detector() = default;
 
   virtual void DetectSmell(const ArchData& data) = 0;
+
+protected:
+  virtual auto GetEvaluator(void) -> ISmellEvaluator*;
+
+private:
+  const std::string m_tag;
 };
 
 }  // namespace icsv::detector
