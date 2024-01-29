@@ -11,9 +11,6 @@ namespace icsv::detector {
 
 class EvaluationCenter final {
 public:
-  using SmellLevel = int;
-
-public:
   static auto Get() -> EvaluationCenter&;
 
   void RegisterEvaluator(const std::string& tag, ISmellEvaluator* ev);
@@ -22,7 +19,8 @@ public:
 
   void DeseriallizeConfig(const std::string& file_path);
 
-  auto EvaluateSmell(const std::string& tag, int curr_lvl) -> SmellLevel;
+  auto EvaluateSmell(const std::string& tag, int curr_lvl)
+      -> ISmellEvaluator::SmellLevel;
 
   void DisplayEvalGui(void);
 
@@ -54,7 +52,7 @@ deseriallize_detector_config(const std::string& path) {
 
 inline auto
 evaluate_smell(const std::string& tag, int curr_lvl)
-    -> EvaluationCenter::SmellLevel {
+    -> ISmellEvaluator::SmellLevel {
   return EvaluationCenter::Get().EvaluateSmell(tag, curr_lvl);
 }
 

@@ -2,7 +2,6 @@
 
 #include <json/json.h>
 #include <string>
-#include <functional>
 
 namespace icsv::detector {
 
@@ -10,7 +9,7 @@ enum EvalType { NONE, RANGE, REGEX, BOOL, ARGS };
 
 class ISmellEvaluator {
 public:
-  using SmellLevel = int;
+  using SmellLevel = float;
 
 public:
   ISmellEvaluator(const std::string& tag);
