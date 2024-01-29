@@ -11,17 +11,17 @@ RangeEvaluator::RangeEvaluator(const std::string& _tag, int _min, int _max)
 }
 
 /*
-  Returns -1 if curr_lvl < minimum range
-  Returns 9 if curr_lvl >= maximum range
+  Returns 0 if curr_lvl < minimum range
+  Returns 10 if curr_lvl >= maximum range
   Else if within range calculate and return smell level
 */
 auto
 RangeEvaluator::EvaluateSmell(int curr_lvl)
     -> icsv::detector::ISmellEvaluator::SmellLevel {
-  return ((curr_lvl < m_range.min) * 0 + (curr_lvl >= m_range.max) * 10
-          + IsWithinRange(curr_lvl)
-              * (((double) (curr_lvl - m_range.min) / m_range.range()) * 10))
-      - 1;
+  return (
+      (curr_lvl < m_range.min) * 0.00f + (curr_lvl >= m_range.max) * 10.00f
+      + IsWithinRange(curr_lvl)
+          * (((double) (curr_lvl - m_range.min) / m_range.range()) * 10.00f));
 }
 
 auto
@@ -37,11 +37,20 @@ RangeEvaluator::SetRange(int min, int max) {
   m_range.max = max;
 }
 
+void
+RangeEvaluator::SetLimits(int min, int max) {
+  assert(min < max);
+  m_limits.min = min;
+  m_limits.max = max;
+}
+
 auto
 RangeEvaluator::Seriallize(void) -> std::string {
   auto ser = ISmellEvaluator::Seriallize();
   ser += ",\n\"range\":{\"min\":" + std::to_string(m_range.min)
       + ",\"max\":" + std::to_string(m_range.max) + "}";
+  ser += ",\n\"limits\":{\"min\":" + std::to_string(m_limits.min)
+      + ",\"max\":" + std::to_string(m_limits.max) + "}";
 
   return ser;
 }
@@ -55,10 +64,14 @@ RangeEvaluator::DisplayGui(void) {
     ImGui::Text("%s%s", "Description: ", m_description.c_str());
     ImGui::Separator();
     ImGui::Text("%s", "Range: ");
-    ImGui::InputInt(std::string("Min " + m_tag).c_str(), &m_range.min);
-    AlwaysGEzero(m_range.min);
-    ImGui::InputInt(std::string("Max " + m_tag).c_str(), &m_range.max);
-    AlwaysGEzero(m_range.max);
+    ImGui::SliderInt(std::string("Min " + m_tag).c_str(),
+                     &m_range.min,
+                     m_limits.min,
+                     m_range.max);
+    ImGui::SliderInt(std::string("Max " + m_tag).c_str(),
+                     &m_range.max,
+                     m_range.min,
+                     m_limits.max);
     ImGui::Separator();
 
     if (ImGui::Button(std::string("Re-Eval " + m_tag).c_str())) {

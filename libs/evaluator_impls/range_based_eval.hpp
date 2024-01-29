@@ -11,6 +11,7 @@ public:
       -> icsv::detector::ISmellEvaluator::SmellLevel override;
 
   void SetRange(int min, int max);
+  void SetLimits(int min, int max);
 
   virtual auto ReEvaluateSmell(int init_lvl)
       -> icsv::detector::ISmellEvaluator::SmellLevel override;
@@ -26,9 +27,7 @@ protected:
     auto range() -> int { return max - min; }
 
     Range(int _min = 0, int _max = 0) : min(_min), max(_max) {}
-  } m_range;
-
-  void AlwaysGEzero(int& num) { num = num * (num >= 0); }
+  } m_range, m_limits;
 
 private:
   // curr_lvl within [min,max)

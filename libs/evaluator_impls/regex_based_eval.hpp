@@ -19,7 +19,7 @@ public:
                           const std::string& regex_tag);
 
   auto EvaluateField(const std::string& _field, const std::string& _str)
-      -> icsv::detector::ISmellEvaluator::SmellLevel;
+      -> NonMatchingChars;
 
   auto ReEvaluateSmell(int lvl)
       -> icsv::detector::ISmellEvaluator::SmellLevel override;
