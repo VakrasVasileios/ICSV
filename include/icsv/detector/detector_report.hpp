@@ -27,8 +27,8 @@ struct SourceInfo {
   std::string method;
 
   SourceInfo(const std::string& _file   = "",
-             int                _line   = -1,
-             int                _col    = -1,
+             int                _line   = 1,
+             int                _col    = 1,
              const std::string& _strct  = "",
              const std::string& _method = "")
       : file(_file), line(_line), col(_col), strct(_strct), method(_method) {}
@@ -47,8 +47,8 @@ typedef struct DetectorReport {
   std::string smell_tag = "";
   std::string message   = "";
   SourceInfo  src_info;
-  int         level      = -1;
-  int         init_level = -1;
+  float       level      = 0.00f;
+  float       init_level = 0.00f;
 
   auto operator()(ReportMembers memb) -> std::string {
     switch (memb) {
@@ -57,7 +57,7 @@ typedef struct DetectorReport {
       case MESSAGE_m:
         return message;
       case LEVEL_m:
-        return std::to_string(level);
+        return std::to_string(static_cast<int>(level));
       case INIT_LEVEL_m:
         return std::to_string(init_level);
       case FILE_m:
@@ -72,7 +72,7 @@ typedef struct DetectorReport {
         return src_info.method;
       case m_EMPTY:
       default:
-        return "-69";
+        return "default :(";
     }
   }
 } Report;
