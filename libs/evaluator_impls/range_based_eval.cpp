@@ -6,7 +6,8 @@
 #endif
 
 RangeEvaluator::RangeEvaluator(const std::string& _tag, int _min, int _max)
-    : icsv::detector::ISmellEvaluator(_tag), m_range(_min, _max) {
+    : icsv::detector::ISmellEvaluator(_tag), m_range(_min, _max),
+      m_limits(0, 100) {
   m_type = icsv::detector::EvalType::RANGE;
 }
 
