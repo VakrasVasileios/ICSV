@@ -90,14 +90,10 @@ RegexEvaluator::DisplayGui(void) {
     ImGui::Text("%s%s", "Description: ", m_description.c_str());
     ImGui::Separator();
     ImGui::Text("%s", "Chars Ignored: ");
-    ImGui::SliderInt(std::string("Min " + m_tag).c_str(),
-                     &m_range.min,
-                     m_limits.min,
-                     m_range.max);
-    ImGui::SliderInt(std::string("Max " + m_tag).c_str(),
-                     &m_range.max,
-                     m_range.min,
-                     m_limits.max);
+    ImGui::InputInt(std::string("Min " + m_tag).c_str(), &m_range.min);
+    AlwaysGEzero(m_range.min);
+    ImGui::InputInt(std::string("Max " + m_tag).c_str(), &m_range.max);
+    AlwaysGEzero(m_range.max);
     for (auto f : m_field_map) {
       ImGui::Separator();
       ImGui::InputText(f.first.c_str(), f.second, m_buff_size);

@@ -112,10 +112,6 @@ EvaluationCenter::MakeRangeEval(Json::Value smell) -> RangeEvaluator* {
                                   smell["range"]["min"].asInt(),
                                   smell["range"]["max"].asInt());
   eval->SetDescription(smell["description"].asString());
-  if (smell.isMember("limits")) {
-    eval->SetLimits(smell["limits"]["min"].asInt(),
-                    smell["limits"]["max"].asInt());
-  }
 
   return eval;
 }
