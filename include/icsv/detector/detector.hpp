@@ -24,11 +24,16 @@ public:
 
   virtual void DetectSmell(const ArchData& data) = 0;
 
+  bool IsActive(void) { return m_is_active; }
+  auto GetActivePtr(void) -> bool* { return &m_is_active; }
+  void SetActive(bool active) { m_is_active = active; }
+
 protected:
   virtual auto GetEvaluator(void) -> ISmellEvaluator*;
 
 private:
   const std::string m_tag;
+  bool              m_is_active = true;
 };
 
 }  // namespace icsv::detector

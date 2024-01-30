@@ -19,6 +19,8 @@ public:
 
   auto GetAllDetectorTags(void) -> std::list<std::string>;
 
+  auto GetDetectors(void) const -> const std::map<std::string, Detector*>&;
+
   void RegisterDetector(const std::string& tag, Detector* det);
 
   void UseDetectors(void);

@@ -26,6 +26,12 @@ DetectorManager::GetAllDetectorTags(void) -> std::list<std::string> {
   return ret;
 }
 
+auto
+DetectorManager::GetDetectors(void) const
+    -> const std::map<std::string, Detector*>& {
+  return m_detectors;
+}
+
 void
 DetectorManager::RegisterDetector(const std::string& tag, Detector* det) {
   if (m_detectors.contains(tag))
@@ -38,7 +44,8 @@ DetectorManager::RegisterDetector(const std::string& tag, Detector* det) {
 void
 DetectorManager::UseDetectors(void) {
   for (auto& d : m_detectors) {
-    d.second->DetectSmell(arch::ArchitectureHolder::Get().GetArchitecture());
+    if (d.second->IsActive())
+      d.second->DetectSmell(arch::ArchitectureHolder::Get().GetArchitecture());
   }
 }
 

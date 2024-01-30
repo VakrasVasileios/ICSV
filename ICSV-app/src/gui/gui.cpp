@@ -1,6 +1,7 @@
 #include "gui.hpp"
 #include "icsv/detector/arch/architecture_holder.hpp"
 #include "icsv/detector/detector_manager.hpp"
+#include "icsv/detector/detector.hpp"
 #include "icsv/detector/evaluation_center.hpp"
 #include "icsv/detector/report_center.hpp"
 #include "../entity_manager.hpp"
@@ -54,6 +55,20 @@ IcsvGui::Display(void) {
   ShowExitPopUp();
 
   ImGui::End();
+}
+
+void
+IcsvGui::ShowActiveDetectors(void) {
+  if (ImGui::CollapsingHeader("Active Detectors")) {
+    auto  lst = icsv::detector::DetectorManager::Get().GetDetectors();
+    bool* active;
+    for (auto& det : lst) {
+      active = det.second->GetActivePtr();
+      ImGui::Checkbox(det.first.c_str(), active);
+    }
+
+    ImGui::Separator();
+  }
 }
 
 void
@@ -116,6 +131,8 @@ IcsvGui::ShowConfigSelect(void) {
   }
   m_conf_brwsr.Display();
   m_graph_brwsr.Display();
+
+  ShowActiveDetectors();
 
   ShowSmellButton(changed);
 }

@@ -49,6 +49,7 @@ private:
   ~IcsvGui()              = default;
 
   void ShowConfigSelect(void);
+  void ShowActiveDetectors(void);
   void ShowDetectorReport(void);
   void ShowEvalConfigs(void);
   void ShowExitPopUp(void);
@@ -64,7 +65,7 @@ private:
 
 struct Selectable {
   Selectable(const std::string& tag  = "",
-             ReportMembers      memb = ReportMembers::m_EMPTY)
+             ReportMembers      memb = ReportMembers::EMPTY_m)
       : m_tag(tag), m_memb(memb) {}
   std::string   m_tag;
   ReportMembers m_memb;
