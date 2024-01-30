@@ -7,7 +7,7 @@
 namespace icsv::detector {
 
 enum ReportMembers {
-  m_EMPTY,
+  EMPTY_m,
   SMELL_TAG_m,
   MESSAGE_m,
   LEVEL_m,
@@ -48,7 +48,7 @@ typedef struct DetectorReport {
   std::string message   = "";
   SourceInfo  src_info;
   float       level      = 0.00f;
-  float       init_level = 0.00f;
+  int         init_level = 0;
 
   auto operator()(ReportMembers memb) -> std::string {
     switch (memb) {
@@ -57,7 +57,7 @@ typedef struct DetectorReport {
       case MESSAGE_m:
         return message;
       case LEVEL_m:
-        return std::to_string(static_cast<int>(level));
+        return std::to_string(static_cast<int>(level - 1));
       case INIT_LEVEL_m:
         return std::to_string(init_level);
       case FILE_m:
@@ -70,7 +70,7 @@ typedef struct DetectorReport {
         return src_info.strct;
       case METHOD_m:
         return src_info.method;
-      case m_EMPTY:
+      case EMPTY_m:
       default:
         return "default :(";
     }
