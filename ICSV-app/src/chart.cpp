@@ -227,8 +227,7 @@ Chart::DrawChart(void) {
 
     if (zlbl_iter != m_z_labels.end()) {
       auto* node = m_node_lst[zlbl_iter->get()->getCaption()];
-      node->setPosition(
-          { -2.f, 0.f, static_cast<float>(z * block_size) + block_size / 2 });
+      node->setPosition({ -2.f, 0.f, static_cast<float>(z * block_size) });
 
       zlbl_iter++;
     }
@@ -243,8 +242,7 @@ Chart::DrawChart(void) {
 
     if (xlbl_iter != m_x_labels.end()) {
       auto* node = m_node_lst[xlbl_iter->get()->getCaption()];
-      node->setPosition(
-          { static_cast<float>(x * block_size) + block_size / 2, 0.f, -2.f });
+      node->setPosition({ static_cast<float>(x * block_size), 0.f, -2.f });
 
       xlbl_iter++;
     }
