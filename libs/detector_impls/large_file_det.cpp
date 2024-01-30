@@ -13,6 +13,11 @@ public:
 
   void DetectSmell(const ArchData& arch) override;
 
+protected:
+  auto GetEvaluator(void) -> RangeEvaluator* {
+    return dynamic_cast<RangeEvaluator*>(Detector::GetEvaluator());
+  }
+
 private:
   unsigned FileLineCount(const std::string& path);
 };
