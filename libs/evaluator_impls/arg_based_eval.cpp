@@ -1,8 +1,12 @@
 #include "./arg_based_eval.hpp"
 #include "./range_based_eval.hpp"
 #include "./regex_based_eval.hpp"
-// #include "icsv/detector/evaluation_center.hpp"
+#include "icsv/detector/detector_manager.hpp"
 #include <assert.h>
+
+#ifndef UNIT_TESTS
+#include <imgui/imgui.h>
+#endif
 
 MultiArgsEvaluator::MultiArgsEvaluator(const std::string& _tag)
     : icsv::detector::SmellEvaluator(_tag) {
@@ -58,4 +62,26 @@ MultiArgsEvaluator::EvaluateSmell(const std::string& eval_name,
   assert(dc_eval);
 
   return dc_eval->EvaluateField(field, str);
+}
+
+void
+MultiArgsEvaluator::DisplayGui(void) {
+#ifndef UNIT_TESTS
+  ImGui::Separator();
+  if (ImGui::TreeNode(m_tag.c_str())) {
+    ImGui::Separator();
+    ImGui::Text("%s%s", "Description: ", m_description.c_str());
+    ImGui::Separator();
+
+    for (auto ref : m_args) {
+      ref.second->DisplayGui();
+    }
+
+    if (ImGui::Button(std::string("Re-Eval " + m_tag).c_str())) {
+      icsv::detector::DetectorManager::Get().UseDetectorWithTag(m_tag);
+    }
+    ImGui::TreePop();
+    ImGui::Separator();
+  }
+#endif
 }

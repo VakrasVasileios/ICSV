@@ -13,10 +13,9 @@ public:
                      const std::string& field,
                      const std::string& str) -> SmellLevel;
 
-  auto EvaluateSmell(int) -> SmellLevel override { return -1; }
   auto ReEvaluateSmell(int) -> SmellLevel override { return -1; }  // TODO
 
-  void DisplayGui(void) override {}
+  void DisplayGui(void) override;
 
   void AddEvaluator(icsv::detector::SmellEvaluator* eval);
 
@@ -25,4 +24,6 @@ private:
 
 private:
   ArgEvalReg m_args;
+
+  auto EvaluateSmell(int) -> SmellLevel override { return -1; }
 };
