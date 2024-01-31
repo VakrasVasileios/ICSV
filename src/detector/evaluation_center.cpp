@@ -38,7 +38,7 @@ EvaluationCenter::GetEvaluator(const std::string& tag) -> SmellEvaluator* {
 
 void
 EvaluationCenter::RegisterEvaluator(const std::string& tag,
-                                    SmellEvaluator*   ev) {
+                                    SmellEvaluator*    ev) {
   if (m_eval_reg.find(tag) != m_eval_reg.end())
     std::cout << "Newly registered evaluator with tag \"" << tag
               << "\" overwrites existing one!\n";
@@ -73,11 +73,9 @@ EvaluationCenter::DeseriallizeConfig(const std::string& file_path) {
     if (smell["type"] == "regex") {
       MakeRegexEval(smell);
     }
-#if (0)
     if (smell["type"] == "args") {
       MakeArgsEval(smell);
     }
-#endif
   }
 }
 
@@ -124,7 +122,7 @@ EvaluationCenter::MakeBoolEval(Json::Value smell) -> RangeEvaluator* {
 
   return eval;
 }
-#if (0)
+
 auto
 EvaluationCenter::MakeArgsEval(Json::Value smell) -> MultiArgsEvaluator* {
   auto* eval = new MultiArgsEvaluator(smell["tag"].asString());
@@ -153,7 +151,7 @@ EvaluationCenter::MakeArgsEval(Json::Value smell) -> MultiArgsEvaluator* {
 
   return eval;
 }
-#endif
+
 auto
 EvaluationCenter::EvaluateSmell(const std::string& tag, const int curr_lvl)
     -> SmellEvaluator::SmellLevel {
