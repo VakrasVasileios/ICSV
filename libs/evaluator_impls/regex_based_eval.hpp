@@ -33,7 +33,7 @@ public:
 
 private:
   using RegexArray = std::map<std::string, std::string>;
-  using Fields     = std::map<std::string, char*>;
+  using Fields     = std::map<std::string, std::string>;
 
 private:
   RegexArray  m_regex_map;
@@ -42,4 +42,7 @@ private:
 
   auto EvaluateName(const std::string& _name, std::regex exp)
       -> NonMatchingChars;
+#ifndef UNIT_TESTS
+  void FieldRegexList(const std::string&, const std::string&);
+#endif
 };

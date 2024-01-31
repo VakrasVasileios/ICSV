@@ -33,17 +33,16 @@ RegexEvaluator::AssignRegexToField(const std::string& field_tag,
   assert(m_field_map.contains(field_tag));
   assert(m_regex_map.contains(regex_tag));
 
-  auto field = m_field_map.at(field_tag);
-  auto regex = m_regex_map.at(regex_tag);
-  std::strcpy(field, regex.c_str());
+  m_field_map[field_tag] = regex_tag;
 
-  assert(m_field_map.at(field_tag) == m_regex_map.at(regex_tag));
+  assert(m_field_map.at(field_tag) == regex_tag);
 }
 
 auto
 RegexEvaluator::EvaluateField(const std::string& _field,
                               const std::string& _name) -> NonMatchingChars {
-  return EvaluateName(_name, std::regex(m_field_map[_field]));
+  return EvaluateName(_name,
+                      std::regex(m_regex_map.at(m_field_map.at(_field))));
 }
 
 auto
@@ -81,6 +80,25 @@ RegexEvaluator::Seriallize(void) -> std::string {
   return ser;
 }
 
+#ifndef UNIT_TESTS
+void
+RegexEvaluator::FieldRegexList(const std::string& preview,
+                               const std::string& field) {
+
+  if (ImGui::BeginCombo(field.c_str(), preview.c_str())) {
+    for (auto& r : m_regex_map) {
+      bool is_selected = false;
+      ImGui::Selectable(r.first.c_str(), &is_selected);
+      if (is_selected) {
+        ImGui::SetItemDefaultFocus();
+        m_field_map[field] = r.first;
+      }
+    }
+    ImGui::EndCombo();
+  }
+}
+#endif
+
 void
 RegexEvaluator::DisplayGui(void) {
 #ifndef UNIT_TESTS
@@ -94,11 +112,12 @@ RegexEvaluator::DisplayGui(void) {
     AlwaysGEzero(m_range.min);
     ImGui::InputInt(std::string("Max " + m_tag).c_str(), &m_range.max);
     AlwaysGEzero(m_range.max);
-    for (auto f : m_field_map) {
-      ImGui::Separator();
-      ImGui::InputText(f.first.c_str(), f.second, m_buff_size);
-      ImGui::Separator();
+
+    ImGui::Separator();
+    for (auto& f : m_field_map) {
+      FieldRegexList(f.second, f.first);
     }
+    ImGui::Separator();
 
     if (ImGui::Button(std::string("Re-Eval " + m_tag).c_str())) {
       ReEvaluateSmell(0);
