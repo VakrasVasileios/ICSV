@@ -99,9 +99,14 @@ RegexEvaluator::FieldRegexList(const std::string& preview,
 }
 #endif
 
+#define BUFF_SIZE 128
+
 void
 RegexEvaluator::DisplayGui(void) {
 #ifndef UNIT_TESTS
+  static char name[BUFF_SIZE], regex[BUFF_SIZE];
+  static bool form_empty = false;
+
   ImGui::Separator();
   if (ImGui::TreeNode(m_tag.c_str())) {
     ImGui::Separator();
@@ -118,6 +123,28 @@ RegexEvaluator::DisplayGui(void) {
       FieldRegexList(f.second, f.first);
     }
     ImGui::Separator();
+
+    if (ImGui::Button("Add Regex"))
+      ImGui::OpenPopup("New Regex");
+    if (ImGui::BeginPopup("New Regex")) {
+
+      ImGui::InputText("Name", name, BUFF_SIZE);
+      ImGui::InputText("Regex", regex, BUFF_SIZE);
+
+      if (ImGui::Button("Confirm")) {
+        std::string n = name, rg = regex;
+        if (n != "" && rg != "") {
+          m_regex_map.insert({ n, rg });
+          form_empty = false;
+        } else
+          form_empty = true;
+      }
+      if (form_empty) {
+        ImGui::Text("%s", "Both fields have to be filled!");
+      }
+
+      ImGui::EndPopup();
+    }
 
     if (ImGui::Button(std::string("Re-Eval " + m_tag).c_str())) {
       ReEvaluateSmell(0);
