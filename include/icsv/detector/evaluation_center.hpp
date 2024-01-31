@@ -6,6 +6,7 @@
 
 class RegexEvaluator;
 class RangeEvaluator;
+class MultiArgsEvaluator;
 
 namespace icsv::detector {
 
@@ -43,6 +44,7 @@ private:
   auto MakeRegexEval(Json::Value smell) -> RegexEvaluator*;
   auto MakeRangeEval(Json::Value smell) -> RangeEvaluator*;
   auto MakeBoolEval(Json::Value smell) -> RangeEvaluator*;
+  auto MakeArgsEval(Json::Value smell) -> MultiArgsEvaluator*;
 };
 
 inline void

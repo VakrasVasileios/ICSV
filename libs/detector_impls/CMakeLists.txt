@@ -2,6 +2,7 @@ set(FILES # Detector Interface Implementations
   circular_dependency_det.cpp
   dependency_count_det.cpp
   function_overload_det.cpp
+	large_class_det.cpp
 	large_file_det.cpp
 	long_identifier_det.cpp
   method_args_det.cpp
@@ -14,5 +15,5 @@ set(FILES # Detector Interface Implementations
 )
 
 if(FILES)
-	target_sources(${PROJECT_NAME} PUBLIC ${FILES})
+	target_sources(${PROJECT_NAME} PRIVATE ${FILES})
 endif()

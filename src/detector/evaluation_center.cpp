@@ -4,6 +4,7 @@
 #include <json/json.h>
 #include "range_based_eval.hpp"
 #include "regex_based_eval.hpp"
+#include "arg_based_eval.hpp"
 #include "icsv/detector/smell_evaluator.hpp"
 #include "icsv/detector/evaluation_center.hpp"
 
@@ -74,7 +75,7 @@ EvaluationCenter::DeseriallizeConfig(const std::string& file_path) {
     }
 #if (0)
     if (smell["type"] == "args") {
-      // TODO: Create and Register Evaluator that holds multiple evaluators
+      MakeArgsEval(smell);
     }
 #endif
   }
@@ -123,7 +124,36 @@ EvaluationCenter::MakeBoolEval(Json::Value smell) -> RangeEvaluator* {
 
   return eval;
 }
+#if (0)
+auto
+EvaluationCenter::MakeArgsEval(Json::Value smell) -> MultiArgsEvaluator* {
+  auto* eval = new MultiArgsEvaluator(smell["tag"].asString());
+  eval->SetDescription(smell["description"].asString());
 
+  for (auto arg : smell["args"]) {
+    if (arg["type"] == "bool") {
+      auto* arg_e = MakeBoolEval(arg);
+      assert(m_eval_reg.erase(arg_e->GetTag()) == 1);
+
+      eval->AddEvaluator(arg_e);
+    }
+    if (arg["type"] == "range") {
+      auto* arg_e = MakeRangeEval(arg);
+      assert(m_eval_reg.erase(arg_e->GetTag()) == 1);
+
+      eval->AddEvaluator(arg_e);
+    }
+    if (arg["type"] == "regex") {
+      auto* arg_e = MakeRegexEval(arg);
+      assert(m_eval_reg.erase(arg_e->GetTag()) == 1);
+
+      eval->AddEvaluator(arg_e);
+    }
+  }
+
+  return eval;
+}
+#endif
 auto
 EvaluationCenter::EvaluateSmell(const std::string& tag, const int curr_lvl)
     -> ISmellEvaluator::SmellLevel {

@@ -4,7 +4,7 @@
 
 namespace icsv::detector {
 
-ISmellEvaluator::ISmellEvaluator(const std::string& tag) {
+SmellEvaluator::SmellEvaluator(const std::string& tag) {
   assert(tag != "");
   m_tag = tag;
   register_evaluator(tag, this);
@@ -12,7 +12,7 @@ ISmellEvaluator::ISmellEvaluator(const std::string& tag) {
 }
 
 auto
-ISmellEvaluator::Seriallize(void) -> std::string {
+SmellEvaluator::Seriallize(void) -> std::string {
   std::string ser{ "" };
   ser += "\"tag\":\"" + m_tag + "\"";
   ser += ",\n\"description\":\"" + m_description + "\"";
@@ -39,22 +39,22 @@ ISmellEvaluator::Seriallize(void) -> std::string {
 }
 
 void
-ISmellEvaluator::SetDescription(const std::string& dsc) {
+SmellEvaluator::SetDescription(const std::string& dsc) {
   m_description = dsc;
 }
 
 void
-ISmellEvaluator::SetTag(const std::string& t) {
+SmellEvaluator::SetTag(const std::string& t) {
   m_tag = t;
 }
 
 auto
-ISmellEvaluator::GetDescription(void) const -> const std::string& {
+SmellEvaluator::GetDescription(void) const -> const std::string& {
   return m_description;
 }
 
 auto
-ISmellEvaluator::GetTag(void) const -> const std::string& {
+SmellEvaluator::GetTag(void) const -> const std::string& {
   return m_tag;
 }
 
