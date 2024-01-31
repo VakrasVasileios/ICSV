@@ -28,7 +28,7 @@ EvaluationCenter::Get() -> EvaluationCenter& {
 }
 
 auto
-EvaluationCenter::GetEvaluator(const std::string& tag) -> ISmellEvaluator* {
+EvaluationCenter::GetEvaluator(const std::string& tag) -> SmellEvaluator* {
   assert(m_eval_reg.contains(tag));
   if (!m_eval_reg.contains(tag))
     return nullptr;
@@ -38,7 +38,7 @@ EvaluationCenter::GetEvaluator(const std::string& tag) -> ISmellEvaluator* {
 
 void
 EvaluationCenter::RegisterEvaluator(const std::string& tag,
-                                    ISmellEvaluator*   ev) {
+                                    SmellEvaluator*   ev) {
   if (m_eval_reg.find(tag) != m_eval_reg.end())
     std::cout << "Newly registered evaluator with tag \"" << tag
               << "\" overwrites existing one!\n";
@@ -156,7 +156,7 @@ EvaluationCenter::MakeArgsEval(Json::Value smell) -> MultiArgsEvaluator* {
 #endif
 auto
 EvaluationCenter::EvaluateSmell(const std::string& tag, const int curr_lvl)
-    -> ISmellEvaluator::SmellLevel {
+    -> SmellEvaluator::SmellLevel {
   if (m_eval_reg.find(tag) == m_eval_reg.end()) {
     std::cout << "Could not find evaluator with tag \"" << tag
               << "\", returning current level.";

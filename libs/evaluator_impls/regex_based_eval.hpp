@@ -22,7 +22,7 @@ public:
       -> NonMatchingChars;
 
   auto ReEvaluateSmell(int lvl)
-      -> icsv::detector::ISmellEvaluator::SmellLevel override;
+      -> icsv::detector::SmellEvaluator::SmellLevel override;
 
   void DisplayGui(void) override;
 

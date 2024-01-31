@@ -3,7 +3,7 @@
 namespace icsv::detector {
 
 auto
-Detector::GetEvaluator(void) -> ISmellEvaluator* {
+Detector::GetEvaluator(void) -> SmellEvaluator* {
   return EvaluationCenter::Get().GetEvaluator(m_tag);
 }
 

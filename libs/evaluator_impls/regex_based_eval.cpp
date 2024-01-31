@@ -47,7 +47,7 @@ RegexEvaluator::EvaluateField(const std::string& _field,
 
 auto
 RegexEvaluator::ReEvaluateSmell(int)
-    -> icsv::detector::ISmellEvaluator::SmellLevel {
+    -> icsv::detector::SmellEvaluator::SmellLevel {
   icsv::detector::DetectorManager::Get().UseDetectorWithTag(m_tag);
   return -1;
 }

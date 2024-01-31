@@ -14,23 +14,23 @@ class EvaluationCenter final {
 public:
   static auto Get() -> EvaluationCenter&;
 
-  void RegisterEvaluator(const std::string& tag, ISmellEvaluator* ev);
+  void RegisterEvaluator(const std::string& tag, SmellEvaluator* ev);
 
   bool RemoveEvaluator(const std::string& tag);
 
   void DeseriallizeConfig(const std::string& file_path);
 
   auto EvaluateSmell(const std::string& tag, int curr_lvl)
-      -> ISmellEvaluator::SmellLevel;
+      -> SmellEvaluator::SmellLevel;
 
   void DisplayEvalGui(void);
 
-  auto GetEvaluator(const std::string& tag) -> ISmellEvaluator*;
+  auto GetEvaluator(const std::string& tag) -> SmellEvaluator*;
 
   void SeriallizeToFile(const std::string& file_name);
 
 private:
-  using Evaluators = std::unordered_map<std::string, ISmellEvaluator*>;
+  using Evaluators = std::unordered_map<std::string, SmellEvaluator*>;
 
 private:
   Evaluators  m_eval_reg;
@@ -54,12 +54,12 @@ deseriallize_detector_config(const std::string& path) {
 
 inline auto
 evaluate_smell(const std::string& tag, int curr_lvl)
-    -> ISmellEvaluator::SmellLevel {
+    -> SmellEvaluator::SmellLevel {
   return EvaluationCenter::Get().EvaluateSmell(tag, curr_lvl);
 }
 
 inline void
-register_evaluator(const std::string& tag, ISmellEvaluator* ev) {
+register_evaluator(const std::string& tag, SmellEvaluator* ev) {
   EvaluationCenter::Get().RegisterEvaluator(tag, ev);
 }
 

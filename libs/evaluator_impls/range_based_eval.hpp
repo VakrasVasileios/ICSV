@@ -2,18 +2,18 @@
 
 #include "icsv/detector/smell_evaluator.hpp"
 
-class RangeEvaluator : public icsv::detector::ISmellEvaluator {
+class RangeEvaluator : public icsv::detector::SmellEvaluator {
 public:
   RangeEvaluator(const std::string& _tag, int _min = 1, int _max = 10);
   ~RangeEvaluator() override = default;
 
   virtual auto EvaluateSmell(int curr_lvl)
-      -> icsv::detector::ISmellEvaluator::SmellLevel override;
+      -> icsv::detector::SmellEvaluator::SmellLevel override;
 
   void SetRange(int min, int max);
 
   virtual auto ReEvaluateSmell(int init_lvl)
-      -> icsv::detector::ISmellEvaluator::SmellLevel override;
+      -> icsv::detector::SmellEvaluator::SmellLevel override;
 
   virtual void DisplayGui(void) override;
 

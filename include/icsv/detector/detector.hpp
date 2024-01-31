@@ -29,7 +29,7 @@ public:
   void SetActive(bool active) { m_is_active = active; }
 
 protected:
-  virtual auto GetEvaluator(void) -> ISmellEvaluator*;
+  virtual auto GetEvaluator(void) -> SmellEvaluator*;
 
 private:
   const std::string m_tag;

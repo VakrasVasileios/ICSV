@@ -6,7 +6,7 @@
 #endif
 
 RangeEvaluator::RangeEvaluator(const std::string& _tag, int _min, int _max)
-    : icsv::detector::ISmellEvaluator(_tag), m_range(_min, _max) {
+    : icsv::detector::SmellEvaluator(_tag), m_range(_min, _max) {
   m_type = icsv::detector::EvalType::RANGE;
 }
 
@@ -17,7 +17,7 @@ RangeEvaluator::RangeEvaluator(const std::string& _tag, int _min, int _max)
 */
 auto
 RangeEvaluator::EvaluateSmell(int curr_lvl)
-    -> icsv::detector::ISmellEvaluator::SmellLevel {
+    -> icsv::detector::SmellEvaluator::SmellLevel {
   return (
       (curr_lvl < m_range.min) * 0.00f + (curr_lvl >= m_range.max) * 10.00f
       + IsWithinRange(curr_lvl)
@@ -26,7 +26,7 @@ RangeEvaluator::EvaluateSmell(int curr_lvl)
 
 auto
 RangeEvaluator::ReEvaluateSmell(int init_lvl)
-    -> icsv::detector::ISmellEvaluator::SmellLevel {
+    -> icsv::detector::SmellEvaluator::SmellLevel {
   return EvaluateSmell(init_lvl);
 }
 
@@ -39,7 +39,7 @@ RangeEvaluator::SetRange(int min, int max) {
 
 auto
 RangeEvaluator::Seriallize(void) -> std::string {
-  auto ser = ISmellEvaluator::Seriallize();
+  auto ser = SmellEvaluator::Seriallize();
   ser += ",\n\"range\":{\"min\":" + std::to_string(m_range.min)
       + ",\"max\":" + std::to_string(m_range.max) + "}";
 
