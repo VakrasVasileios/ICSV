@@ -34,29 +34,21 @@
       "args": [
         {
           "tag": "max_statements",
-          "formal_name": "Maximum method statement count",
+          "description": "Maximum method statement count",
           "type": "range",
-          "range": [
-            70,
-            161
-          ],
-          "limits": [
-            20,
-            200
-          ]
+          "range": {
+            "min": 70,
+            "max": 161
+          }
         },
         {
           "tag": "max_lines",
-          "formal_name": "Maximum Method line count",
+          "description": "Maximum Method line count",
           "type": "range",
-          "range": [
-            70,
-            120
-          ],
-          "limits": [
-            5,
-            200
-          ]
+          "range": {
+            "min": 70,
+            "max": 120
+          }
         }
       ]
     },
@@ -66,29 +58,21 @@
       "args": [
         {
           "tag": "max_loops",
-          "formal_name": "Maximum method loops",
+          "description": "Maximum method loops",
           "type": "range",
-          "range": [
-            6,
-            12
-          ],
-          "limits": [
-            1,
-            30
-          ]
+          "range": {
+            "min": 6,
+            "max": 12
+          }
         },
         {
           "tag": "max_branches",
-          "formal_name": "Maximum method branching statements",
+          "description": "Maximum method branching statements",
           "type": "range",
-          "range": [
-            14,
-            20
-          ],
-          "limits": [
-            1,
-            60
-          ]
+          "range": {
+            "min": 14,
+            "max": 20
+          }
         }
       ]
     },
@@ -195,29 +179,21 @@
       "args": [
         {
           "tag": "max_methods",
-          "formal_name": "Maximum count of methods",
+          "description": "Maximum count of methods",
           "type": "range",
-          "range": [
-            8,
-            29
-          ],
-          "limits": [
-            2,
-            40
-          ]
+          "range": {
+            "min": 8,
+            "max": 29
+          }
         },
         {
           "tag": "max_fields",
-          "formal_name": "Maximum count of fields",
+          "description": "Maximum count of fields",
           "type": "range",
-          "range": [
-            6,
-            17
-          ],
-          "limits": [
-            2,
-            40
-          ]
+          "range": {
+            "min": 6,
+            "max": 17
+          }
         }
       ]
     },
