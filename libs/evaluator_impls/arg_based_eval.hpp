@@ -13,7 +13,7 @@ public:
                      const std::string& field,
                      const std::string& str) -> SmellLevel;
 
-  auto ReEvaluateSmell(int) -> SmellLevel override { return -1; }  // TODO
+  auto ReEvaluateSmell(int) -> SmellLevel override;
 
   void DisplayGui(void) override;
 

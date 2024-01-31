@@ -64,6 +64,12 @@ MultiArgsEvaluator::EvaluateSmell(const std::string& eval_name,
   return dc_eval->EvaluateField(field, str);
 }
 
+auto
+MultiArgsEvaluator::ReEvaluateSmell(int) -> SmellLevel {
+  icsv::detector::DetectorManager::Get().UseDetectorWithTag(m_tag);
+  return -1;
+}
+
 void
 MultiArgsEvaluator::DisplayGui(void) {
 #ifndef UNIT_TESTS
@@ -78,7 +84,7 @@ MultiArgsEvaluator::DisplayGui(void) {
     }
 
     if (ImGui::Button(std::string("Re-Eval " + m_tag).c_str())) {
-      icsv::detector::DetectorManager::Get().UseDetectorWithTag(m_tag);
+      ReEvaluateSmell(0);
     }
     ImGui::TreePop();
     ImGui::Separator();
