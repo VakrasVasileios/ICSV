@@ -3,6 +3,7 @@
 #include "./regex_based_eval.hpp"
 #include "icsv/detector/detector_manager.hpp"
 #include <assert.h>
+#include <iostream>
 
 #ifndef UNIT_TESTS
 #include <imgui/imgui.h>
@@ -41,8 +42,8 @@ MultiArgsEvaluator::EvaluateSmell(const std::string& eval_name, int init_lvl)
       return rng_eval->EvaluateSmell(init_lvl);
     }
     case icsv::detector::REGEX: {
-      auto* rgx_eval = dynamic_cast<RegexEvaluator*>(eval);
-      return rgx_eval->EvaluateSmell(init_lvl);
+      std::cout << "\tWarning: Range evaluation method being used for regex "
+                   "evaluation!\n";
     }
     case icsv::detector::NONE:
     case icsv::detector::ARGS:
