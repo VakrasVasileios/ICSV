@@ -31,6 +31,7 @@
     {
       "tag": "Long function",
       "description": "Detects methods with too many statemets or too many lines",
+      "type": "args",
       "args": [
         {
           "tag": "max_statements",
@@ -55,6 +56,7 @@
     {
       "tag": "Cyclomatic complexity",
       "description": "Detects methods with excessive branches (if, switch, while, for, continue, break, return)",
+      "type": "args",
       "args": [
         {
           "tag": "max_loops",
@@ -162,6 +164,7 @@
       "tag": "Large Class",
       "description": "Detects structures with too many methods or fields",
       "public_only": true,
+      "type": "args",
       "args": [
         {
           "tag": "max_methods",
