@@ -44,7 +44,7 @@ LargeClassDet::DetectSmell(const ArchData& arch) {
     auto field_count      = CountStructureFields(strct);
     auto method_count     = CountStructureMethods(strct);
     auto field_smell_lvl  = eval->EvaluateSmell("max_fields", field_count);
-    auto method_smell_lvl = eval->EvaluateSmell("max_methods", field_count);
+    auto method_smell_lvl = eval->EvaluateSmell("max_methods", method_count);
 
     rep.smell_tag  = TAG;
     rep.init_level = -1;
@@ -61,14 +61,13 @@ LargeClassDet::DetectSmell(const ArchData& arch) {
                               strct.src_info.line,
                               strct.src_info.col,
                               strct.signature);
-
     icsv::detector::register_report(TAG, rep);
   }
 }
 
 auto
 LargeClassDet::CountStructureMethods(const Structure& strct) -> size_t {
-  if (!strct.methods.empty())
+  if (strct.methods.empty())
     return 0;
   if (!m_public_only)
     return strct.methods.size();
@@ -84,7 +83,7 @@ LargeClassDet::CountStructureMethods(const Structure& strct) -> size_t {
 
 auto
 LargeClassDet::CountStructureFields(const Structure& strct) -> size_t {
-  if (!strct.fields.empty())
+  if (strct.fields.empty())
     return 0;
   if (!m_public_only) {
     return strct.fields.size();
