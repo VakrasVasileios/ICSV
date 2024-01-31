@@ -15,5 +15,5 @@ set(FILES # Detector Interface Implementations
 )
 
 if(FILES)
-	target_sources(${PROJECT_NAME} PRIVATE ${FILES})
+	target_sources(${PROJECT_NAME} PUBLIC ${FILES})
 endif()
