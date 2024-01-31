@@ -43,6 +43,7 @@ MaterialFactory::DeseriallizeConfig(const std::string& path) {
 
     } else if (smell.isMember("color")) {
       auto color = smell["color"];
+      assert(color.isArray() && color.size() == 3);
 
       auto mat_name = smell["tag"].asString();
 
@@ -54,48 +55,21 @@ MaterialFactory::DeseriallizeConfig(const std::string& path) {
 
       m_smell_materials[smell["tag"].asString()] = mat;
 
-      assert(color.isMember("ambient"));
-      auto ambient = color["ambient"];
-      assert(ambient.isArray() && ambient.size() == 3);
+      mat->m_material->setAmbient(color[0].asFloat(),
+                                  color[1].asFloat(),
+                                  color[2].asFloat());
+      mat->m_material->setDiffuse(color[0].asFloat(),
+                                  color[1].asFloat(),
+                                  color[2].asFloat(),
+                                  1.0f);
+      mat->m_material->setSpecular(color[0].asFloat(),
+                                   color[1].asFloat(),
+                                   color[2].asFloat(),
+                                   1.0f);
 
-      mat->m_material->setAmbient(ambient[0].asFloat(),
-                                  ambient[1].asFloat(),
-                                  ambient[2].asFloat());
-
-      mat->m_color[AMBIENT][0] = ambient[0].asFloat();
-      mat->m_color[AMBIENT][1] = ambient[1].asFloat();
-      mat->m_color[AMBIENT][2] = ambient[2].asFloat();
-      mat->m_color[AMBIENT][3] = 1.f;
-
-      if (color.isMember("diffuse")) {
-        auto diffuse = color["diffuse"];
-        assert(diffuse.isArray() && diffuse.size() == 4);
-
-        mat->m_material->setDiffuse(diffuse[0].asFloat(),
-                                    diffuse[1].asFloat(),
-                                    diffuse[2].asFloat(),
-                                    diffuse[3].asFloat());
-
-        mat->m_color[DIFFUSE][0] = diffuse[0].asFloat();
-        mat->m_color[DIFFUSE][1] = diffuse[1].asFloat();
-        mat->m_color[DIFFUSE][2] = diffuse[2].asFloat();
-        mat->m_color[DIFFUSE][3] = diffuse[3].asFloat();
-      }
-
-      if (color.isMember("specular")) {
-        auto specular = color["specular"];
-        assert(specular.isArray() && specular.size() == 4);
-
-        mat->m_material->setSpecular(specular[0].asFloat(),
-                                     specular[1].asFloat(),
-                                     specular[2].asFloat(),
-                                     specular[3].asFloat());
-
-        mat->m_color[SPECULAR][0] = specular[0].asFloat();
-        mat->m_color[SPECULAR][1] = specular[1].asFloat();
-        mat->m_color[SPECULAR][2] = specular[2].asFloat();
-        mat->m_color[SPECULAR][3] = specular[3].asFloat();
-      }
+      mat->m_color[0] = color[0].asFloat();
+      mat->m_color[1] = color[1].asFloat();
+      mat->m_color[2] = color[2].asFloat();
 
     } else {
       auto mat_name = std::string(smell["tag"].asString());

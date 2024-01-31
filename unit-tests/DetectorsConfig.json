@@ -80,25 +80,11 @@
       "tag": "Excessively long identifier",
       "description": "Detects identifiers with too many characters",
       "type": "range",
-      "color": {
-        "ambient": [
-          1,
-          0,
-          0
-        ],
-        "diffuse": [
-          1,
-          0.5,
-          0.5,
-          1.0
-        ],
-        "specular": [
-          1,
-          0.7,
-          0.7,
-          1.0
-        ]
-      },
+      "color": [
+        1,
+        0,
+        0
+      ],
       "range": {
         "min": 25,
         "max": 45

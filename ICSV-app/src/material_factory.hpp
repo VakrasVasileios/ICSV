@@ -6,12 +6,10 @@
 
 namespace ICSVapp {
 
-enum ColorType : int { AMBIENT = 0, DIFFUSE, SPECULAR };
-
 struct Material {
   Material(Ogre::MaterialPtr m) : m_material(m) {}
   Ogre::MaterialPtr m_material;
-  float             m_color[3][4];
+  float             m_color[3];
 };
 
 using MaterialFacPtr = std::shared_ptr<Material>;

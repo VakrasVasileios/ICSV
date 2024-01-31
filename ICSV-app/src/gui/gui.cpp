@@ -393,8 +393,7 @@ IcsvGui::ShowSortingSettings(void) {
 
 void
 IcsvGui::ShowSmellColorPallet(void) {
-  static ImGuiColorEditFlags flags
-      = ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_DisplayRGB;
+  static ImGuiColorEditFlags flags = ImGuiColorEditFlags_DisplayRGB;
 
   ImGui::Separator();
 
@@ -424,33 +423,25 @@ IcsvGui::ShowSmellColorPallet(void) {
   }
   ImGui::Text("%s%s", "Chosen Smell: ", smell_slctd.c_str());
 
-  static int chosen = AMBIENT;
-
   if (mat.operator bool()) {  // chosen material is not null
-    ImGui::RadioButton("Ambient", &chosen, AMBIENT);
-    ImGui::SameLine();
-    ImGui::RadioButton("Diffuse", &chosen, DIFFUSE);
-    ImGui::SameLine();
-    ImGui::RadioButton("Specular", &chosen, SPECULAR);
-
-    ImGui::ColorPicker4(smell_slctd.c_str(), mat->m_color[chosen], flags);
+    ImGui::ColorPicker3(smell_slctd.c_str(), mat->m_color, flags);
   }
 
   if (ImGui::Button("Apply Color")) {
 
-    mat->m_material->setAmbient(mat->m_color[AMBIENT][0],
-                                mat->m_color[AMBIENT][1],
-                                mat->m_color[AMBIENT][2]);
+    mat->m_material->setAmbient(mat->m_color[0],
+                                mat->m_color[1],
+                                mat->m_color[2]);
 
-    mat->m_material->setDiffuse(mat->m_color[DIFFUSE][0],
-                                mat->m_color[DIFFUSE][1],
-                                mat->m_color[DIFFUSE][2],
-                                mat->m_color[DIFFUSE][3]);
+    mat->m_material->setDiffuse(mat->m_color[0],
+                                mat->m_color[1],
+                                mat->m_color[2],
+                                1.0f);
 
-    mat->m_material->setSpecular(mat->m_color[SPECULAR][0],
-                                 mat->m_color[SPECULAR][1],
-                                 mat->m_color[SPECULAR][2],
-                                 mat->m_color[SPECULAR][3]);
+    mat->m_material->setSpecular(mat->m_color[0],
+                                 mat->m_color[1],
+                                 mat->m_color[2],
+                                 1.0f);
   }
 }
 
