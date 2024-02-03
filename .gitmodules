@@ -2,10 +2,6 @@
 	path = external/googletest
 	url = https://github.com/google/googletest
 
-[submodule "external/ogre"]
-	path = external/ogre
-	url = https://github.com/OGRECave/ogre
-
 [submodule "external/imgui"]
 	path = external/imgui
 	url = https://github.com/ocornut/imgui
