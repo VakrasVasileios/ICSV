@@ -1,4 +1,4 @@
-#include "../evaluator_impls/range_based_eval.hpp"
+#include "../evaluator_impls/arg_based_eval.hpp"
 #include <assert.h>
 #include <fstream>
 #include <string>
@@ -15,9 +15,9 @@ public:
 
 private:
   unsigned FileLineCount(const std::string& path);
-  auto     GetEvaluator(void) -> RangeEvaluator* {
-    auto* eval = dynamic_cast<RangeEvaluator*>(Detector::GetEvaluator());
-    assert(eval);
+
+  auto GetEvaluator(void) -> MultiArgsEvaluator* {
+    auto* eval = dynamic_cast<MultiArgsEvaluator*>(Detector::GetEvaluator());
     return eval;
   }
 };
@@ -38,13 +38,28 @@ LargeFileDet::FileLineCount(const std::string& path) {
 
 void
 LargeFileDet::DetectSmell(const ArchData& arch) {
+  auto* eval = GetEvaluator();
+  assert(eval);
+
   for (auto& src : arch.sources) {
     DetectorReport rep;
     unsigned       lines = FileLineCount(src);
     rep.init_level       = lines;
-    rep.level            = icsv::detector::evaluate_smell(TAG, lines);
+    rep.level            = eval->EvaluateSmell("big_source_file", lines);
     rep.message
         = "Source file: " + src + " has " + std::to_string(lines) + " of code.";
+    rep.src_info.file = src;
+
+    icsv::detector::register_report(TAG, rep);
+  }
+
+  for (auto& src : arch.headers) {
+    DetectorReport rep;
+    unsigned       lines = FileLineCount(src);
+    rep.init_level       = lines;
+    rep.level            = eval->EvaluateSmell("big_header_file", lines);
+    rep.message
+        = "Header file: " + src + " has " + std::to_string(lines) + " of code.";
     rep.src_info.file = src;
 
     icsv::detector::register_report(TAG, rep);
