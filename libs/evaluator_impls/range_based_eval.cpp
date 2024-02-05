@@ -1,5 +1,6 @@
 #include "range_based_eval.hpp"
 #include "icsv/detector/report_center.hpp"
+#include "icsv/detector/detector_manager.hpp"
 #include <assert.h>
 #ifndef UNIT_TESTS
 #include <imgui/imgui.h>
@@ -65,6 +66,11 @@ RangeEvaluator::DisplayGui(void) {
       for (auto* rep :
            icsv::detector::ReportCenter::Get().GetReportsByTag(m_tag))
         rep->level = ReEvaluateSmell(rep->init_level);
+    }
+    ImGui::SameLine();
+    if (ImGui::Button(std::string("Detect " + m_tag).c_str())) {
+      icsv::detector::ReportCenter::Get().ClearReportsWithTag(m_tag);
+      icsv::detector::DetectorManager::Get().UseDetectorWithTag(m_tag);
     }
     ImGui::TreePop();
     ImGui::Separator();
