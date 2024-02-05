@@ -192,7 +192,7 @@
       "type": "args",
       "args": [
         {
-          "tag": "big_source_files",
+          "tag": "big_source_file",
           "description": "Detects source files with too many lines",
           "type": "range",
           "range": {
@@ -201,7 +201,7 @@
           }
         },
         {
-          "tag": "big_header_files",
+          "tag": "big_header_file",
           "description": "Detects header files with too many lines",
           "type": "range",
           "range": {
