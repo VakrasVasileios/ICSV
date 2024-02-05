@@ -86,6 +86,7 @@ IcsvGui::ShowConfigSelect(void) {
     m_conf_brwsr.Open();
   }
   if (m_conf_brwsr.HasSelected()) {
+    std::memset(det_buf, '\0', BUFFSIZE);
     std::strncpy(det_buf, det_conf_file.c_str(), det_conf_file.size());
     if (m_conf_brwsr.GetSelected().c_str() != det_conf_file) {
       det_conf_file = m_conf_brwsr.GetSelected();
@@ -106,13 +107,14 @@ IcsvGui::ShowConfigSelect(void) {
 
   ImGui::Separator();
 
-  ImGui::Text("Architecture Graph File");
-  ImGui::InputText("Graph", graph_buf, BUFFSIZE);
+  ImGui::Text("Symbol Table File");
+  ImGui::InputText("ST", graph_buf, BUFFSIZE);
   if (ImGui::Button("Select##2", ImVec2(100, 20))) {
-    m_graph_brwsr.SetTitle("Select Architecture Graph");
+    m_graph_brwsr.SetTitle("Select Symbol Table");
     m_graph_brwsr.Open();
   }
   if (m_graph_brwsr.HasSelected()) {
+    std::memset(graph_buf, '\0', BUFFSIZE);
     std::strncpy(graph_buf, graph_conf_file.c_str(), graph_conf_file.size());
     if (m_graph_brwsr.GetSelected().c_str() != graph_conf_file) {
       graph_conf_file = m_graph_brwsr.GetSelected();
@@ -124,7 +126,7 @@ IcsvGui::ShowConfigSelect(void) {
               m_graph_brwsr.GetSelected());
           changed = true;
         } catch (std::exception* e) {
-          std::cout << "Invalid architecture graph file. " << e->what() << '\n';
+          std::cout << "Invalid symbol table file. " << e->what() << '\n';
         }
       }
     }
@@ -220,29 +222,28 @@ void
 IcsvGui::ShowExportTab(void) {
   static char evals[BUFFSIZE];
   static char reps[BUFFSIZE];
-  static int  lvl_min = 0, lvl_max = 10;
+  static int  lvl_range[2] = { 0, 10 };
 
+  ImGui::Text("%s", "Detectors config");
   ImGui::InputText("File", evals, BUFFSIZE);
-  if (ImGui::Button("Export Evaluator Configs")) {
+  if (ImGui::Button("Export Detector Configs")) {
     icsv::detector::EvaluationCenter::Get().SeriallizeToFile(evals);
   }
 
   ImGui::Separator();
 
+  ImGui::Text("%s", "Smell reports");
   ImGui::InputText("File##2", reps, BUFFSIZE);
-  ImGui::DragIntRange2("Smell Level Range",
-                       &lvl_min,
-                       &lvl_max,
-                       1,
-                       0,
-                       10,
-                       "%d",
-                       NULL,
-                       ImGuiSliderFlags_AlwaysClamp);
+  ImGui::SliderInt2("Smell Level Range",
+                    lvl_range,
+                    0,
+                    10,
+                    "%d",
+                    ImGuiSliderFlags_AlwaysClamp);
   if (ImGui::Button("Export Reports")) {
     icsv::detector::ReportCenter::Get().SeriallizeToFile(reps,
-                                                         lvl_min,
-                                                         lvl_max);
+                                                         lvl_range[0],
+                                                         lvl_range[1]);
   }
 }
 
@@ -267,7 +268,7 @@ IcsvGui::ShowSmellButton(bool& changed) {
 
       auto unit_scale = 0.2;
       for (auto* rep : replst) {
-        if (rep->level > -1) {
+        if (rep->level > 0) {
           double y = unit_scale * (rep->level + 2) / 2;
           create_icsv_entity(rep,
                              Ogre::Vector3f(0, y / 2, 0),
