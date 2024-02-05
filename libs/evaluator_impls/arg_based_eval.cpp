@@ -73,6 +73,22 @@ MultiArgsEvaluator::ReEvaluateSmell(int) -> SmellLevel {
   return -1;
 }
 
+auto
+MultiArgsEvaluator::Seriallize(void) -> std::string {
+  auto ser = SmellEvaluator::Seriallize();
+  ser += ",\"args\":[";
+  for (auto ev : m_args) {
+    ser += "\n{";
+    ser += ev.second->Seriallize();
+    ser += "},";
+  }
+
+  ser.pop_back();
+  ser += "]";
+
+  return ser;
+}
+
 void
 MultiArgsEvaluator::DisplayGui(void) {
 #ifndef UNIT_TESTS

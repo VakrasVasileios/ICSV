@@ -19,6 +19,8 @@ public:
 
   void AddEvaluator(icsv::detector::SmellEvaluator* eval);
 
+  auto Seriallize(void) -> std::string;
+
 private:
   using ArgEvalReg = std::map<std::string, SmellEvaluator*>;
 
