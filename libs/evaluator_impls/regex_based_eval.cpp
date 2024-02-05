@@ -53,6 +53,19 @@ RegexEvaluator::ReEvaluateSmell(int)
 }
 
 auto
+seriallize_regex(const std::string& regex) -> std::string {
+  std::string ret = "";
+
+  for (auto c : regex) {
+    if (c == '\\')
+      ret += '\\';
+    ret += c;
+  }
+
+  return ret;
+}
+
+auto
 RegexEvaluator::Seriallize(void) -> std::string {
   auto ser = RangeEvaluator::Seriallize();
   ser += ",\n\"regex_array\":[\n";
@@ -61,7 +74,7 @@ RegexEvaluator::Seriallize(void) -> std::string {
     if (init)
       ser += ",\n";
     ser += "{\"tag\":\"" + reg.first + "\"";
-    ser += ",\n\"regex\":\"" + reg.second + "\"}";
+    ser += ",\n\"regex\":\"" + seriallize_regex(reg.second) + "\"}";
     init = true;
   }
   init = false;
