@@ -92,28 +92,26 @@ CircularDependencyDet::DetectSmell(const ArchData& arch) {
     rep.smell_tag  = TAG;
     rep.init_level = crc.size();
     rep.level      = icsv::detector::evaluate_smell(TAG, crc.size());
-    if (rep.level > 0) {
-      auto strct
-          = std::find_if(arch.structures.begin(),
-                         arch.structures.end(),
-                         [&crc](auto& strc) {
-                           return std::string(crc.front()) == strc.signature;
-                         });
-      rep.message = "Structure: `" + crc.front()
-          + "` is part of this dependency cycle: ";
+    auto strct
+        = std::find_if(arch.structures.begin(),
+                       arch.structures.end(),
+                       [&crc](auto& strc) {
+                         return std::string(crc.front()) == strc.signature;
+                       });
+    rep.message
+        = "Structure: `" + crc.front() + "` is part of this dependency cycle: ";
 
-      for (auto c : crc) {
-        if (c != crc.back())
-          rep.message += "`" + c + "` -> ";
-      }
-      rep.message += "`" + crc.back() + "`\n";
-      rep.src_info.file  = strct->src_info.file;
-      rep.src_info.col   = strct->src_info.col;
-      rep.src_info.line  = strct->src_info.line;
-      rep.src_info.strct = crc.front();
-
-      icsv::detector::register_report(TAG, rep);
+    for (auto c : crc) {
+      if (c != crc.back())
+        rep.message += "`" + c + "` -> ";
     }
+    rep.message += "`" + crc.back() + "`\n";
+    rep.src_info.file  = strct->src_info.file;
+    rep.src_info.col   = strct->src_info.col;
+    rep.src_info.line  = strct->src_info.line;
+    rep.src_info.strct = crc.front();
+
+    icsv::detector::register_report(TAG, rep);
   }
 }
 
