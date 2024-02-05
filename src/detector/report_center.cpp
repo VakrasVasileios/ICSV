@@ -12,13 +12,10 @@ ReportCenter::Get() -> ReportCenter& {
 }
 
 void
-ReportCenter::RegisterReportGT_0(const std::string& smell_tag,
-                                 const Report&      rep) {
-  if (rep.level > 0) {
-    auto* in      = new Report(rep);
-    in->smell_tag = smell_tag;
-    m_report_log.push_back(in);
-  }
+ReportCenter::RegisterReport(const std::string& smell_tag, const Report& rep) {
+  auto* in      = new Report(rep);
+  in->smell_tag = smell_tag;
+  m_report_log.push_back(in);
 }
 
 auto
@@ -51,6 +48,18 @@ ReportCenter::ClearReports(void) {
     }
   }
   m_report_log.clear();
+}
+
+void
+ReportCenter::ClearReportsWithTag(const std::string& tag) {
+  auto log = m_report_log.begin();
+  for (; log != m_report_log.end(); log++) {
+    if (*log != nullptr && (*log)->smell_tag == tag) {
+      delete *log;
+      *log = nullptr;
+      log  = m_report_log.erase(log);
+    }
+  }
 }
 
 void

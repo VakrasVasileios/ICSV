@@ -14,13 +14,14 @@ public:
 public:
   static auto Get() -> ReportCenter&;
 
-  void RegisterReportGT_0(const std::string& smell_tag, const Report& rep);
+  void RegisterReport(const std::string& smell_tag, const Report& rep);
 
   auto GetReportsByTag(const std::string& tag) const -> ReportList;
 
   auto GetReportList(void) const -> const ReportList&;
 
   void ClearReports(void);
+  void ClearReportsWithTag(const std::string& tag);
 
   void SeriallizeToFile(const std::string& file_name,
                         int                lvl_min = 0,
@@ -37,7 +38,7 @@ private:
 
 inline void
 register_report(const std::string& smell_tag, const Report& rep) {
-  ReportCenter::Get().RegisterReportGT_0(smell_tag, rep);
+  ReportCenter::Get().RegisterReport(smell_tag, rep);
 }
 
 inline void
