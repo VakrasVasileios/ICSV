@@ -24,7 +24,6 @@ private:
 
   auto GetEvaluator(void) -> MultiArgsEvaluator* {
     auto* eval = dynamic_cast<MultiArgsEvaluator*>(Detector::GetEvaluator());
-    assert(eval);
     return eval;
   }
 };
@@ -55,7 +54,7 @@ LargeClassDet::DetectSmell(const ArchData& arch) {
         + " fields, with a `max_fields` Level of "
         + std::to_string(field_smell_lvl) + "\nand "
         + std::to_string(method_count) + " " + public_only
-        + " methods, with  a `max_methods` Level of "
+        + " methods, with a `max_methods` Level of "
         + std::to_string(method_smell_lvl) + ".";
     rep.src_info = SourceInfo(strct.src_info.file,
                               strct.src_info.line,
