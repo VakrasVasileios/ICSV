@@ -87,6 +87,11 @@ Chart::AssignLabelsToAxis(const IcsvEnttIter& begin,
   auto            traveler = begin;
   auto            lbegin   = begin;
 
+  if (begin == end) {
+    std::cout << "Entity list is empty, rendering empty chart\n";
+    return;
+  }
+
   auto caption = (*(*traveler)->GetDetectorReport())(axis);
 
   if (IsLabelUnique(lbl_lst, caption)) {
