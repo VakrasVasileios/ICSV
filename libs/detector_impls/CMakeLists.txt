@@ -1,5 +1,6 @@
 set(FILES # Detector Interface Implementations
   circular_dependency_det.cpp
+  cyclomatic_complexity.cpp
   dependency_count_det.cpp
   function_overload_det.cpp
   god_line.cpp
