@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
+#include <map>
 #include "smell_evaluator.hpp"
 
 class RegexEvaluator;
@@ -30,7 +30,7 @@ public:
   void SeriallizeToFile(const std::string& file_name);
 
 private:
-  using Evaluators = std::unordered_map<std::string, SmellEvaluator*>;
+  using Evaluators = std::map<std::string, SmellEvaluator*>;
 
 private:
   Evaluators  m_eval_reg;

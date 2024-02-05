@@ -131,19 +131,22 @@ EvaluationCenter::MakeArgsEval(Json::Value smell) -> MultiArgsEvaluator* {
   for (auto arg : smell["args"]) {
     if (arg["type"] == "bool") {
       auto* arg_e = MakeBoolEval(arg);
-      assert(m_eval_reg.erase(arg_e->GetTag()) == 1);
+      m_eval_reg.erase(arg_e->GetTag());
+      assert(m_eval_reg.contains(arg_e->GetTag()) == false);
 
       eval->AddEvaluator(arg_e);
     }
     if (arg["type"] == "range") {
       auto* arg_e = MakeRangeEval(arg);
-      assert(m_eval_reg.erase(arg_e->GetTag()) == 1);
+      m_eval_reg.erase(arg_e->GetTag());
+      assert(m_eval_reg.contains(arg_e->GetTag()) == false);
 
       eval->AddEvaluator(arg_e);
     }
     if (arg["type"] == "regex") {
       auto* arg_e = MakeRegexEval(arg);
-      assert(m_eval_reg.erase(arg_e->GetTag()) == 1);
+      m_eval_reg.erase(arg_e->GetTag());
+      assert(m_eval_reg.contains(arg_e->GetTag()) == false);
 
       eval->AddEvaluator(arg_e);
     }
