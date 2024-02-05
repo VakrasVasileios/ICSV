@@ -122,27 +122,50 @@ Chart::AssignLabelsToAxis(const IcsvEnttIter& begin,
   }
 }
 
+using RepMemb = icsv::detector::ReportMembers;
+
 void
 Chart::DrawChart(void) {
   /// Initialize sorting funcs
   static auto _sort = [&](IcsvEntity* e1, IcsvEntity* e2) {
-    auto s1 = (*e1->GetDetectorReport())(m_x_axis)
-        + (*e1->GetDetectorReport())(m_z_axis);
-    auto s2 = (*e2->GetDetectorReport())(m_x_axis)
-        + (*e2->GetDetectorReport())(m_z_axis);
-    return s1 < s2;
+    bool x = false, z = false;
+    if (m_x_axis == RepMemb::LEVEL_m) {
+      x = e1->GetDetectorReport()->level < e2->GetDetectorReport()->level;
+    } else {
+      x = (*e1->GetDetectorReport())(m_x_axis)
+          < (*e2->GetDetectorReport())(m_x_axis);
+    }
+    if (m_z_axis == RepMemb::LEVEL_m) {
+      z = e1->GetDetectorReport()->level < e2->GetDetectorReport()->level;
+    } else {
+      z = (*e1->GetDetectorReport())(m_z_axis)
+          < (*e2->GetDetectorReport())(m_z_axis);
+    }
+
+    return x & z;
   };
 
   static auto lbl_sort = [](const Label& m1, const Label& m2) {
     return m1.get()->getCaption() < m2.get()->getCaption();
   };
 
+  static auto num_lbl_sort = [](const Label& m1, const Label& m2) {
+    return std::stoi(m1.get()->getCaption().c_str())
+        < std::stoi(m2.get()->getCaption().c_str());
+  };
+
   static auto x_sort = [&](IcsvEntity* e1, IcsvEntity* e2) {
+    if (m_x_axis == RepMemb::LEVEL_m)
+      return e1->GetDetectorReport()->level < e2->GetDetectorReport()->level;
+
     return (*e1->GetDetectorReport())(m_x_axis)
         < (*e2->GetDetectorReport())(m_x_axis);
   };
 
   static auto z_sort = [&](IcsvEntity* e1, IcsvEntity* e2) {
+    if (m_z_axis == RepMemb::LEVEL_m)
+      return e1->GetDetectorReport()->level < e2->GetDetectorReport()->level;
+
     return (*e1->GetDetectorReport())(m_z_axis)
         < (*e2->GetDetectorReport())(m_z_axis);
   };
@@ -157,14 +180,20 @@ Chart::DrawChart(void) {
   AssignLabelsToAxis(entt_list.begin(), entt_list.end(), m_x_axis);
   const int x_length = m_x_labels.size();
 
-  std::stable_sort(m_x_labels.begin(), m_x_labels.end(), lbl_sort);
+  if (m_x_axis == RepMemb::LEVEL_m)
+    std::stable_sort(m_x_labels.begin(), m_x_labels.end(), num_lbl_sort);
+  else
+    std::stable_sort(m_x_labels.begin(), m_x_labels.end(), lbl_sort);
 
   /// Sort entity list and get number of neighborhoods on the z axis
   EntityManager::Get().SortEnttsWith(z_sort);
   AssignLabelsToAxis(entt_list.begin(), entt_list.end(), m_z_axis);
   const int z_length = m_z_labels.size();
 
-  std::stable_sort(m_z_labels.begin(), m_z_labels.end(), lbl_sort);
+  if (m_z_axis == RepMemb::LEVEL_m)
+    std::stable_sort(m_z_labels.begin(), m_z_labels.end(), num_lbl_sort);
+  else
+    std::stable_sort(m_z_labels.begin(), m_z_labels.end(), lbl_sort);
 
   /// Sort entity list for both axises and set total neighborhoods
   EntityManager::Get().SortEnttsWith(_sort);
@@ -282,7 +311,7 @@ Chart::FindNeighborhoodSize(const IcsvEnttIter& begin, const IcsvEnttIter& end)
   int size = 0, cntr = 0;
 
   while (traveler != end) {
-    if ((*traveler)->GetDetectorReport()->level > -1) {
+    if ((*traveler)->GetDetectorReport()->level > 0) {
       if (AxisToStringPred(*traveler, *hood_begin)) {
         cntr++;
       } else {
