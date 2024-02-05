@@ -213,7 +213,7 @@
     },
     {
       "tag": "Inappropriate Intimacy",
-      "description": "@argument max_member_expr: Max count of member expr from one class to any other class.",
+      "description": "Max count of member expr from one class to any other class.",
       "type": "range",
       "range": {
         "min": 50,
