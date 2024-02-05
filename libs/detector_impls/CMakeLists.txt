@@ -4,6 +4,7 @@ set(FILES # Detector Interface Implementations
   function_overload_det.cpp
 	large_class_det.cpp
 	large_file_det.cpp
+  long_function_det.cpp
 	long_identifier_det.cpp
   method_args_det.cpp
   method_literals_det.cpp
