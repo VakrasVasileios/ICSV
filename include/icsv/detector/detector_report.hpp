@@ -57,7 +57,7 @@ typedef struct DetectorReport {
       case MESSAGE_m:
         return message;
       case LEVEL_m:
-        return std::to_string(static_cast<int>(level - 1));
+        return std::to_string(static_cast<int>(level));
       case INIT_LEVEL_m:
         return std::to_string(init_level);
       case FILE_m:
