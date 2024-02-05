@@ -2,6 +2,7 @@
 #include "./range_based_eval.hpp"
 #include "./regex_based_eval.hpp"
 #include "icsv/detector/detector_manager.hpp"
+#include "icsv/detector/report_center.hpp"
 #include <assert.h>
 #include <iostream>
 
@@ -43,7 +44,7 @@ MultiArgsEvaluator::EvaluateSmell(const std::string& eval_name, int init_lvl)
     }
     case icsv::detector::REGEX: {
       std::cout << "\tWarning: Range evaluation method being used for regex "
-                   "evaluation!\n";
+                << "evaluation!\n";
     }
     case icsv::detector::NONE:
     case icsv::detector::ARGS:
@@ -67,6 +68,7 @@ MultiArgsEvaluator::EvaluateSmell(const std::string& eval_name,
 
 auto
 MultiArgsEvaluator::ReEvaluateSmell(int) -> SmellLevel {
+  icsv::detector::ReportCenter::Get().ClearReportsWithTag(m_tag);
   icsv::detector::DetectorManager::Get().UseDetectorWithTag(m_tag);
   return -1;
 }
