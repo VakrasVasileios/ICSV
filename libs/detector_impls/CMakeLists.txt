@@ -2,6 +2,8 @@ set(FILES # Detector Interface Implementations
   circular_dependency_det.cpp
   dependency_count_det.cpp
   function_overload_det.cpp
+  god_line.cpp
+  inappropriate_intimacy.cpp
 	large_class_det.cpp
 	large_file_det.cpp
   long_function_det.cpp
