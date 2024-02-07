@@ -38,7 +38,7 @@ LongIdentifierDet::DetectSmell(const ArchData& arch) {
       meth_rep.message = "Method `" + meth.signature + "` has an id of "
           + std::to_string(id_size) + " characters";
       meth_rep.init_level = id_size;
-      meth_rep.level      = id_size;
+      meth_rep.level      = icsv::detector::evaluate_smell(TAG, id_size);
       meth_rep.src_info   = SourceInfo(strct.src_info.file,
                                      strct.src_info.line,
                                      strct.src_info.col,
