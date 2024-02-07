@@ -120,6 +120,8 @@ ArchitectureHolder::DeserializeArchitecture(const std::string& path) {
 
         m.args.emplace_back(def);
       }
+
+      s.methods.emplace_back(m);
     }  // for auto meth
 
     for (auto f = (*it)["fields"].begin(); f != (*it)["fields"].end(); f++) {
