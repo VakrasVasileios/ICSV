@@ -13,6 +13,8 @@ set(FILES
   material_factory.hpp
   movable_text.cpp
   movable_text.hpp
+  statistics.cpp
+  statistics.hpp
 )
 set(SUBDIRECTORIES
   gui

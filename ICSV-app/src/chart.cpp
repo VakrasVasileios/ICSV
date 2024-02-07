@@ -1,5 +1,6 @@
 #include "chart.hpp"
 #include "entity_manager.hpp"
+#include "statistics.hpp"
 
 namespace ICSVapp {
 
@@ -172,7 +173,9 @@ Chart::DrawChart(void) {
 
   /// Clear previous chart if it exists
   ClearChart();
-
+#if (0)
+  SmellStatistics::Get().ClearStats();
+#endif
   auto entt_list = EntityManager::Get().GetEntityList();
 
   /// Sort entity list and get number of neighborhoods on the x axis
@@ -246,6 +249,14 @@ Chart::DrawChart(void) {
               = (double) (i / hood_side) + (z_hood * block_size) + increment;
           (*traveler)->SetPosition(x, y, z);
         }
+#if (0)
+        SmellStatistics::Get()
+            .AddFileIntensity((*traveler)->GetDetectorReport()->src_info.file,
+                              (*traveler)->GetDetectorReport()->level);
+        SmellStatistics::Get()
+            .AddSmellIntensity((*traveler)->GetDetectorReport()->smell_tag,
+                               (*traveler)->GetDetectorReport()->level);
+#endif
         traveler++;
       }
     }

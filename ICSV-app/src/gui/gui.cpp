@@ -8,6 +8,7 @@
 #include "../material_factory.hpp"
 #include "../chart.hpp"
 #include <imgui/imgui_internal.h>
+#include "../statistics.hpp"
 
 namespace ICSVapp {
 
@@ -55,6 +56,9 @@ IcsvGui::Display(void) {
   ShowExitPopUp();
 
   ImGui::End();
+#if (0)
+  SmellStatistics::Get().DisplayGui();
+#endif
 }
 
 void
@@ -155,7 +159,7 @@ IcsvGui::ShowDetectorReport(void) {
 
     ImGui::MenuItem("Level: ");
     ImGui::SameLine();
-    ImGui::Text("%s", std::to_string(m_rep_dspld->level).c_str());
+    ImGui::Text("%.2f", m_rep_dspld->level);
     ImGui::Separator();
 
     ImGui::MenuItem("File: ");
@@ -165,12 +169,12 @@ IcsvGui::ShowDetectorReport(void) {
 
     ImGui::MenuItem("Line: ");
     ImGui::SameLine();
-    ImGui::Text("%s", std::to_string(m_rep_dspld->src_info.line).c_str());
+    ImGui::Text("%d", m_rep_dspld->src_info.line);
     ImGui::Separator();
 
     ImGui::MenuItem("Column: ");
     ImGui::SameLine();
-    ImGui::Text("%s", std::to_string(m_rep_dspld->src_info.col).c_str());
+    ImGui::Text("%d", m_rep_dspld->src_info.col);
     ImGui::Separator();
 
     ImGui::MenuItem("Structure: ");
