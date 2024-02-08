@@ -1,1 +1,1 @@
-# Interactive-Code-Smell-Visualization-for-Large-Codebases
+# Interactive Code-Smell Visualization for Large Codebases
