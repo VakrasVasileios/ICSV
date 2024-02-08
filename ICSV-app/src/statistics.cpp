@@ -66,45 +66,54 @@ SmellStatistics::DisplayGui(void) {
   ImGui::Begin("Statistics");
 
   ImGui::Text("%s%.2f", "Overall Intensity: ", m_overall_int);
+  ImGui::Separator();
 
-  if (ImGui::TabItemButton("Intensity per Smell")) {
-    ImGui::Separator();
-    for (auto& ref : m_smell_int_map) {
-      ImGui::Text("%s", std::string(ref.first).c_str());
-      ImGui::Text("%s%.2f", "Smell Intensity: ", ref.second.level);
-      ImGui::Text("%s%.2f", "Average Intensity: ", ref.second.average);
-      ImGui::Text("%s%ld", "Smell Count: ", ref.second.count);
-      if (ImGui::CollapsingHeader("Per Intensity Level Count")) {
-        for (int i = 0; i < 10; i++) {
-          ImGui::Text("%d%c%d%s%ld",
-                      i,
-                      '-',
-                      i + 1,
-                      ": ",
-                      ref.second.level_c[i]);
+  if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None)) {
+
+    if (ImGui::BeginTabItem("Intensity per Smell")) {
+      for (auto& ref : m_smell_int_map) {
+        ImGui::Text("%s", std::string(ref.first).c_str());
+        ImGui::Text("%s%.2f", "Smell Intensity: ", ref.second.level);
+        ImGui::Text("%s%.2f", "Average Intensity: ", ref.second.average);
+        ImGui::Text("%s%ld", "Smell Count: ", ref.second.count);
+        if (ImGui::CollapsingHeader("Per Intensity Level Count")) {
+          for (int i = 0; i < 10; i++) {
+            ImGui::Text("%d%c%d%s%ld",
+                        i,
+                        '-',
+                        i + 1,
+                        ": ",
+                        ref.second.level_c[i]);
+          }
         }
+        ImGui::Separator();
       }
-      ImGui::Separator();
+
+      ImGui::EndTabItem();
     }
-  }
-  if (ImGui::TabItemButton("Intensity per File")) {
-    for (auto& ref : m_file_int_map) {
-      ImGui::Text("%s", std::string(ref.first).c_str());
-      ImGui::Text("%s%.2f", "Smell Intensity: ", ref.second.level);
-      ImGui::Text("%s%.2f", "Average Intensity: ", ref.second.average);
-      ImGui::Text("%s%ld", "Smell Count: ", ref.second.count);
-      if (ImGui::CollapsingHeader("Per Intensity Level Count")) {
-        for (int i = 0; i < 10; i++) {
-          ImGui::Text("%d%c%d%s%ld",
-                      i,
-                      '-',
-                      i + 1,
-                      ": ",
-                      ref.second.level_c[i]);
+    if (ImGui::BeginTabItem("Intensity per File")) {
+      for (auto& ref : m_file_int_map) {
+        ImGui::Text("%s", std::string(ref.first).c_str());
+        ImGui::Text("%s%.2f", "Smell Intensity: ", ref.second.level);
+        ImGui::Text("%s%.2f", "Average Intensity: ", ref.second.average);
+        ImGui::Text("%s%ld", "Smell Count: ", ref.second.count);
+        if (ImGui::CollapsingHeader("Per Intensity Level Count")) {
+          for (int i = 0; i < 10; i++) {
+            ImGui::Text("%d%c%d%s%ld",
+                        i,
+                        '-',
+                        i + 1,
+                        ": ",
+                        ref.second.level_c[i]);
+          }
         }
+        ImGui::Separator();
       }
-      ImGui::Separator();
+
+      ImGui::EndTabItem();
     }
+
+    ImGui::EndTabBar();
   }
 
   ImGui::End();

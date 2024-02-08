@@ -44,7 +44,7 @@ operator<<(std::ostream& os, const SourceInfo& s) -> std::ostream& {
 }
 
 typedef struct DetectorReport {
-  std::string smell_tag = "";
+  const char* smell_tag = "";
   std::string message   = "";
   SourceInfo  src_info;
   float       level      = 0.00f;

@@ -173,7 +173,7 @@ Chart::DrawChart(void) {
 
   /// Clear previous chart if it exists
   ClearChart();
-#if (0)
+#if (1)
   SmellStatistics::Get().ClearStats();
 #endif
   auto entt_list = EntityManager::Get().GetEntityList();
@@ -249,7 +249,7 @@ Chart::DrawChart(void) {
               = (double) (i / hood_side) + (z_hood * block_size) + increment;
           (*traveler)->SetPosition(x, y, z);
         }
-#if (0)
+#if (1)
         SmellStatistics::Get()
             .AddFileIntensity((*traveler)->GetDetectorReport()->src_info.file,
                               (*traveler)->GetDetectorReport()->level);

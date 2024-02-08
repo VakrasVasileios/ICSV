@@ -14,7 +14,7 @@ public:
 public:
   static auto Get() -> ReportCenter&;
 
-  void RegisterReport(const std::string& smell_tag, const Report& rep);
+  void RegisterReport(const char* smell_tag, const Report& rep);
 
   auto GetReportsByTag(const std::string& tag) const -> ReportList;
 
@@ -37,7 +37,7 @@ private:
 };
 
 inline void
-register_report(const std::string& smell_tag, const Report& rep) {
+register_report(const char* smell_tag, const Report& rep) {
   ReportCenter::Get().RegisterReport(smell_tag, rep);
 }
 

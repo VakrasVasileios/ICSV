@@ -12,7 +12,7 @@ ReportCenter::Get() -> ReportCenter& {
 }
 
 void
-ReportCenter::RegisterReport(const std::string& smell_tag, const Report& rep) {
+ReportCenter::RegisterReport(const char* smell_tag, const Report& rep) {
   auto* in      = new Report(rep);
   in->smell_tag = smell_tag;
   m_report_log.push_back(in);

@@ -11,6 +11,12 @@ RangeEvaluator::RangeEvaluator(const std::string& _tag, int _min, int _max)
   m_type = icsv::detector::EvalType::RANGE;
 }
 
+float
+round(float var) {
+  float value = (int) (var * 100 + .5);
+  return (float) value / 100;
+}
+
 /*
   Returns 0 if curr_lvl < minimum range
   Returns 10 if curr_lvl >= maximum range
@@ -19,10 +25,11 @@ RangeEvaluator::RangeEvaluator(const std::string& _tag, int _min, int _max)
 auto
 RangeEvaluator::EvaluateSmell(int curr_lvl)
     -> icsv::detector::SmellEvaluator::SmellLevel {
-  return (
-      (curr_lvl < m_range.min) * 0.00f + (curr_lvl >= m_range.max) * 10.00f
-      + IsWithinRange(curr_lvl)
-          * (((double) (curr_lvl - m_range.min) / m_range.range()) * 10.00f));
+  float lvl
+      = ((curr_lvl < m_range.min) * 0.00f + (curr_lvl >= m_range.max) * 10.00f
+         + IsWithinRange(curr_lvl)
+             * (((float) (curr_lvl - m_range.min) / m_range.range()) * 10.00f));
+  return round(lvl);
 }
 
 auto

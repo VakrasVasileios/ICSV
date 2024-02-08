@@ -56,7 +56,7 @@ IcsvGui::Display(void) {
   ShowExitPopUp();
 
   ImGui::End();
-#if (0)
+#if (1)
   SmellStatistics::Get().DisplayGui();
 #endif
 }
@@ -149,7 +149,7 @@ IcsvGui::ShowDetectorReport(void) {
     ImGui::Begin("Detector Report");
     ImGui::MenuItem("Smell Tag: ");
     ImGui::SameLine();
-    ImGui::Text("%s", m_rep_dspld->smell_tag.c_str());
+    ImGui::Text("%s", m_rep_dspld->smell_tag);
     ImGui::Separator();
 
     ImGui::MenuItem("Message: ");
