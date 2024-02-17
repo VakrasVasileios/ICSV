@@ -63,6 +63,9 @@ SmellStatistics::ClearStats(void) {
 
 void
 SmellStatistics::DisplayGui(void) {
+  static ImGuiTableFlags flags
+      = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg;
+
   ImGui::Begin("Statistics");
 
   ImGui::Text("%s%.2f", "Overall Intensity: ", m_overall_int);
@@ -76,16 +79,29 @@ SmellStatistics::DisplayGui(void) {
         ImGui::Text("%s%.2f", "Smell Intensity: ", ref.second.level);
         ImGui::Text("%s%.2f", "Average Intensity: ", ref.second.average);
         ImGui::Text("%s%ld", "Smell Count: ", ref.second.count);
-        if (ImGui::CollapsingHeader("Per Intensity Level Count")) {
+
+        if (ImGui::BeginTable("#tableSmell", 10, flags)) {
+          ImGui::TableSetupColumn("0 - 1");
+          ImGui::TableSetupColumn("1 - 2");
+          ImGui::TableSetupColumn("2 - 3");
+          ImGui::TableSetupColumn("3 - 4");
+          ImGui::TableSetupColumn("4 - 5");
+          ImGui::TableSetupColumn("5 - 6");
+          ImGui::TableSetupColumn("6 - 7");
+          ImGui::TableSetupColumn("7 - 8");
+          ImGui::TableSetupColumn("8 - 9");
+          ImGui::TableSetupColumn("9 - 10");
+          ImGui::TableHeadersRow();
+
+          ImGui::TableNextRow();
           for (int i = 0; i < 10; i++) {
-            ImGui::Text("%d%c%d%s%ld",
-                        i,
-                        '-',
-                        i + 1,
-                        ": ",
-                        ref.second.level_c[i]);
+            ImGui::TableSetColumnIndex(i);
+            ImGui::Text("%ld", ref.second.level_c[i]);
           }
+
+          ImGui::EndTable();
         }
+
         ImGui::Separator();
       }
 
@@ -97,16 +113,29 @@ SmellStatistics::DisplayGui(void) {
         ImGui::Text("%s%.2f", "Smell Intensity: ", ref.second.level);
         ImGui::Text("%s%.2f", "Average Intensity: ", ref.second.average);
         ImGui::Text("%s%ld", "Smell Count: ", ref.second.count);
-        if (ImGui::CollapsingHeader("Per Intensity Level Count")) {
+
+        if (ImGui::BeginTable("#tableFile", 10, flags)) {
+          ImGui::TableSetupColumn("0 - 1");
+          ImGui::TableSetupColumn("1 - 2");
+          ImGui::TableSetupColumn("2 - 3");
+          ImGui::TableSetupColumn("3 - 4");
+          ImGui::TableSetupColumn("4 - 5");
+          ImGui::TableSetupColumn("5 - 6");
+          ImGui::TableSetupColumn("6 - 7");
+          ImGui::TableSetupColumn("7 - 8");
+          ImGui::TableSetupColumn("8 - 9");
+          ImGui::TableSetupColumn("9 - 10");
+          ImGui::TableHeadersRow();
+
+          ImGui::TableNextRow();
           for (int i = 0; i < 10; i++) {
-            ImGui::Text("%d%c%d%s%ld",
-                        i,
-                        '-',
-                        i + 1,
-                        ": ",
-                        ref.second.level_c[i]);
+            ImGui::TableSetColumnIndex(i);
+            ImGui::Text("%ld", ref.second.level_c[i]);
           }
+
+          ImGui::EndTable();
         }
+
         ImGui::Separator();
       }
 
