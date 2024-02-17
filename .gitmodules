@@ -1,7 +1,7 @@
-[submodule "googletest"]
+[submodule "external/googletest"]
 	path = external/googletest
 	url = https://github.com/google/googletest
 
-[submodule "imgui"]
+[submodule "external/imgui"]
   path = external/imgui
 	url = https://github.com/ocornut/imgui
