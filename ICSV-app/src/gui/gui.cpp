@@ -97,14 +97,13 @@ IcsvGui::ShowConfigSelect(void) {
       if (!det_conf_file.ends_with(".json"))
         std::cout << "\tThe selected file is not a json file.\n";
       else {
-        try {
+        if (icsv::detector::deseriallize_detector_config(
+                m_conf_brwsr.GetSelected())
+            == false)
+          std::cout << "Invalid Detector configuration file. " << '\n';
+        else
           MaterialFactory::Get().DeseriallizeConfig(m_conf_brwsr.GetSelected());
-          icsv::detector::deseriallize_detector_config(
-              m_conf_brwsr.GetSelected());
-          changed = true;
-        } catch (std::exception* e) {
-          std::cout << "Invalid configuration file. " << e->what() << '\n';
-        }
+        changed = true;
       }
     }
   }
