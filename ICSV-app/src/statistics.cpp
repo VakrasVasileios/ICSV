@@ -39,7 +39,7 @@ SmellStatistics::AddFileIntensity(const std::string& file,
   if (!m_file_int_map.contains(file)) {
     FileIntensity fi;
 
-    fi.smell_count[smell_tag] = 0;
+    fi.smell_count[smell_tag] = 1;
 
     fi.si.level   = lvl;
     fi.si.average = lvl;
