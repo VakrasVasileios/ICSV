@@ -252,6 +252,7 @@ Chart::DrawChart(void) {
 #if (1)
         SmellStatistics::Get()
             .AddFileIntensity((*traveler)->GetDetectorReport()->src_info.file,
+                              (*traveler)->GetDetectorReport()->smell_tag,
                               (*traveler)->GetDetectorReport()->level);
         SmellStatistics::Get()
             .AddSmellIntensity((*traveler)->GetDetectorReport()->smell_tag,

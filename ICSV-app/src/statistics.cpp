@@ -10,7 +10,7 @@ SmellStatistics::Get(void) -> SmellStatistics& {
 }
 
 void
-SmellStatistics::AddSmellIntensity(const std::string& tag, float lvl) {
+SmellStatistics::AddSmellIntensity(const char* tag, float lvl) {
   if (!m_smell_int_map.contains(tag)) {
     SmellIntesity si;
 
@@ -33,24 +33,31 @@ SmellStatistics::AddSmellIntensity(const std::string& tag, float lvl) {
 }
 
 void
-SmellStatistics::AddFileIntensity(const std::string& file, float lvl) {
+SmellStatistics::AddFileIntensity(const std::string& file,
+                                  const char*        smell_tag,
+                                  float              lvl) {
   if (!m_file_int_map.contains(file)) {
-    SmellIntesity si;
+    FileIntensity fi;
 
-    si.level   = lvl;
-    si.average = lvl;
-    si.count   = 1;
-    int indx   = static_cast<int>(lvl);
-    si.level_c[(indx == 10) ? 9 : indx]++;
+    fi.smell_count[smell_tag] = 0;
 
-    m_file_int_map.insert({ file, si });
+    fi.si.level   = lvl;
+    fi.si.average = lvl;
+    fi.si.count   = 1;
+    int indx      = static_cast<int>(lvl);
+    fi.si.level_c[(indx == 10) ? 9 : indx]++;
+
+    m_file_int_map.insert({ file, fi });
   } else {
-    auto& s = m_file_int_map.at(file);
-    s.level += lvl;
-    s.count++;
-    s.average = s.level / s.count;
-    int indx  = static_cast<int>(lvl);
-    s.level_c[(indx == 10) ? 9 : indx]++;
+    auto& f = m_file_int_map.at(file);
+
+    f.smell_count[smell_tag]++;
+
+    f.si.level += lvl;
+    f.si.count++;
+    f.si.average = f.si.level / f.si.count;
+    int indx     = static_cast<int>(lvl);
+    f.si.level_c[(indx == 10) ? 9 : indx]++;
   }
 }
 
@@ -110,9 +117,25 @@ SmellStatistics::DisplayGui(void) {
     if (ImGui::BeginTabItem("Intensity per File")) {
       for (auto& ref : m_file_int_map) {
         ImGui::Text("%s", std::string(ref.first).c_str());
-        ImGui::Text("%s%.2f", "Smell Intensity: ", ref.second.level);
-        ImGui::Text("%s%.2f", "Average Intensity: ", ref.second.average);
-        ImGui::Text("%s%ld", "Smell Count: ", ref.second.count);
+        ImGui::Text("%s%.2f", "Smell Intensity: ", ref.second.si.level);
+        ImGui::Text("%s%.2f", "Average Intensity: ", ref.second.si.average);
+        ImGui::Text("%s%ld", "Smell Count: ", ref.second.si.count);
+
+        if (ImGui::BeginTable("#tableSmellCount", 2, flags)) {
+          ImGui::TableSetupColumn("Smell");
+          ImGui::TableSetupColumn("Count");
+          ImGui::TableHeadersRow();
+
+          ImGui::TableNextRow();
+          for (auto& s : ref.second.smell_count) {
+            ImGui::TableSetColumnIndex(0);
+            ImGui::Text("%s", s.first);
+            ImGui::TableSetColumnIndex(1);
+            ImGui::Text("%ld", s.second);
+            ImGui::TableNextRow();
+          }
+          ImGui::EndTable();
+        }
 
         if (ImGui::BeginTable("#tableFile", 10, flags)) {
           ImGui::TableSetupColumn("0 - 1");
@@ -130,7 +153,7 @@ SmellStatistics::DisplayGui(void) {
           ImGui::TableNextRow();
           for (int i = 0; i < 10; i++) {
             ImGui::TableSetColumnIndex(i);
-            ImGui::Text("%ld", ref.second.level_c[i]);
+            ImGui::Text("%ld", ref.second.si.level_c[i]);
           }
 
           ImGui::EndTable();
