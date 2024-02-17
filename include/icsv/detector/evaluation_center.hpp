@@ -18,7 +18,7 @@ public:
 
   bool RemoveEvaluator(const std::string& tag);
 
-  void DeseriallizeConfig(const std::string& file_path);
+  bool DeseriallizeConfig(const std::string& file_path);
 
   auto EvaluateSmell(const std::string& tag, int curr_lvl)
       -> SmellEvaluator::SmellLevel;
@@ -47,9 +47,9 @@ private:
   auto MakeArgsEval(Json::Value smell) -> MultiArgsEvaluator*;
 };
 
-inline void
+inline bool
 deseriallize_detector_config(const std::string& path) {
-  EvaluationCenter::Get().DeseriallizeConfig(path);
+  return EvaluationCenter::Get().DeseriallizeConfig(path);
 }
 
 inline auto

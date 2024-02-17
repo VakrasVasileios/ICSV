@@ -51,7 +51,7 @@ EvaluationCenter::RemoveEvaluator(const std::string& tag) {
   return m_eval_reg.erase(tag);
 }
 
-void
+bool
 EvaluationCenter::DeseriallizeConfig(const std::string& file_path) {
   m_config_file = file_path;
   std::ifstream file(file_path);
@@ -61,7 +61,11 @@ EvaluationCenter::DeseriallizeConfig(const std::string& file_path) {
   assert(config_doc.isObject());
   file.close();
 
-  assert(config_doc["smells"].isArray());
+  if (!config_doc.isMember("smells"))
+    return false;
+
+  if (!config_doc["smells"].isArray())
+    return false;
 
   for (auto smell : config_doc["smells"]) {
     if (smell["type"] == "bool") {
@@ -77,6 +81,8 @@ EvaluationCenter::DeseriallizeConfig(const std::string& file_path) {
       MakeArgsEval(smell);
     }
   }
+
+  return true;
 }
 
 void
