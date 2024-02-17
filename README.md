@@ -16,8 +16,7 @@ Using the CMake interface to configure the project make sure to Enable the follo
 
 Also make sure **OGRE_STATIC** is **DISABLED**.
 
-After generating the project run following commands:
-- `cd build`
+After generating the project navigate into the build directory and run following commands:
 - `make`
 - `make install`
 
@@ -26,16 +25,16 @@ After generating the project run following commands:
 Clone the project with its submodules:
 - `git clone --recurse-submodules https://github.com/VakrasVasileios/ICSV.git`
 
-Navigate to the project diractory and build the project using the following commands.
+Navigate to the project diractory create a build directory with `mkdir build` and build the project using the following commands depending on type.
 
 #### Release mode
-- `mkdir build & cd build`
+- `cd build`
 - `mkdir release & cd release`
 - `cmake -DCMAKE_BUILD_TYPE=Release ../..`
 - `make`
 
 #### Debug mode
-- `mkdir build & cd build`
+- `cd build`
 - `mkdir debug & cd debug`
 - `cmake -DCMAKE_BUILD_TYPE=Debug ../..`
 - `make`
