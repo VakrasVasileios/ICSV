@@ -154,7 +154,7 @@ IcsvGui::ShowDetectorReport(void) {
 
     ImGui::MenuItem("Message: ");
     ImGui::SameLine();
-    ImGui::Text("%s", m_rep_dspld->message.c_str());
+    ImGui::TextWrapped("%s", m_rep_dspld->message.c_str());
     ImGui::Separator();
 
     ImGui::MenuItem("Level: ");
@@ -164,7 +164,7 @@ IcsvGui::ShowDetectorReport(void) {
 
     ImGui::MenuItem("File: ");
     ImGui::SameLine();
-    ImGui::Text("%s", m_rep_dspld->src_info.file.c_str());
+    ImGui::TextWrapped("%s", m_rep_dspld->src_info.file.c_str());
     ImGui::Separator();
 
     ImGui::MenuItem("Line: ");
