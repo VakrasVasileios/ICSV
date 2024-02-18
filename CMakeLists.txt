@@ -18,16 +18,36 @@ add_library(${PROJECT_NAME} )
  
 set(JSONCPP_LIBS libjsoncpp.so)
 
-set(IMGUI_INCLUDE_DIR "/usr/include/imgui")
-include_directories(${IMGUI_INCLUDE_DIR})
-set(IMGUI_LIBS libimgui.a)
+add_library(imgui STATIC
+        # Main Imgui files
+        external/imgui/imgui.cpp
+        external/imgui/imgui.h
+        external/imgui/imgui_draw.cpp
+        external/imgui/imgui_tables.cpp
+        external/imgui/imgui_widgets.cpp
+        external/imgui/imgui_demo.cpp
+        external/imgui/backends/imgui_impl_opengl3.cpp
+        external/imgui/backends/imgui_impl_opengl3.h)
+
+add_library(imgui::imgui ALIAS imgui)
+target_include_directories(imgui PUBLIC 
+  external/imgui/
+  external/imgui/backends/
+  external/googletest/googletest/include
+  external/googletest/googlemock/include
+
+)
+
+# set(IMGUI_INCLUDE_DIR "/usr/include/imgui")
+# include_directories(${IMGUI_INCLUDE_DIR})
+# set(IMGUI_LIBS libimgui.a)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC 
   ${JSONCPP_LIBS}
-  ${IMGUI_LIBS}
+  # ${IMGUI_LIBS}
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC include libs/evaluator_impls ${IMGUI_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC include libs/evaluator_impls)
 
 set(SUBDIRECTORIES 
   ICSV-app
