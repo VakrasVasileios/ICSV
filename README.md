@@ -22,10 +22,21 @@ After generating the project navigate into the build directory and run following
 
 ## Installing ICSV
 
-Clone the project with its submodules:
-- `git clone --recurse-submodules https://github.com/VakrasVasileios/ICSV.git`
+Clone the project:
+- `git clone https://github.com/VakrasVasileios/ICSV.git`
+- `cd ICSV`
 
-Navigate to the project diractory create a build directory with `mkdir build` and build the project using the following commands depending on type.
+Run the appropriate script, after changing its execution policy, if needed.
+#### Linux
+- `chmod +x linux_build.sh`
+- `./linux_build.sh`
+
+#### Windows
+- `windows_build.bat`
+
+Or execute the following commands:
+
+- `mkdir build`
 
 #### Release mode
 - `cd build`
